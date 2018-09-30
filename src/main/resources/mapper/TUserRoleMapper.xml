@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.boku.www.mapper.TUserRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.boku.www.pojo.TUserRole" >
+    <id column="user_role_id" property="userRoleId" jdbcType="VARCHAR" />
+    <result column="user_role_userId" property="userRoleUserid" jdbcType="VARCHAR" />
+    <result column="user_role_roleId" property="userRoleRoleid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    user_role_id, user_role_userId, user_role_roleId
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.boku.www.pojo.TUserRoleExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_user_role
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_user_role
+    where user_role_id = #{userRoleId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_user_role
+    where user_role_id = #{userRoleId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.boku.www.pojo.TUserRoleExample" >
+    delete from t_user_role
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.boku.www.pojo.TUserRole" >
+    insert into t_user_role (user_role_id, user_role_userId, user_role_roleId
+      )
+    values (#{userRoleId,jdbcType=VARCHAR}, #{userRoleUserid,jdbcType=VARCHAR}, #{userRoleRoleid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.boku.www.pojo.TUserRole" >
+    insert into t_user_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userRoleId != null" >
+        user_role_id,
+      </if>
+      <if test="userRoleUserid != null" >
+        user_role_userId,
+      </if>
+      <if test="userRoleRoleid != null" >
+        user_role_roleId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userRoleId != null" >
+        #{userRoleId,jdbcType=VARCHAR},
+      </if>
+      <if test="userRoleUserid != null" >
+        #{userRoleUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="userRoleRoleid != null" >
+        #{userRoleRoleid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.boku.www.pojo.TUserRoleExample" resultType="java.lang.Integer" >
+    select count(*) from t_user_role
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_user_role
+    <set >
+      <if test="record.userRoleId != null" >
+        user_role_id = #{record.userRoleId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userRoleUserid != null" >
+        user_role_userId = #{record.userRoleUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userRoleRoleid != null" >
+        user_role_roleId = #{record.userRoleRoleid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_user_role
+    set user_role_id = #{record.userRoleId,jdbcType=VARCHAR},
+      user_role_userId = #{record.userRoleUserid,jdbcType=VARCHAR},
+      user_role_roleId = #{record.userRoleRoleid,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.boku.www.pojo.TUserRole" >
+    update t_user_role
+    <set >
+      <if test="userRoleUserid != null" >
+        user_role_userId = #{userRoleUserid,jdbcType=VARCHAR},
+      </if>
+      <if test="userRoleRoleid != null" >
+        user_role_roleId = #{userRoleRoleid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_role_id = #{userRoleId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.boku.www.pojo.TUserRole" >
+    update t_user_role
+    set user_role_userId = #{userRoleUserid,jdbcType=VARCHAR},
+      user_role_roleId = #{userRoleRoleid,jdbcType=VARCHAR}
+    where user_role_id = #{userRoleId,jdbcType=VARCHAR}
+  </update>
+</mapper>

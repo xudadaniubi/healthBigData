@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.boku.www.mapper.TUserinfoMapper" >
+  <resultMap id="BaseResultMap" type="com.boku.www.pojo.TUserinfo" >
+    <id column="userInfo_id" property="userinfoId" jdbcType="VARCHAR" />
+    <result column="userInfo_pic" property="userinfoPic" jdbcType="VARCHAR" />
+    <result column="userInfo_company" property="userinfoCompany" jdbcType="VARCHAR" />
+    <result column="userInfo_position_name" property="userinfoPositionName" jdbcType="VARCHAR" />
+    <result column="userInfo_department" property="userinfoDepartment" jdbcType="VARCHAR" />
+    <result column="userInfo_is_staff_doctor" property="userinfoIsStaffDoctor" jdbcType="VARCHAR" />
+    <result column="userInfo_subject" property="userinfoSubject" jdbcType="VARCHAR" />
+    <result column="userInfo_doctor_num" property="userinfoDoctorNum" jdbcType="VARCHAR" />
+    <result column="userInfo_jobIds" property="userinfoJobids" jdbcType="VARCHAR" />
+    <result column="userInfo_studyIds" property="userinfoStudyids" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    userInfo_id, userInfo_pic, userInfo_company, userInfo_position_name, userInfo_department, 
+    userInfo_is_staff_doctor, userInfo_subject, userInfo_doctor_num, userInfo_jobIds, 
+    userInfo_studyIds
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.boku.www.pojo.TUserinfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_userinfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_userinfo
+    where userInfo_id = #{userinfoId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_userinfo
+    where userInfo_id = #{userinfoId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.boku.www.pojo.TUserinfoExample" >
+    delete from t_userinfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.boku.www.pojo.TUserinfo" >
+    insert into t_userinfo (userInfo_id, userInfo_pic, userInfo_company, 
+      userInfo_position_name, userInfo_department, 
+      userInfo_is_staff_doctor, userInfo_subject, 
+      userInfo_doctor_num, userInfo_jobIds, userInfo_studyIds
+      )
+    values (#{userinfoId,jdbcType=VARCHAR}, #{userinfoPic,jdbcType=VARCHAR}, #{userinfoCompany,jdbcType=VARCHAR}, 
+      #{userinfoPositionName,jdbcType=VARCHAR}, #{userinfoDepartment,jdbcType=VARCHAR}, 
+      #{userinfoIsStaffDoctor,jdbcType=VARCHAR}, #{userinfoSubject,jdbcType=VARCHAR}, 
+      #{userinfoDoctorNum,jdbcType=VARCHAR}, #{userinfoJobids,jdbcType=VARCHAR}, #{userinfoStudyids,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.boku.www.pojo.TUserinfo" >
+    insert into t_userinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userinfoId != null" >
+        userInfo_id,
+      </if>
+      <if test="userinfoPic != null" >
+        userInfo_pic,
+      </if>
+      <if test="userinfoCompany != null" >
+        userInfo_company,
+      </if>
+      <if test="userinfoPositionName != null" >
+        userInfo_position_name,
+      </if>
+      <if test="userinfoDepartment != null" >
+        userInfo_department,
+      </if>
+      <if test="userinfoIsStaffDoctor != null" >
+        userInfo_is_staff_doctor,
+      </if>
+      <if test="userinfoSubject != null" >
+        userInfo_subject,
+      </if>
+      <if test="userinfoDoctorNum != null" >
+        userInfo_doctor_num,
+      </if>
+      <if test="userinfoJobids != null" >
+        userInfo_jobIds,
+      </if>
+      <if test="userinfoStudyids != null" >
+        userInfo_studyIds,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userinfoId != null" >
+        #{userinfoId,jdbcType=VARCHAR},
+      </if>
+      <if test="userinfoPic != null" >
+        #{userinfoPic,jdbcType=VARCHAR},
+      </if>
+      <if test="userinfoCompany != null" >
+        #{userinfoCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="userinfoPositionName != null" >
+        #{userinfoPositionName,jdbcType=VARCHAR},
+      </if>
+      <if test="userinfoDepartment != null" >
+        #{userinfoDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="userinfoIsStaffDoctor != null" >
+        #{userinfoIsStaffDoctor,jdbcType=VARCHAR},
+      </if>
+      <if test="userinfoSubject != null" >
+        #{userinfoSubject,jdbcType=VARCHAR},
+      </if>
+      <if test="userinfoDoctorNum != null" >
+        #{userinfoDoctorNum,jdbcType=VARCHAR},
+      </if>
+      <if test="userinfoJobids != null" >
+        #{userinfoJobids,jdbcType=VARCHAR},
+      </if>
+      <if test="userinfoStudyids != null" >
+        #{userinfoStudyids,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.boku.www.pojo.TUserinfoExample" resultType="java.lang.Integer" >
+    select count(*) from t_userinfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_userinfo
+    <set >
+      <if test="record.userinfoId != null" >
+        userInfo_id = #{record.userinfoId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userinfoPic != null" >
+        userInfo_pic = #{record.userinfoPic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userinfoCompany != null" >
+        userInfo_company = #{record.userinfoCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userinfoPositionName != null" >
+        userInfo_position_name = #{record.userinfoPositionName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userinfoDepartment != null" >
+        userInfo_department = #{record.userinfoDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userinfoIsStaffDoctor != null" >
+        userInfo_is_staff_doctor = #{record.userinfoIsStaffDoctor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userinfoSubject != null" >
+        userInfo_subject = #{record.userinfoSubject,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userinfoDoctorNum != null" >
+        userInfo_doctor_num = #{record.userinfoDoctorNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userinfoJobids != null" >
+        userInfo_jobIds = #{record.userinfoJobids,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userinfoStudyids != null" >
+        userInfo_studyIds = #{record.userinfoStudyids,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_userinfo
+    set userInfo_id = #{record.userinfoId,jdbcType=VARCHAR},
+      userInfo_pic = #{record.userinfoPic,jdbcType=VARCHAR},
+      userInfo_company = #{record.userinfoCompany,jdbcType=VARCHAR},
+      userInfo_position_name = #{record.userinfoPositionName,jdbcType=VARCHAR},
+      userInfo_department = #{record.userinfoDepartment,jdbcType=VARCHAR},
+      userInfo_is_staff_doctor = #{record.userinfoIsStaffDoctor,jdbcType=VARCHAR},
+      userInfo_subject = #{record.userinfoSubject,jdbcType=VARCHAR},
+      userInfo_doctor_num = #{record.userinfoDoctorNum,jdbcType=VARCHAR},
+      userInfo_jobIds = #{record.userinfoJobids,jdbcType=VARCHAR},
+      userInfo_studyIds = #{record.userinfoStudyids,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.boku.www.pojo.TUserinfo" >
+    update t_userinfo
+    <set >
+      <if test="userinfoPic != null" >
+        userInfo_pic = #{userinfoPic,jdbcType=VARCHAR},
+      </if>
+      <if test="userinfoCompany != null" >
+        userInfo_company = #{userinfoCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="userinfoPositionName != null" >
+        userInfo_position_name = #{userinfoPositionName,jdbcType=VARCHAR},
+      </if>
+      <if test="userinfoDepartment != null" >
+        userInfo_department = #{userinfoDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="userinfoIsStaffDoctor != null" >
+        userInfo_is_staff_doctor = #{userinfoIsStaffDoctor,jdbcType=VARCHAR},
+      </if>
+      <if test="userinfoSubject != null" >
+        userInfo_subject = #{userinfoSubject,jdbcType=VARCHAR},
+      </if>
+      <if test="userinfoDoctorNum != null" >
+        userInfo_doctor_num = #{userinfoDoctorNum,jdbcType=VARCHAR},
+      </if>
+      <if test="userinfoJobids != null" >
+        userInfo_jobIds = #{userinfoJobids,jdbcType=VARCHAR},
+      </if>
+      <if test="userinfoStudyids != null" >
+        userInfo_studyIds = #{userinfoStudyids,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where userInfo_id = #{userinfoId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.boku.www.pojo.TUserinfo" >
+    update t_userinfo
+    set userInfo_pic = #{userinfoPic,jdbcType=VARCHAR},
+      userInfo_company = #{userinfoCompany,jdbcType=VARCHAR},
+      userInfo_position_name = #{userinfoPositionName,jdbcType=VARCHAR},
+      userInfo_department = #{userinfoDepartment,jdbcType=VARCHAR},
+      userInfo_is_staff_doctor = #{userinfoIsStaffDoctor,jdbcType=VARCHAR},
+      userInfo_subject = #{userinfoSubject,jdbcType=VARCHAR},
+      userInfo_doctor_num = #{userinfoDoctorNum,jdbcType=VARCHAR},
+      userInfo_jobIds = #{userinfoJobids,jdbcType=VARCHAR},
+      userInfo_studyIds = #{userinfoStudyids,jdbcType=VARCHAR}
+    where userInfo_id = #{userinfoId,jdbcType=VARCHAR}
+  </update>
+</mapper>

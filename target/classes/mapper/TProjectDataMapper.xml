@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.boku.www.mapper.TProjectDataMapper" >
+  <resultMap id="BaseResultMap" type="com.boku.www.pojo.TProjectData" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="management_company" property="managementCompany" jdbcType="VARCHAR" />
+    <result column="subject" property="subject" jdbcType="VARCHAR" />
+    <result column="project_num" property="projectNum" jdbcType="VARCHAR" />
+    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+    <result column="project_kidcat" property="projectKidcat" jdbcType="VARCHAR" />
+    <result column="category" property="category" jdbcType="VARCHAR" />
+    <result column="subject1_id" property="subject1Id" jdbcType="VARCHAR" />
+    <result column="subject2_id" property="subject2Id" jdbcType="VARCHAR" />
+    <result column="subject3_id" property="subject3Id" jdbcType="VARCHAR" />
+    <result column="project_satrt_time" property="projectSatrtTime" jdbcType="DATE" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="organizer" property="organizer" jdbcType="VARCHAR" />
+    <result column="project_leader" property="projectLeader" jdbcType="VARCHAR" />
+    <result column="team_members" property="teamMembers" jdbcType="VARCHAR" />
+    <result column="prize_category" property="prizeCategory" jdbcType="VARCHAR" />
+    <result column="prize_name" property="prizeName" jdbcType="VARCHAR" />
+    <result column="result_category" property="resultCategory" jdbcType="VARCHAR" />
+    <result column="result_category_id" property="resultCategoryId" jdbcType="VARCHAR" />
+    <result column="result_name" property="resultName" jdbcType="VARCHAR" />
+    <result column="result_time" property="resultTime" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, management_company, subject, project_num, project_name, project_kidcat, category, 
+    subject1_id, subject2_id, subject3_id, project_satrt_time, area, organizer, project_leader, 
+    team_members, prize_category, prize_name, result_category, result_category_id, result_name, 
+    result_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.boku.www.pojo.TProjectDataExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_project_data
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_project_data
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_project_data
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.boku.www.pojo.TProjectDataExample" >
+    delete from t_project_data
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.boku.www.pojo.TProjectData" >
+    insert into t_project_data (id, management_company, subject, 
+      project_num, project_name, project_kidcat, 
+      category, subject1_id, subject2_id, 
+      subject3_id, project_satrt_time, area, 
+      organizer, project_leader, team_members, 
+      prize_category, prize_name, result_category, 
+      result_category_id, result_name, result_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{managementCompany,jdbcType=VARCHAR}, #{subject,jdbcType=VARCHAR}, 
+      #{projectNum,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, #{projectKidcat,jdbcType=VARCHAR}, 
+      #{category,jdbcType=VARCHAR}, #{subject1Id,jdbcType=VARCHAR}, #{subject2Id,jdbcType=VARCHAR}, 
+      #{subject3Id,jdbcType=VARCHAR}, #{projectSatrtTime,jdbcType=DATE}, #{area,jdbcType=VARCHAR}, 
+      #{organizer,jdbcType=VARCHAR}, #{projectLeader,jdbcType=VARCHAR}, #{teamMembers,jdbcType=VARCHAR}, 
+      #{prizeCategory,jdbcType=VARCHAR}, #{prizeName,jdbcType=VARCHAR}, #{resultCategory,jdbcType=VARCHAR}, 
+      #{resultCategoryId,jdbcType=VARCHAR}, #{resultName,jdbcType=VARCHAR}, #{resultTime,jdbcType=DATE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.boku.www.pojo.TProjectData" >
+    insert into t_project_data
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="managementCompany != null" >
+        management_company,
+      </if>
+      <if test="subject != null" >
+        subject,
+      </if>
+      <if test="projectNum != null" >
+        project_num,
+      </if>
+      <if test="projectName != null" >
+        project_name,
+      </if>
+      <if test="projectKidcat != null" >
+        project_kidcat,
+      </if>
+      <if test="category != null" >
+        category,
+      </if>
+      <if test="subject1Id != null" >
+        subject1_id,
+      </if>
+      <if test="subject2Id != null" >
+        subject2_id,
+      </if>
+      <if test="subject3Id != null" >
+        subject3_id,
+      </if>
+      <if test="projectSatrtTime != null" >
+        project_satrt_time,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="organizer != null" >
+        organizer,
+      </if>
+      <if test="projectLeader != null" >
+        project_leader,
+      </if>
+      <if test="teamMembers != null" >
+        team_members,
+      </if>
+      <if test="prizeCategory != null" >
+        prize_category,
+      </if>
+      <if test="prizeName != null" >
+        prize_name,
+      </if>
+      <if test="resultCategory != null" >
+        result_category,
+      </if>
+      <if test="resultCategoryId != null" >
+        result_category_id,
+      </if>
+      <if test="resultName != null" >
+        result_name,
+      </if>
+      <if test="resultTime != null" >
+        result_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="managementCompany != null" >
+        #{managementCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null" >
+        #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="projectNum != null" >
+        #{projectNum,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null" >
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectKidcat != null" >
+        #{projectKidcat,jdbcType=VARCHAR},
+      </if>
+      <if test="category != null" >
+        #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="subject1Id != null" >
+        #{subject1Id,jdbcType=VARCHAR},
+      </if>
+      <if test="subject2Id != null" >
+        #{subject2Id,jdbcType=VARCHAR},
+      </if>
+      <if test="subject3Id != null" >
+        #{subject3Id,jdbcType=VARCHAR},
+      </if>
+      <if test="projectSatrtTime != null" >
+        #{projectSatrtTime,jdbcType=DATE},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="organizer != null" >
+        #{organizer,jdbcType=VARCHAR},
+      </if>
+      <if test="projectLeader != null" >
+        #{projectLeader,jdbcType=VARCHAR},
+      </if>
+      <if test="teamMembers != null" >
+        #{teamMembers,jdbcType=VARCHAR},
+      </if>
+      <if test="prizeCategory != null" >
+        #{prizeCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="prizeName != null" >
+        #{prizeName,jdbcType=VARCHAR},
+      </if>
+      <if test="resultCategory != null" >
+        #{resultCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="resultCategoryId != null" >
+        #{resultCategoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="resultName != null" >
+        #{resultName,jdbcType=VARCHAR},
+      </if>
+      <if test="resultTime != null" >
+        #{resultTime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.boku.www.pojo.TProjectDataExample" resultType="java.lang.Integer" >
+    select count(*) from t_project_data
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_project_data
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.managementCompany != null" >
+        management_company = #{record.managementCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subject != null" >
+        subject = #{record.subject,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectNum != null" >
+        project_num = #{record.projectNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectName != null" >
+        project_name = #{record.projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectKidcat != null" >
+        project_kidcat = #{record.projectKidcat,jdbcType=VARCHAR},
+      </if>
+      <if test="record.category != null" >
+        category = #{record.category,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subject1Id != null" >
+        subject1_id = #{record.subject1Id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subject2Id != null" >
+        subject2_id = #{record.subject2Id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subject3Id != null" >
+        subject3_id = #{record.subject3Id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectSatrtTime != null" >
+        project_satrt_time = #{record.projectSatrtTime,jdbcType=DATE},
+      </if>
+      <if test="record.area != null" >
+        area = #{record.area,jdbcType=VARCHAR},
+      </if>
+      <if test="record.organizer != null" >
+        organizer = #{record.organizer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectLeader != null" >
+        project_leader = #{record.projectLeader,jdbcType=VARCHAR},
+      </if>
+      <if test="record.teamMembers != null" >
+        team_members = #{record.teamMembers,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prizeCategory != null" >
+        prize_category = #{record.prizeCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prizeName != null" >
+        prize_name = #{record.prizeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.resultCategory != null" >
+        result_category = #{record.resultCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="record.resultCategoryId != null" >
+        result_category_id = #{record.resultCategoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.resultName != null" >
+        result_name = #{record.resultName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.resultTime != null" >
+        result_time = #{record.resultTime,jdbcType=DATE},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_project_data
+    set id = #{record.id,jdbcType=INTEGER},
+      management_company = #{record.managementCompany,jdbcType=VARCHAR},
+      subject = #{record.subject,jdbcType=VARCHAR},
+      project_num = #{record.projectNum,jdbcType=VARCHAR},
+      project_name = #{record.projectName,jdbcType=VARCHAR},
+      project_kidcat = #{record.projectKidcat,jdbcType=VARCHAR},
+      category = #{record.category,jdbcType=VARCHAR},
+      subject1_id = #{record.subject1Id,jdbcType=VARCHAR},
+      subject2_id = #{record.subject2Id,jdbcType=VARCHAR},
+      subject3_id = #{record.subject3Id,jdbcType=VARCHAR},
+      project_satrt_time = #{record.projectSatrtTime,jdbcType=DATE},
+      area = #{record.area,jdbcType=VARCHAR},
+      organizer = #{record.organizer,jdbcType=VARCHAR},
+      project_leader = #{record.projectLeader,jdbcType=VARCHAR},
+      team_members = #{record.teamMembers,jdbcType=VARCHAR},
+      prize_category = #{record.prizeCategory,jdbcType=VARCHAR},
+      prize_name = #{record.prizeName,jdbcType=VARCHAR},
+      result_category = #{record.resultCategory,jdbcType=VARCHAR},
+      result_category_id = #{record.resultCategoryId,jdbcType=VARCHAR},
+      result_name = #{record.resultName,jdbcType=VARCHAR},
+      result_time = #{record.resultTime,jdbcType=DATE}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.boku.www.pojo.TProjectData" >
+    update t_project_data
+    <set >
+      <if test="managementCompany != null" >
+        management_company = #{managementCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null" >
+        subject = #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="projectNum != null" >
+        project_num = #{projectNum,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null" >
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectKidcat != null" >
+        project_kidcat = #{projectKidcat,jdbcType=VARCHAR},
+      </if>
+      <if test="category != null" >
+        category = #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="subject1Id != null" >
+        subject1_id = #{subject1Id,jdbcType=VARCHAR},
+      </if>
+      <if test="subject2Id != null" >
+        subject2_id = #{subject2Id,jdbcType=VARCHAR},
+      </if>
+      <if test="subject3Id != null" >
+        subject3_id = #{subject3Id,jdbcType=VARCHAR},
+      </if>
+      <if test="projectSatrtTime != null" >
+        project_satrt_time = #{projectSatrtTime,jdbcType=DATE},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="organizer != null" >
+        organizer = #{organizer,jdbcType=VARCHAR},
+      </if>
+      <if test="projectLeader != null" >
+        project_leader = #{projectLeader,jdbcType=VARCHAR},
+      </if>
+      <if test="teamMembers != null" >
+        team_members = #{teamMembers,jdbcType=VARCHAR},
+      </if>
+      <if test="prizeCategory != null" >
+        prize_category = #{prizeCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="prizeName != null" >
+        prize_name = #{prizeName,jdbcType=VARCHAR},
+      </if>
+      <if test="resultCategory != null" >
+        result_category = #{resultCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="resultCategoryId != null" >
+        result_category_id = #{resultCategoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="resultName != null" >
+        result_name = #{resultName,jdbcType=VARCHAR},
+      </if>
+      <if test="resultTime != null" >
+        result_time = #{resultTime,jdbcType=DATE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.boku.www.pojo.TProjectData" >
+    update t_project_data
+    set management_company = #{managementCompany,jdbcType=VARCHAR},
+      subject = #{subject,jdbcType=VARCHAR},
+      project_num = #{projectNum,jdbcType=VARCHAR},
+      project_name = #{projectName,jdbcType=VARCHAR},
+      project_kidcat = #{projectKidcat,jdbcType=VARCHAR},
+      category = #{category,jdbcType=VARCHAR},
+      subject1_id = #{subject1Id,jdbcType=VARCHAR},
+      subject2_id = #{subject2Id,jdbcType=VARCHAR},
+      subject3_id = #{subject3Id,jdbcType=VARCHAR},
+      project_satrt_time = #{projectSatrtTime,jdbcType=DATE},
+      area = #{area,jdbcType=VARCHAR},
+      organizer = #{organizer,jdbcType=VARCHAR},
+      project_leader = #{projectLeader,jdbcType=VARCHAR},
+      team_members = #{teamMembers,jdbcType=VARCHAR},
+      prize_category = #{prizeCategory,jdbcType=VARCHAR},
+      prize_name = #{prizeName,jdbcType=VARCHAR},
+      result_category = #{resultCategory,jdbcType=VARCHAR},
+      result_category_id = #{resultCategoryId,jdbcType=VARCHAR},
+      result_name = #{resultName,jdbcType=VARCHAR},
+      result_time = #{resultTime,jdbcType=DATE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
