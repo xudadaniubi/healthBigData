@@ -2,10 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.boku.www.mapper.TSubjectCategoryMapper" >
   <resultMap id="BaseResultMap" type="com.boku.www.pojo.TSubjectCategory" >
-    <id column="id" property="id" jdbcType="VARCHAR" />
+    <id column="id" property="id" jdbcType="INTEGER" />
     <result column="subject_id" property="subjectId" jdbcType="VARCHAR" />
     <result column="parent_subject_id" property="parentSubjectId" jdbcType="VARCHAR" />
     <result column="subject_name" property="subjectName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -66,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, subject_id, parent_subject_id, subject_name
+    id, subject_id, parent_subject_id, subject_name, status
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.boku.www.pojo.TSubjectCategoryExample" >
     select
@@ -82,15 +83,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from t_subject_category
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from t_subject_category
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.boku.www.pojo.TSubjectCategoryExample" >
     delete from t_subject_category
@@ -100,9 +101,9 @@
   </delete>
   <insert id="insert" parameterType="com.boku.www.pojo.TSubjectCategory" >
     insert into t_subject_category (id, subject_id, parent_subject_id, 
-      subject_name)
-    values (#{id,jdbcType=VARCHAR}, #{subjectId,jdbcType=VARCHAR}, #{parentSubjectId,jdbcType=VARCHAR}, 
-      #{subjectName,jdbcType=VARCHAR})
+      subject_name, status)
+    values (#{id,jdbcType=INTEGER}, #{subjectId,jdbcType=VARCHAR}, #{parentSubjectId,jdbcType=VARCHAR}, 
+      #{subjectName,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.boku.www.pojo.TSubjectCategory" >
     insert into t_subject_category
@@ -119,10 +120,13 @@
       <if test="subjectName != null" >
         subject_name,
       </if>
+      <if test="status != null" >
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
-        #{id,jdbcType=VARCHAR},
+        #{id,jdbcType=INTEGER},
       </if>
       <if test="subjectId != null" >
         #{subjectId,jdbcType=VARCHAR},
@@ -132,6 +136,9 @@
       </if>
       <if test="subjectName != null" >
         #{subjectName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -145,7 +152,7 @@
     update t_subject_category
     <set >
       <if test="record.id != null" >
-        id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.subjectId != null" >
         subject_id = #{record.subjectId,jdbcType=VARCHAR},
@@ -156,6 +163,9 @@
       <if test="record.subjectName != null" >
         subject_name = #{record.subjectName,jdbcType=VARCHAR},
       </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -163,10 +173,11 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update t_subject_category
-    set id = #{record.id,jdbcType=VARCHAR},
+    set id = #{record.id,jdbcType=INTEGER},
       subject_id = #{record.subjectId,jdbcType=VARCHAR},
       parent_subject_id = #{record.parentSubjectId,jdbcType=VARCHAR},
-      subject_name = #{record.subjectName,jdbcType=VARCHAR}
+      subject_name = #{record.subjectName,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -183,14 +194,18 @@
       <if test="subjectName != null" >
         subject_name = #{subjectName,jdbcType=VARCHAR},
       </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
     </set>
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.boku.www.pojo.TSubjectCategory" >
     update t_subject_category
     set subject_id = #{subjectId,jdbcType=VARCHAR},
       parent_subject_id = #{parentSubjectId,jdbcType=VARCHAR},
-      subject_name = #{subjectName,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=VARCHAR}
+      subject_name = #{subjectName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

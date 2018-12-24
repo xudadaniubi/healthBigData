@@ -1,7 +1,9 @@
 package com.boku.www.pojo;
 
-public class TSubjectCategory {
-    private String id;
+import java.io.Serializable;
+
+public class TSubjectCategory implements Serializable {
+    private Integer id;
 
     private String subjectId;
 
@@ -9,12 +11,14 @@ public class TSubjectCategory {
 
     private String subjectName;
 
-    public String getId() {
+    private String status;
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getSubjectId() {
@@ -39,5 +43,13 @@ public class TSubjectCategory {
 
     public void setSubjectName(String subjectName) {
         this.subjectName = subjectName == null ? null : subjectName.trim();
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
     }
 }

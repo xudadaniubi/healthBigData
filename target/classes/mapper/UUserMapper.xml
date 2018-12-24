@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boku.www.mapper.system.UUserDao">
+
+<!-- UUser resultMap映射  -->
+<resultMap type="com.boku.www.pojo.system.UUser" id="UUser">
+        <id column="id" property="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <id column="username" property="username" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <id column="email" property="email" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <id column="pswd" property="pswd" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <id column="create_time" property="createTime" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <id column="last_login_time" property="lastLoginTime" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <id column="status" property="status" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <id column="company" property="company" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <id column="area" property="area" javaType="java.lang.String" jdbcType="VARCHAR"/>
+</resultMap>
+
+
+
+<!-- 全部字段，一般用于明细查询 -->
+<sql id="AllColumnlist">
+ id,username,email,pswd,create_time,last_login_time,company,area,status
+</sql>
+
+
+
+<!--根据主键获取数据-->
+<select id="findByName" resultMap="UUser">
+	select <include refid="AllColumnlist"/> from u_user
+	<where>
+		username=#{0}
+	</where>
+</select>
+
+    <insert id="insert" parameterType="com.boku.www.pojo.system.UUser" >
+        insert into u_user (id, username, pswd,
+        email, create_time, last_login_time,company, area, status)
+        values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{pswd,jdbcType=VARCHAR},
+        #{email,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE},
+        #{lastLoginTime,jdbcType=DATE}, #{company,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR},
+        #{status,jdbcType=VARCHAR})
+    </insert>
+</mapper>

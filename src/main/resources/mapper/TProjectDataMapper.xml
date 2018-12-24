@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.boku.www.pojo.TProjectData" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="management_company" property="managementCompany" jdbcType="VARCHAR" />
+    <result column="project_category_grade" property="projectCategoryGrade" jdbcType="VARCHAR" />
     <result column="subject" property="subject" jdbcType="VARCHAR" />
     <result column="project_num" property="projectNum" jdbcType="VARCHAR" />
     <result column="project_name" property="projectName" jdbcType="VARCHAR" />
@@ -13,16 +14,19 @@
     <result column="subject2_id" property="subject2Id" jdbcType="VARCHAR" />
     <result column="subject3_id" property="subject3Id" jdbcType="VARCHAR" />
     <result column="project_satrt_time" property="projectSatrtTime" jdbcType="DATE" />
+    <result column="project_end_time" property="projectEndTime" jdbcType="DATE" />
     <result column="area" property="area" jdbcType="VARCHAR" />
     <result column="organizer" property="organizer" jdbcType="VARCHAR" />
+    <result column="organizer_company" property="organizerCompany" jdbcType="VARCHAR" />
     <result column="project_leader" property="projectLeader" jdbcType="VARCHAR" />
     <result column="team_members" property="teamMembers" jdbcType="VARCHAR" />
+    <result column="prize_category_grade" property="prizeCategoryGrade" jdbcType="VARCHAR" />
     <result column="prize_category" property="prizeCategory" jdbcType="VARCHAR" />
     <result column="prize_name" property="prizeName" jdbcType="VARCHAR" />
-    <result column="result_category" property="resultCategory" jdbcType="VARCHAR" />
-    <result column="result_category_id" property="resultCategoryId" jdbcType="VARCHAR" />
-    <result column="result_name" property="resultName" jdbcType="VARCHAR" />
-    <result column="result_time" property="resultTime" jdbcType="DATE" />
+    <result column="prize_time" property="prizeTime" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="confirm_prize_status" property="confirmPrizeStatus" jdbcType="VARCHAR" />
+    <result column="confirm_project_status" property="confirmProjectStatus" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -83,10 +87,11 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, management_company, subject, project_num, project_name, project_kidcat, category, 
-    subject1_id, subject2_id, subject3_id, project_satrt_time, area, organizer, project_leader, 
-    team_members, prize_category, prize_name, result_category, result_category_id, result_name, 
-    result_time
+    id, management_company, project_category_grade, subject, project_num, project_name, 
+    project_kidcat, category, subject1_id, subject2_id, subject3_id, project_satrt_time, 
+    project_end_time, area, organizer, organizer_company, project_leader, team_members, 
+    prize_category_grade, prize_category, prize_name, prize_time, status, confirm_prize_status, 
+    confirm_project_status
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.boku.www.pojo.TProjectDataExample" >
     select
@@ -119,22 +124,24 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.boku.www.pojo.TProjectData" >
-    insert into t_project_data (id, management_company, subject, 
-      project_num, project_name, project_kidcat, 
-      category, subject1_id, subject2_id, 
-      subject3_id, project_satrt_time, area, 
-      organizer, project_leader, team_members, 
-      prize_category, prize_name, result_category, 
-      result_category_id, result_name, result_time
-      )
-    values (#{id,jdbcType=INTEGER}, #{managementCompany,jdbcType=VARCHAR}, #{subject,jdbcType=VARCHAR}, 
-      #{projectNum,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, #{projectKidcat,jdbcType=VARCHAR}, 
-      #{category,jdbcType=VARCHAR}, #{subject1Id,jdbcType=VARCHAR}, #{subject2Id,jdbcType=VARCHAR}, 
-      #{subject3Id,jdbcType=VARCHAR}, #{projectSatrtTime,jdbcType=DATE}, #{area,jdbcType=VARCHAR}, 
-      #{organizer,jdbcType=VARCHAR}, #{projectLeader,jdbcType=VARCHAR}, #{teamMembers,jdbcType=VARCHAR}, 
-      #{prizeCategory,jdbcType=VARCHAR}, #{prizeName,jdbcType=VARCHAR}, #{resultCategory,jdbcType=VARCHAR}, 
-      #{resultCategoryId,jdbcType=VARCHAR}, #{resultName,jdbcType=VARCHAR}, #{resultTime,jdbcType=DATE}
-      )
+    insert into t_project_data (id, management_company, project_category_grade, 
+      subject, project_num, project_name, 
+      project_kidcat, category, subject1_id, 
+      subject2_id, subject3_id, project_satrt_time, 
+      project_end_time, area, organizer, 
+      organizer_company, project_leader, team_members, 
+      prize_category_grade, prize_category, prize_name, 
+      prize_time, status, confirm_prize_status, 
+      confirm_project_status)
+    values (#{id,jdbcType=INTEGER}, #{managementCompany,jdbcType=VARCHAR}, #{projectCategoryGrade,jdbcType=VARCHAR}, 
+      #{subject,jdbcType=VARCHAR}, #{projectNum,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, 
+      #{projectKidcat,jdbcType=VARCHAR}, #{category,jdbcType=VARCHAR}, #{subject1Id,jdbcType=VARCHAR}, 
+      #{subject2Id,jdbcType=VARCHAR}, #{subject3Id,jdbcType=VARCHAR}, #{projectSatrtTime,jdbcType=DATE}, 
+      #{projectEndTime,jdbcType=DATE}, #{area,jdbcType=VARCHAR}, #{organizer,jdbcType=VARCHAR}, 
+      #{organizerCompany,jdbcType=VARCHAR}, #{projectLeader,jdbcType=VARCHAR}, #{teamMembers,jdbcType=VARCHAR}, 
+      #{prizeCategoryGrade,jdbcType=VARCHAR}, #{prizeCategory,jdbcType=VARCHAR}, #{prizeName,jdbcType=VARCHAR}, 
+      #{prizeTime,jdbcType=DATE}, #{status,jdbcType=VARCHAR}, #{confirmPrizeStatus,jdbcType=VARCHAR}, 
+      #{confirmProjectStatus,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.boku.www.pojo.TProjectData" >
     insert into t_project_data
@@ -144,6 +151,9 @@
       </if>
       <if test="managementCompany != null" >
         management_company,
+      </if>
+      <if test="projectCategoryGrade != null" >
+        project_category_grade,
       </if>
       <if test="subject != null" >
         subject,
@@ -172,11 +182,17 @@
       <if test="projectSatrtTime != null" >
         project_satrt_time,
       </if>
+      <if test="projectEndTime != null" >
+        project_end_time,
+      </if>
       <if test="area != null" >
         area,
       </if>
       <if test="organizer != null" >
         organizer,
+      </if>
+      <if test="organizerCompany != null" >
+        organizer_company,
       </if>
       <if test="projectLeader != null" >
         project_leader,
@@ -184,23 +200,26 @@
       <if test="teamMembers != null" >
         team_members,
       </if>
+      <if test="prizeCategoryGrade != null" >
+        prize_category_grade,
+      </if>
       <if test="prizeCategory != null" >
         prize_category,
       </if>
       <if test="prizeName != null" >
         prize_name,
       </if>
-      <if test="resultCategory != null" >
-        result_category,
+      <if test="prizeTime != null" >
+        prize_time,
       </if>
-      <if test="resultCategoryId != null" >
-        result_category_id,
+      <if test="status != null" >
+        status,
       </if>
-      <if test="resultName != null" >
-        result_name,
+      <if test="confirmPrizeStatus != null" >
+        confirm_prize_status,
       </if>
-      <if test="resultTime != null" >
-        result_time,
+      <if test="confirmProjectStatus != null" >
+        confirm_project_status,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -209,6 +228,9 @@
       </if>
       <if test="managementCompany != null" >
         #{managementCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="projectCategoryGrade != null" >
+        #{projectCategoryGrade,jdbcType=VARCHAR},
       </if>
       <if test="subject != null" >
         #{subject,jdbcType=VARCHAR},
@@ -237,11 +259,17 @@
       <if test="projectSatrtTime != null" >
         #{projectSatrtTime,jdbcType=DATE},
       </if>
+      <if test="projectEndTime != null" >
+        #{projectEndTime,jdbcType=DATE},
+      </if>
       <if test="area != null" >
         #{area,jdbcType=VARCHAR},
       </if>
       <if test="organizer != null" >
         #{organizer,jdbcType=VARCHAR},
+      </if>
+      <if test="organizerCompany != null" >
+        #{organizerCompany,jdbcType=VARCHAR},
       </if>
       <if test="projectLeader != null" >
         #{projectLeader,jdbcType=VARCHAR},
@@ -249,23 +277,26 @@
       <if test="teamMembers != null" >
         #{teamMembers,jdbcType=VARCHAR},
       </if>
+      <if test="prizeCategoryGrade != null" >
+        #{prizeCategoryGrade,jdbcType=VARCHAR},
+      </if>
       <if test="prizeCategory != null" >
         #{prizeCategory,jdbcType=VARCHAR},
       </if>
       <if test="prizeName != null" >
         #{prizeName,jdbcType=VARCHAR},
       </if>
-      <if test="resultCategory != null" >
-        #{resultCategory,jdbcType=VARCHAR},
+      <if test="prizeTime != null" >
+        #{prizeTime,jdbcType=DATE},
       </if>
-      <if test="resultCategoryId != null" >
-        #{resultCategoryId,jdbcType=VARCHAR},
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
       </if>
-      <if test="resultName != null" >
-        #{resultName,jdbcType=VARCHAR},
+      <if test="confirmPrizeStatus != null" >
+        #{confirmPrizeStatus,jdbcType=VARCHAR},
       </if>
-      <if test="resultTime != null" >
-        #{resultTime,jdbcType=DATE},
+      <if test="confirmProjectStatus != null" >
+        #{confirmProjectStatus,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -283,6 +314,9 @@
       </if>
       <if test="record.managementCompany != null" >
         management_company = #{record.managementCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="record.projectCategoryGrade != null" >
+        project_category_grade = #{record.projectCategoryGrade,jdbcType=VARCHAR},
       </if>
       <if test="record.subject != null" >
         subject = #{record.subject,jdbcType=VARCHAR},
@@ -311,11 +345,17 @@
       <if test="record.projectSatrtTime != null" >
         project_satrt_time = #{record.projectSatrtTime,jdbcType=DATE},
       </if>
+      <if test="record.projectEndTime != null" >
+        project_end_time = #{record.projectEndTime,jdbcType=DATE},
+      </if>
       <if test="record.area != null" >
         area = #{record.area,jdbcType=VARCHAR},
       </if>
       <if test="record.organizer != null" >
         organizer = #{record.organizer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.organizerCompany != null" >
+        organizer_company = #{record.organizerCompany,jdbcType=VARCHAR},
       </if>
       <if test="record.projectLeader != null" >
         project_leader = #{record.projectLeader,jdbcType=VARCHAR},
@@ -323,23 +363,26 @@
       <if test="record.teamMembers != null" >
         team_members = #{record.teamMembers,jdbcType=VARCHAR},
       </if>
+      <if test="record.prizeCategoryGrade != null" >
+        prize_category_grade = #{record.prizeCategoryGrade,jdbcType=VARCHAR},
+      </if>
       <if test="record.prizeCategory != null" >
         prize_category = #{record.prizeCategory,jdbcType=VARCHAR},
       </if>
       <if test="record.prizeName != null" >
         prize_name = #{record.prizeName,jdbcType=VARCHAR},
       </if>
-      <if test="record.resultCategory != null" >
-        result_category = #{record.resultCategory,jdbcType=VARCHAR},
+      <if test="record.prizeTime != null" >
+        prize_time = #{record.prizeTime,jdbcType=DATE},
       </if>
-      <if test="record.resultCategoryId != null" >
-        result_category_id = #{record.resultCategoryId,jdbcType=VARCHAR},
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
-      <if test="record.resultName != null" >
-        result_name = #{record.resultName,jdbcType=VARCHAR},
+      <if test="record.confirmPrizeStatus != null" >
+        confirm_prize_status = #{record.confirmPrizeStatus,jdbcType=VARCHAR},
       </if>
-      <if test="record.resultTime != null" >
-        result_time = #{record.resultTime,jdbcType=DATE},
+      <if test="record.confirmProjectStatus != null" >
+        confirm_project_status = #{record.confirmProjectStatus,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -350,6 +393,7 @@
     update t_project_data
     set id = #{record.id,jdbcType=INTEGER},
       management_company = #{record.managementCompany,jdbcType=VARCHAR},
+      project_category_grade = #{record.projectCategoryGrade,jdbcType=VARCHAR},
       subject = #{record.subject,jdbcType=VARCHAR},
       project_num = #{record.projectNum,jdbcType=VARCHAR},
       project_name = #{record.projectName,jdbcType=VARCHAR},
@@ -359,16 +403,19 @@
       subject2_id = #{record.subject2Id,jdbcType=VARCHAR},
       subject3_id = #{record.subject3Id,jdbcType=VARCHAR},
       project_satrt_time = #{record.projectSatrtTime,jdbcType=DATE},
+      project_end_time = #{record.projectEndTime,jdbcType=DATE},
       area = #{record.area,jdbcType=VARCHAR},
       organizer = #{record.organizer,jdbcType=VARCHAR},
+      organizer_company = #{record.organizerCompany,jdbcType=VARCHAR},
       project_leader = #{record.projectLeader,jdbcType=VARCHAR},
       team_members = #{record.teamMembers,jdbcType=VARCHAR},
+      prize_category_grade = #{record.prizeCategoryGrade,jdbcType=VARCHAR},
       prize_category = #{record.prizeCategory,jdbcType=VARCHAR},
       prize_name = #{record.prizeName,jdbcType=VARCHAR},
-      result_category = #{record.resultCategory,jdbcType=VARCHAR},
-      result_category_id = #{record.resultCategoryId,jdbcType=VARCHAR},
-      result_name = #{record.resultName,jdbcType=VARCHAR},
-      result_time = #{record.resultTime,jdbcType=DATE}
+      prize_time = #{record.prizeTime,jdbcType=DATE},
+      status = #{record.status,jdbcType=VARCHAR},
+      confirm_prize_status = #{record.confirmPrizeStatus,jdbcType=VARCHAR},
+      confirm_project_status = #{record.confirmProjectStatus,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -378,6 +425,9 @@
     <set >
       <if test="managementCompany != null" >
         management_company = #{managementCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="projectCategoryGrade != null" >
+        project_category_grade = #{projectCategoryGrade,jdbcType=VARCHAR},
       </if>
       <if test="subject != null" >
         subject = #{subject,jdbcType=VARCHAR},
@@ -406,11 +456,17 @@
       <if test="projectSatrtTime != null" >
         project_satrt_time = #{projectSatrtTime,jdbcType=DATE},
       </if>
+      <if test="projectEndTime != null" >
+        project_end_time = #{projectEndTime,jdbcType=DATE},
+      </if>
       <if test="area != null" >
         area = #{area,jdbcType=VARCHAR},
       </if>
       <if test="organizer != null" >
         organizer = #{organizer,jdbcType=VARCHAR},
+      </if>
+      <if test="organizerCompany != null" >
+        organizer_company = #{organizerCompany,jdbcType=VARCHAR},
       </if>
       <if test="projectLeader != null" >
         project_leader = #{projectLeader,jdbcType=VARCHAR},
@@ -418,23 +474,26 @@
       <if test="teamMembers != null" >
         team_members = #{teamMembers,jdbcType=VARCHAR},
       </if>
+      <if test="prizeCategoryGrade != null" >
+        prize_category_grade = #{prizeCategoryGrade,jdbcType=VARCHAR},
+      </if>
       <if test="prizeCategory != null" >
         prize_category = #{prizeCategory,jdbcType=VARCHAR},
       </if>
       <if test="prizeName != null" >
         prize_name = #{prizeName,jdbcType=VARCHAR},
       </if>
-      <if test="resultCategory != null" >
-        result_category = #{resultCategory,jdbcType=VARCHAR},
+      <if test="prizeTime != null" >
+        prize_time = #{prizeTime,jdbcType=DATE},
       </if>
-      <if test="resultCategoryId != null" >
-        result_category_id = #{resultCategoryId,jdbcType=VARCHAR},
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
       </if>
-      <if test="resultName != null" >
-        result_name = #{resultName,jdbcType=VARCHAR},
+      <if test="confirmPrizeStatus != null" >
+        confirm_prize_status = #{confirmPrizeStatus,jdbcType=VARCHAR},
       </if>
-      <if test="resultTime != null" >
-        result_time = #{resultTime,jdbcType=DATE},
+      <if test="confirmProjectStatus != null" >
+        confirm_project_status = #{confirmProjectStatus,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -442,6 +501,7 @@
   <update id="updateByPrimaryKey" parameterType="com.boku.www.pojo.TProjectData" >
     update t_project_data
     set management_company = #{managementCompany,jdbcType=VARCHAR},
+      project_category_grade = #{projectCategoryGrade,jdbcType=VARCHAR},
       subject = #{subject,jdbcType=VARCHAR},
       project_num = #{projectNum,jdbcType=VARCHAR},
       project_name = #{projectName,jdbcType=VARCHAR},
@@ -451,16 +511,32 @@
       subject2_id = #{subject2Id,jdbcType=VARCHAR},
       subject3_id = #{subject3Id,jdbcType=VARCHAR},
       project_satrt_time = #{projectSatrtTime,jdbcType=DATE},
+      project_end_time = #{projectEndTime,jdbcType=DATE},
       area = #{area,jdbcType=VARCHAR},
       organizer = #{organizer,jdbcType=VARCHAR},
+      organizer_company = #{organizerCompany,jdbcType=VARCHAR},
       project_leader = #{projectLeader,jdbcType=VARCHAR},
       team_members = #{teamMembers,jdbcType=VARCHAR},
+      prize_category_grade = #{prizeCategoryGrade,jdbcType=VARCHAR},
       prize_category = #{prizeCategory,jdbcType=VARCHAR},
       prize_name = #{prizeName,jdbcType=VARCHAR},
-      result_category = #{resultCategory,jdbcType=VARCHAR},
-      result_category_id = #{resultCategoryId,jdbcType=VARCHAR},
-      result_name = #{resultName,jdbcType=VARCHAR},
-      result_time = #{resultTime,jdbcType=DATE}
+      prize_time = #{prizeTime,jdbcType=DATE},
+      status = #{status,jdbcType=VARCHAR},
+      confirm_prize_status = #{confirmPrizeStatus,jdbcType=VARCHAR},
+      confirm_project_status = #{confirmProjectStatus,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <!--查询最大的项目编号-->
+    <select id="selectMaxProjectNum" parameterType="com.boku.www.pojo.TProjectData" resultType="java.lang.String" >
+        SELECT MAX(project_num) FROM t_project_data
+    </select>
+
+    <resultMap id="CountResultMap" type="com.boku.www.utils.Count" >
+        <result column="area" property="area" jdbcType="VARCHAR" />
+        <result column="count" property="count" jdbcType="INTEGER" />
+    </resultMap>
+    <!--统计各地区项目的数量-->
+    <select id="countTheNumberOfProjectDataInEachArea" resultMap="CountResultMap">
+        select  area ,count(*) AS 'count' from t_project_data group by area
+    </select>
 </mapper>
