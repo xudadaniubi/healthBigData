@@ -8,6 +8,9 @@ public interface ExcelImportAndBuildService {
 	//解析项目数据表
 	public String importProjectDataExcel(File file, String fileName) throws Exception;
 
+	//解析项目数据表
+	public String importPrizeDataExcel(File file, String fileName) throws Exception;
+
 	//解析学科分类表
 	public String importSubjectExcel(File file, String fileName) throws Exception;
 

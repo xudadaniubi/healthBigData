@@ -63,9 +63,40 @@ public class ExcelImportAndBuildController {
 			return message;
 		} catch (Exception e) {
 			e.printStackTrace();
-			message =  "数据导入失败！请注意：立项时间、结题时间、获奖时间必须要有固定的格式，如：‘2018’，项目管理单位、" +
-					"级别、项目类别、项目名称、项目子类、类目、所在地区、承担单位、项目负责人、团队成员、奖项类别、奖项名称不能为纯数字，" +
-					"一级学科分类id、二级学科分类id、三级学科分类id、项目编号可以位数字也可以是文字。";
+			//项目管理单位	项目级别	项目类别	一级学科分类	二级学科分类	项目名称	项目子类	类目	立项时间	结题时间	所在地区	承担单位	项目负责人	团队成员
+			message =  "数据导入失败！请注意：立项时间、结题时间必须要有固定的格式，如：‘2018’，项目管理单位、" +
+					"项目管理单位\t项目级别\t项目类别\t一级学科分类\t二级学科分类\t项目名称\t项目子类\t类目\t结题时间\t所在地区\t承担单位\t项目负责人\t团队成员不能为纯数字" ;
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"下载论文（中文）表数据失败,Exception:message"+e);
+			return message;
+		}
+	}
+
+	// 解析奖励数据表
+	@RequestMapping(value = "/importPrizeDataExcel", method = RequestMethod.POST)
+	@ResponseBody
+	public String importPrizeDataExcel(@RequestParam("file") MultipartFile file) {
+		String message = "";
+		try {
+			if (file.isEmpty()) {
+				return "文件为空";
+			}
+			// 获取文件名
+			String fileName = file.getOriginalFilename();
+			File f = null;
+			if(file.equals("")||file.getSize()<=0){
+				file = null;
+			}else{
+				InputStream ins = file.getInputStream();
+				f=new File(fileName);
+				inputStreamToFile(ins, f);
+			}
+			//调用服务层解析excel文件
+			message= excelImportAndBuildService.importPrizeDataExcel(f, fileName);
+			return message;
+		} catch (Exception e) {
+			e.printStackTrace();
+			message =  "数据导入失败！请注意：获奖时间必须要有固定的格式，如：‘2018’，项目管理单位、" +
+					"项目名称、项目类别、一级学科分类、二级学科分类、承担单位、所在地区、项目负责人、团队成员、奖励级别、所获奖项、奖项等级不能为纯数字";
 			logger.info("用户"+ CurrentUser.returnCurrentUser()+"下载论文（中文）表数据失败,Exception:message"+e);
 			return message;
 		}

@@ -70,24 +70,13 @@ public interface ProjectDataService {
 	 */
 	public List<TProjectData> findTProjectDataToExcel(TProjectData projectData) ;
 
-	/**查询所有的成果数据（科研成果统计）
-	 * 根据成果名称如：论文，查询所有的论文数据，将数据存储到对应的实体，封装到list集合里面进行返回
-	 */
-	public List downloadResultStatisticsExcel(String resultCategory);
+
 
 	/**
 	 * 批量确认
 	 * @param ids
 	 */
 	public void confirmProjectDataStatus(Integer[] ids);
-
-	public void confirmPrizeStatus(Integer[] ids);
-
-	public void confirmProjectAndPrizeStatus(Integer[] ids);
-	/**
-	 * 查询最大的项目编号
-	 */
-	public String selectMaxProjectNum();
 
 	/**
 	 * 统计各地区项目的数量

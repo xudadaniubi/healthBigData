@@ -1,9 +1,7 @@
 package com.boku.www.controller;
-import java.util.Date;
 import java.util.List;
 
 import com.boku.www.pojo.TProjectData;
-import com.boku.www.pojo.system.UUser;
 import com.boku.www.utils.Count;
 import com.boku.www.utils.CurrentUser;
 import com.boku.www.utils.PageResult;
@@ -32,10 +30,6 @@ public class ProjectDataController {
 	 */
 	@RequestMapping("/findAll")
 	public List<TProjectData> findAll(){
-		/*long a = System.currentTimeMillis();
-		projectDataService.findAll();
-		long b = System.currentTimeMillis();
-		System.out.println(b-a);*/
 		try {
 			return projectDataService.findAll();
 		} catch (Exception e) {
@@ -157,40 +151,6 @@ public class ProjectDataController {
 			return new Result(true, "确认成功");
 		} catch (Exception e) {
 			logger.info("用户"+CurrentUser.returnCurrentUser()+"确认项目数据失败,Exception:"+e);
-			e.printStackTrace();
-			return new Result(false, "确认失败");
-		}
-	}
-
-	/**
-	 * 批量确认奖励数据
-	 * @param ids
-	 * @return
-	 */
-	@RequestMapping("/confirmPrizeStatus")
-	public Result confirmPrizeStatus(@RequestBody Integer [] ids){
-		try {
-			projectDataService.confirmPrizeStatus(ids);
-			return new Result(true, "确认成功");
-		} catch (Exception e) {
-			logger.info("用户"+CurrentUser.returnCurrentUser()+"确认奖励数据失败,Exception:"+e);
-			e.printStackTrace();
-			return new Result(false, "确认失败");
-		}
-	}
-
-	/**
-	 * 批量确认奖励和项目数据
-	 * @param ids
-	 * @return
-	 */
-	@RequestMapping("/confirmProjectAndPrizeStatus")
-	public Result confirmProjectAndPrizeStatus(@RequestBody Integer [] ids){
-		try {
-			projectDataService.confirmProjectAndPrizeStatus(ids);
-			return new Result(true, "确认成功");
-		} catch (Exception e) {
-			logger.info("用户"+CurrentUser.returnCurrentUser()+"批量确认奖励和项目数据失败,Exception:"+e);
 			e.printStackTrace();
 			return new Result(false, "确认失败");
 		}

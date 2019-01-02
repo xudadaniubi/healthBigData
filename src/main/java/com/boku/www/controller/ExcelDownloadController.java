@@ -44,7 +44,7 @@ public class ExcelDownloadController {
 	private static Logger logger = LoggerFactory.getLogger(ExcelDownloadController.class);
 
 	@Autowired
-	private BooksService booksService;
+	private PrizeDataService prizeDataService;
 
 	@Autowired
 	private ProjectDataService projectDataService;
@@ -59,62 +59,70 @@ public class ExcelDownloadController {
 	private PatentService patentService;
 
 	/**
-	 * 1.下载项目分析表
+	 * 1.下载项目数据表
 	 */
-	@RequestMapping(value = "/downloadProjectDataOrPrizeDataExcel", method = RequestMethod.GET)
-	public void downloadProjectDataOrPrizeDataExcel(HttpServletRequest request, HttpServletResponse response,String subject,String subject1Id,String subject2Id
-		,String area,String organizer,String projectLeader,String prizeCategory,String searchStartTime,String searchEndTime,String code,
-													String projectCategoryGrade,String prizeCategoryGrade)throws IOException {
+	@RequestMapping(value = "/downloadProjectDataExcel", method = RequestMethod.GET)
+	public void downloadProjectDataExcel(HttpServletRequest request, HttpServletResponse response,String projectCategory,String subjectName1,String subjectName2
+		,String area,String firstOrganizerCompany,String projectLeader,String searchStartTime,String searchEndTime,
+													String projectCategoryGrade){
 		TProjectData projectData = new TProjectData();
 		projectData.setProjectCategoryGrade(projectCategoryGrade);
-		projectData.setSubject(subject);
-		projectData.setSubject1Id(subject1Id);
-		projectData.setSubject2Id(subject2Id);
+		projectData.setProjectCategory(projectCategory);
+		projectData.setSubjectName1(subjectName1);
+		projectData.setSubjectName2(subjectName2);
 		projectData.setArea(area);
-		projectData.setOrganizer(organizer);
+		projectData.setFirstOrganizerCompany(firstOrganizerCompany);
 		projectData.setProjectLeader(projectLeader);
 		projectData.setSearchStartTime(searchStartTime);
 		projectData.setSearchEndTime(searchEndTime);
-		projectData.setPrizeCategoryGrade(prizeCategoryGrade);
-		projectData.setPrizeCategory(prizeCategory);
-		//判断查询条件
-		//无条件，查询所有数据，将所有数据下载下来
 		try {
-			//1、查询奖励统计数据
-			if(code!=null && code.length()>0){
-				if(code.equals("1")){
-					//根据前端传来的projectData作为条件来查询数据库里的数据
-					//导出的Excel头部，这个要根据自己项目改一下
-					//String[] headers = { "序号", "奖项管理单位","级别", "奖项名称","拟奖等级","项目名称","获奖时间","所属地区","承担单位","项目负责人","团队成员"};
-					String[] header= { "序号", "奖项管理单位", "奖项名称","拟奖等级","项目名称","所属地区","承担单位","项目负责人","团队成员"};
-					String excelName = "科研奖励统计表";
-					List<TProjectData> list = projectDataService.findTProjectDataToExcel(projectData);//查询出来的数据
-					DownloadExcelUtils.downProjectDataExcel(request,response,list,header,excelName);
-				}else if(code.equals("2")){
-					//2、查询项目统计数据
-					//根据前端传来的projectData作为条件来查询数据库里的数据
-					//导出的Excel头部，这个要根据自己项目改一下
-					//String[] headers = { "序号", "项目管理单位","级别", "项目类别", "学科分类","项目名称","立项时间","结题时间","承担单位","所属地区","项目负责人"};
-					String[] header = { "序号", "项目管理单位", "项目类别", "学科分类","项目名称","立项时间","承担单位","项目负责人","级别"};
-					String excelName = "科研项目统计表";
-					List<TProjectData> list = projectDataService.findTProjectDataToExcel(projectData);//查询出来的数据
-					DownloadExcelUtils.downProjectDataExcel(request,response,list,header,excelName);
-				}
-			}else {
-				System.out.println("状态码为空");
-			}
-		} catch (IOException e) {
+			//查询项目统计数据
+			//根据前端传来的projectData作为条件来查询数据库里的数据
+			//项目管理单位	项目级别	项目类别	一级学科分类	二级学科分类	项目名称	项目子类	类目	立项时间	结题时间	所在地区	承担单位	项目负责人	团队成员
+			String[] header= { "序号", "项目管理单位", "项目级别","项目类别","一级学科分类","二级学科分类","项目名称","项目子类","类目","立项时间","结题时间","所在地区","承担单位","项目负责人","团队成员"};
+			List<TProjectData> list = projectDataService.findTProjectDataToExcel(projectData);//查询出来的数据
+			DownloadExcelUtils.downProjectDataExcel(request,response,list,header);
+		} catch (Exception e) {
 			logger.info("用户"+ CurrentUser.returnCurrentUser()+"项目分析表数据下载失败,Exception:"+e);
 			e.printStackTrace();
 		}
 
 	}
-
 	/**
-	 * 2、下载项目数据模板表
+	 * 2.下载将奖励数据表
+	 */
+	@RequestMapping(value = "/downloadPrizeDataExcel", method = RequestMethod.GET)
+	public void downloadPrizeDataExcel(HttpServletRequest request, HttpServletResponse response,String subjectName1,String subjectName2
+			,String area,String firstOrganizerCompany,String projectLeader,String prizeCategory,String searchStartTime,String searchEndTime
+													,String prizeCategoryGrade){
+		TPrizeData prizeData = new TPrizeData();
+		prizeData.setSubjectName1(subjectName1);
+		prizeData.setSubjectName2(subjectName2);
+		prizeData.setArea(area);
+		prizeData.setFirstOrganizerCompany(firstOrganizerCompany);
+		prizeData.setProjectLeader(projectLeader);
+		prizeData.setSearchStartTime(searchStartTime);
+		prizeData.setSearchEndTime(searchEndTime);
+		prizeData.setPrizeCategoryGrade(prizeCategoryGrade);
+		prizeData.setPrizeCategory(prizeCategory);
+		try {
+			//查询奖励统计数据
+			//导出的Excel头部，这个要根据自己项目改一下
+			//项目名称	项目类别	一级学科分类	二级学科分类	承担单位	所在地区	项目负责人	团队成员	奖励级别	所获奖项	奖项等级	获奖时间
+			String[] header= { "序号", "项目名称", "项目类别", "一级学科分类","二级学科分类","承担单位","所在地区","项目负责人","团队成员","奖励级别","所获奖项","奖项等级","获奖时间"};
+			List<TPrizeData> list = prizeDataService.findTPrizeDataToExcel(prizeData);//查询出来的数据
+			DownloadExcelUtils.downPrizeDataExcel(request,response,list,header);
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"奖励数据表数据下载失败,Exception:"+e);
+			e.printStackTrace();
+		}
+
+	}
+	/**
+	 * 3、下载项目数据模板表
 	 */
 	@RequestMapping(value = "/downloadTemplateProjectDataExcel" , method = RequestMethod.GET)
-	public void downloadTemplateProjectDataExcel(HttpServletRequest request, HttpServletResponse response)throws IOException {
+	public void downloadTemplateProjectDataExcel(HttpServletRequest request, HttpServletResponse response){
 		String message =  "请注意：立项时间、结题时间必须要有固定的格式，如：‘2018’，项目管理单位、" +
 				"“项目类别、项目名称、项目子类、类目、所在地区、项目负责人、”不能为纯数字，" +
 				"“一级学科分类、二级学科分类、”必须根据“国家标准学科分类表”进行填写" +
@@ -131,25 +139,22 @@ public class ExcelDownloadController {
 		String excelName = "项目数据统计模板表";
 		try {
 			DownloadExcelUtils.downTemplateExcel(request,response,headers,data1,data2,data3,data4,data5,excelName);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.info("用户"+ CurrentUser.returnCurrentUser()+"下载项目数据模板表失败,Exception:"+e);
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * 3、下载奖励数据模板表
+	 * 4、下载奖励数据模板表
 	 */
 	@RequestMapping(value = "/downloadTemplatePrizeDataExcel" , method = RequestMethod.GET)
-	public void downloadTemplatePrizeDataExcel(HttpServletRequest request, HttpServletResponse response)throws IOException {
-		//导出的Excel头部，这个要根据自己项目改一下
-
+	public void downloadTemplatePrizeDataExcel(HttpServletRequest request, HttpServletResponse response){
 		String message =  "请注意：获奖时间必须要有固定的格式，如：‘2018’，" +
 				"“项目类别、项目名称、所在地区、项目负责人、奖项类别、奖项名称、所获奖项、奖项等级”不能为纯数字，" +
 				"“一级学科分类、二级学科分类”必须根据“国家标准学科分类表”进行填写" +
 				"“奖励级别”如果是市、区、院级必须填写所在的地区或单位的名称，括号必须是中文状态下的，" +
 				"“承担单位、团队成员”有多个必须用英文状态下的“,”隔开。请不要更改表头的名称和各列的顺序，请把所有的模板信息删除。";
-
 		//项目名称	项目类别	一级学科分类	二级学科分类	承担单位	所在地区	项目负责人	团队成员	奖励级别	所获奖项	奖项等级	获奖时间
 		String[] headers = { "项目名称","项目类别", "一级学科分类","二级学科分类","承担单位","所在地区","项目负责人","团队成员","获奖级别","所获奖项","奖项等级","获奖时间","特别说明"};
 		String[] data1 = { "抗癌新药克美纳治疗非小细胞肺癌的Ⅱ,Ⅲ期临床研究","2017年杭州市重大科技创新项目", "基础医学","医学史","浙江肿瘤医院,浙江贝达药业有限公司","杭州市","王印祥","徐伟明,章鹏飞,顾海宁,边界,沈超,常雨薇,何红强","国家级","2019年杭州市科技进步奖","三等奖","2019",message};
@@ -160,17 +165,17 @@ public class ExcelDownloadController {
 		String excelName = "奖励数据统计模板表";
 		try {
 			DownloadExcelUtils.downTemplateExcel(request,response,headers,data1,data2,data3,data4,data5,excelName);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.info("用户"+ CurrentUser.returnCurrentUser()+"下载奖励数据模板表失败,Exception:"+e);
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 *4、下载论文（中文）模板表
+	 *5、下载论文（中文）模板表
 	 */
 	@RequestMapping(value = "/downloadTemplateThesisForChineseExcel" , method = RequestMethod.GET)
-	public void downloadTemplateThesisForChineseExcel(HttpServletRequest request, HttpServletResponse response)throws IOException {
+	public void downloadTemplateThesisForChineseExcel(HttpServletRequest request, HttpServletResponse response){
 		//导出的Excel头部，这个要根据自己项目改一下
 		String message =  "请注意：“年”必须要有固定的格式，如：‘2018’，“作者、题名、文献来源、机构、所属地区”不能为纯数字，" +
 				"“卷、期、页码、ISSN、DOI”可以为数字，“作者、机构”有多个必须用英文状态下的“;”隔开。请不要更改表头的名称和各列的顺序，请把所有的模板信息删除。";
@@ -185,17 +190,17 @@ public class ExcelDownloadController {
 		String excelName = "论文（中文）模板表";
 		try {
 			DownloadExcelUtils.downTemplateExcel(request,response,headers,data1,data2,data3,data4,data5,excelName);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.info("用户"+ CurrentUser.returnCurrentUser()+"下载论文（中文）模板表失败,Exception:"+e);
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 *5、下载论文（外文）模板表
+	 *6、下载论文（外文）模板表
 	 */
 	@RequestMapping(value = "/downloadTemplateThesisForEnglishExcel" , method = RequestMethod.GET)
-	public void downloadTemplateThesisForEnglishExcel(HttpServletRequest request, HttpServletResponse response)throws IOException {
+	public void downloadTemplateThesisForEnglishExcel(HttpServletRequest request, HttpServletResponse response){
 		//导出的Excel头部，这个要根据自己项目改一下
 		String message =  "请注意：“年”必须要有固定的格式，如：‘2018’，“作者、文献、期刊名称、作者单位、机构、所属地区、作者地址、文摘”不能为纯数字，" +
 				"“卷、期、页、ISSN、DOI”可以为数字，“作者、作者单位”有多个必须用英文状态下的“;”隔开。请不要更改表头的名称和各列的顺序，请把所有的模板信息删除。";
@@ -210,17 +215,17 @@ public class ExcelDownloadController {
 		String excelName = "论文（外文）模板表";
 		try {
 			DownloadExcelUtils.downTemplateExcel(request,response,headers,data1,data2,data3,data4,data5,excelName);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.info("用户"+ CurrentUser.returnCurrentUser()+"下载论文（外文）模板表失败,Exception:"+e);
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 *6、下载专利模板表
+	 *7、下载专利模板表
 	 */
 	@RequestMapping(value = "/downloadTemplatePatentExcel" , method = RequestMethod.GET)
-	public void downloadTemplatePatentExcel(HttpServletRequest request, HttpServletResponse response)throws IOException {
+	public void downloadTemplatePatentExcel(HttpServletRequest request, HttpServletResponse response){
 		//导出的Excel头部，这个要根据自己项目改一下
 		String message =  "请注意：“专利申请日,授权公告日,登记时间”必须要有固定的格式，如：‘2016-02-12’，“第一发明人、其他发明人、第一发明人单位、专利名称、专利权人、专利类别、专利代理机构名称、所属地区”不能为纯数字，" +
 				"“证书号、CN106137336A”可以为数字，“其他发明人”有多个必须用英文状态下的“,”隔开。请不要更改表头的名称和各列的顺序，请把所有的模板信息删除。";
@@ -235,18 +240,18 @@ public class ExcelDownloadController {
 		String excelName = "论文（外文）模板表";
 		try {
 			DownloadExcelUtils.downTemplateExcel(request,response,headers,data1,data2,data3,data4,data5,excelName);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.info("用户"+ CurrentUser.returnCurrentUser()+"下载专利模板表失败,Exception:"+e);
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * 7.下载论文（中文）表数据
+	 * 8.下载论文（中文）表数据
 	 */
 	@RequestMapping(value = "/downloadThesisForChineseExcel", method = RequestMethod.GET)
 	public void downloadThesisForChineseExcel(HttpServletRequest request, HttpServletResponse response,String title,String author,String authorCompany
-			,String area,String searchStartTime,String searchEndTime)throws IOException {
+			,String area,String searchStartTime,String searchEndTime){
 		TThesisForChinese thesisForChinese = new TThesisForChinese();
 		thesisForChinese.setTitle(title);
 		thesisForChinese.setAuthor(author);
@@ -263,18 +268,18 @@ public class ExcelDownloadController {
 			//查询出来的数据
 			List<TThesisForChinese> list = thesisForChineseService.findThesisForChineseToExcel(thesisForChinese);
 			DownloadExcelUtils.downThesisForChineseExcel(request,response,list,headers);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.info("用户"+ CurrentUser.returnCurrentUser()+"下载论文（中文）表数据失败,Exception:"+e);
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * 8.下载论文（外文）表
+	 * 9.下载论文（外文）表
 	 */
 	@RequestMapping(value = "/downloadThesisForEnglishExcel", method = RequestMethod.GET)
 	public void downloadThesisForEnglishExcel(HttpServletRequest request, HttpServletResponse response,String title,String author,String authorCompany
-			,String area,String searchStartTime,String searchEndTime)throws IOException {
+			,String area,String searchStartTime,String searchEndTime){
 		TThesisForEnglish thesisForEnglish = new TThesisForEnglish();
 		thesisForEnglish.setTitle(title);
 		thesisForEnglish.setAuthor(author);
@@ -289,18 +294,18 @@ public class ExcelDownloadController {
 			//查询出来的数据
 			List<TThesisForEnglish> list = thesisForEnglishService.findThesisForEnglishToExcel(thesisForEnglish);
 			DownloadExcelUtils.downThesisForEnglishExcel(request,response,list,headers);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.info("用户"+ CurrentUser.returnCurrentUser()+"下载论文（外文）表数据失败,Exception:"+e);
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * 9.下载专利表数据
+	 * 10.下载专利表数据
 	 */
 	@RequestMapping(value = "/downloadPatentExcel", method = RequestMethod.GET)
 	public void downloadPatentExcel(HttpServletRequest request, HttpServletResponse response,String patentName,String firstInvento,String patentNum
-			,String patentee,String area,String searchStartTime,String searchEndTime)throws IOException {
+			,String patentee,String area,String searchStartTime,String searchEndTime){
 		TPatent patent = new TPatent();
 		//专利名称
 		patent.setPatentName(patentName);

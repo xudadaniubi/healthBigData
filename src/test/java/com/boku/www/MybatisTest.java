@@ -40,14 +40,25 @@ public class MybatisTest {
 	@Autowired
 	private UUserRoleDao userRoleDao;
 	/*@Test
-	public void test3() throws Exception {
+	public void test2() throws Exception {
 		//String filePath = "E:\\模板.xls";
-		String filePath = "E:\\浙江省科技项目1.8.xls";
+		String filePath = "E:\\项目数据表.xlsx";
 		File file = new File(filePath);
 		//截取字符串名称
 		String fileName = filePath.substring(filePath.lastIndexOf("\\")+1);
 		System.out.println(fileName);
 		String message = excelImportAndBuildService.importProjectDataExcel(file, fileName);
+		System.out.println(message);
+	}*/
+	/*@Test
+	public void test3() throws Exception {
+		//String filePath = "E:\\模板.xls";
+		String filePath = "E:\\奖励数据表.xlsx";
+		File file = new File(filePath);
+		//截取字符串名称
+		String fileName = filePath.substring(filePath.lastIndexOf("\\")+1);
+		System.out.println(fileName);
+		String message = excelImportAndBuildService.importPrizeDataExcel(file, fileName);
 		System.out.println(message);
 	}*/
 

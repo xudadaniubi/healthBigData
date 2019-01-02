@@ -43,6 +43,9 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 	private TProjectDataMapper projectDataMapper;
 
 	@Autowired
+	private TPrizeDataMapper prizeDataMapper;
+
+	@Autowired
 	private TSubjectCategoryMapper subjectCategoryMapper;
 
 	@Autowired
@@ -88,6 +91,25 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 		for (TProjectData projectData : projectDataList) {
 			//将集合中所有的数据存入到数据库中
 			projectDataMapper.insert(projectData);
+		}
+		return message;
+	}
+	/**插入奖励数据到数据库
+	 * @param file
+	 * @param fileName
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	public String importPrizeDataExcel(File file, String fileName) throws Exception {
+		String message = "Import success";
+		//转换文件
+		Sheet sheet = ParseExcelUtils.parseExcel(file, fileName);
+		//解析数据
+		List<TPrizeData> prizeDataList = getPrizeDataExcelContent(sheet);
+		for (TPrizeData prizeData : prizeDataList) {
+			//将集合中所有的数据存入到数据库中
+			prizeDataMapper.insert(prizeData);
 		}
 		return message;
 	}
@@ -263,150 +285,194 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 				if(titleRow.getCell(2).getStringCellValue().indexOf("项目类别")>=0){
 					if(row.getCell(2)!=null && row.getCell(2).getCellType()==row.getCell(2).CELL_TYPE_NUMERIC){
 						row.getCell(2).setCellType(Cell.CELL_TYPE_STRING);
-						projectData.setSubject(row.getCell(2).getStringCellValue().trim());
+						projectData.setProjectCategory(row.getCell(2).getStringCellValue().trim());
 					}else if(row.getCell(2)!=null && row.getCell(2).getCellType()==row.getCell(2).CELL_TYPE_STRING){
-						projectData.setSubject(row.getCell(2).getStringCellValue().trim());
+						projectData.setProjectCategory(row.getCell(2).getStringCellValue().trim());
 					}
-					if (projectData.getSubject() != null && projectData.getSubject().length() > 0) {
+					if (projectData.getProjectCategory() != null && projectData.getProjectCategory().length() > 0) {
 						//查询项目字典表里是否有修改的项目，如果有就不用重新添加新的项目，如果没有就新增新的项目类别
 						TProjectCategoryExample example = new TProjectCategoryExample();
 						TProjectCategoryExample.Criteria criteria = example.createCriteria();
-						criteria.andProjectCategoryEqualTo(projectData.getSubject());
+						criteria.andProjectCategoryEqualTo(projectData.getProjectCategory());
 						List<TProjectCategory> projectCategoryList = projectCategoryMapper.selectByExample(example);
 
 						if(projectCategoryList == null || projectCategoryList.size()<=0){
 							TProjectCategory projectCategory = new TProjectCategory();
 							projectCategory.setGrade(projectData.getProjectCategoryGrade());
-							projectCategory.setProjectCategory(projectData.getSubject());
+							projectCategory.setProjectCategory(projectData.getProjectCategory());
 							projectCategory.setStatus("1");
 							//将新增好的项目字典信息插入到数据库里
 							projectCategoryMapper.insert(projectCategory);
 						}
 					}
 				}
-
-				//一级学科分类id
-				if(titleRow.getCell(3).getStringCellValue().indexOf("一级学科分类id")>=0){
-					if(row.getCell(3)!=null && row.getCell(3).getCellType()==row.getCell(3).CELL_TYPE_NUMERIC){
-						row.getCell(3).setCellType(Cell.CELL_TYPE_STRING);
-						projectData.setSubject1Id(row.getCell(3).getStringCellValue().trim());
-					}else if(row.getCell(3)!=null && row.getCell(3).getCellType()==row.getCell(3).CELL_TYPE_STRING){
-						projectData.setSubject1Id(row.getCell(3).getStringCellValue().trim());
-					}
-				}
-				//二级学科分类id
-				if(titleRow.getCell(4).getStringCellValue().indexOf("二级学科分类id")>=0){
-					if(row.getCell(4)!=null && row.getCell(4).getCellType()==row.getCell(4).CELL_TYPE_NUMERIC){
-						row.getCell(4).setCellType(Cell.CELL_TYPE_STRING);
-						projectData.setSubject2Id(row.getCell(4).getStringCellValue().trim());
-					}else if(row.getCell(4)!=null && row.getCell(4).getCellType()==row.getCell(4).CELL_TYPE_STRING){
-						projectData.setSubject2Id(row.getCell(4).getStringCellValue().trim());
-					}
-				}
-				//三级学科分类id
-				if(titleRow.getCell(5).getStringCellValue().indexOf("三级学科分类id")>=0){
-					if(row.getCell(5)!=null && row.getCell(5).getCellType()==row.getCell(5).CELL_TYPE_NUMERIC){
-						row.getCell(5).setCellType(Cell.CELL_TYPE_STRING);
-						projectData.setSubject3Id(row.getCell(5).getStringCellValue().trim());
-					}else if(row.getCell(5)!=null && row.getCell(5).getCellType()==row.getCell(5).CELL_TYPE_STRING){
-						projectData.setSubject3Id(row.getCell(5).getStringCellValue().trim());
-					}
-				}
-				if(titleRow.getCell(6).getStringCellValue().indexOf("项目编号")>=0){
-					long projectNum = 330100000000L;
-					if(projectDataMapper.selectMaxProjectNum() != null && projectDataMapper.selectMaxProjectNum().length()>0){
-						projectNum = Long.parseLong(projectDataMapper.selectMaxProjectNum());
-					}
-					projectNum += i;
-					projectData.setProjectNum(""+(projectNum));
-				}
+				//一级学科分类
+				projectData.setSubjectName1(row.getCell(3).getStringCellValue());
+				//二级学科分类
+				projectData.setSubjectName2(row.getCell(4).getStringCellValue());
 				//项目名称
-				projectData.setProjectName(row.getCell(7).getStringCellValue());
+				projectData.setProjectName(row.getCell(5).getStringCellValue());
 				//项目子类
-				projectData.setProjectKidcat(row.getCell(8).getStringCellValue());
+				projectData.setProjectKidcat(row.getCell(6).getStringCellValue());
 				//类目
-				projectData.setCategory(row.getCell(9).getStringCellValue());
+				projectData.setCategory(row.getCell(7).getStringCellValue());
 				//立项时间
-				if(titleRow.getCell(10).getStringCellValue().indexOf("立项时间")>=0){
-					Cell cell10 = row.getCell(10);
-					//将double类型的数据转换未字符串，然后将字符串转换为date类型
-					SimpleDateFormat format = new SimpleDateFormat("yyyy");
-					if(cell10!=null && cell10.getCellType()==cell10.CELL_TYPE_NUMERIC){
-						cell10.setCellType(Cell.CELL_TYPE_STRING);
-						//将double转换为String
-						String sDate=cell10.getStringCellValue().trim();
-						//将String装换为Date
-						Date date = format.parse(sDate);
-						projectData.setProjectSatrtTime(date);
+				if(titleRow.getCell(8).getStringCellValue().indexOf("立项时间")>=0){
+					if(row.getCell(8)!=null && row.getCell(8).getCellType()==row.getCell(8).CELL_TYPE_NUMERIC){
+						row.getCell(8).setCellType(Cell.CELL_TYPE_STRING);
+						projectData.setProjectStartTime(row.getCell(8).getStringCellValue().trim());
+					}else if(row.getCell(8)!=null && row.getCell(8).getCellType()==row.getCell(8).CELL_TYPE_STRING){
+						projectData.setProjectStartTime(row.getCell(8).getStringCellValue().trim());
 					}
 				}
 				//结题时间
-				if(titleRow.getCell(11).getStringCellValue().indexOf("结题时间")>=0){
-					Cell cell11 = row.getCell(11);
-					//将double类型的数据转换未字符串，然后将字符串转换为date类型
-					SimpleDateFormat format = new SimpleDateFormat("yyyy");
-					if(cell11!=null && cell11.getCellType()==cell11.CELL_TYPE_NUMERIC){
-						cell11.setCellType(Cell.CELL_TYPE_STRING);
-						//将double转换为String
-						String sDate=cell11.getStringCellValue().trim();
-						//将String装换为Date
-						Date date = format.parse(sDate);
-						projectData.setProjectEndTime(date);
+				if(titleRow.getCell(9).getStringCellValue().indexOf("结题时间")>=0){
+					if(row.getCell(9)!=null && row.getCell(9).getCellType()==row.getCell(9).CELL_TYPE_NUMERIC){
+						row.getCell(9).setCellType(Cell.CELL_TYPE_STRING);
+						projectData.setProjectEndTime(row.getCell(9).getStringCellValue().trim());
+					}else if(row.getCell(9)!=null && row.getCell(9).getCellType()==row.getCell(9).CELL_TYPE_STRING){
+						projectData.setProjectEndTime(row.getCell(9).getStringCellValue().trim());
 					}
 				}
 				//所在地区
-				projectData.setArea(row.getCell(12).getStringCellValue());
+				projectData.setArea(row.getCell(10).getStringCellValue());
 				//第一承办单位
-				String allOrganizerCompany = row.getCell(13).getStringCellValue();
+				String allOrganizerCompany = row.getCell(11).getStringCellValue();
 				String[] organizerCompanys = allOrganizerCompany.split(",");
 				//将第一个承办单位存到实体中
-				projectData.setOrganizer(organizerCompanys[0]);
+				projectData.setFirstOrganizerCompany(organizerCompanys[0]);
+				//其他承办单位
+				//如果承办单位大于1个，就将第一承办单位以外的其他单位放在其他承办单位里面
+				if(organizerCompanys.length>1){
+					String otherOrganizerCompanys = "";
+					for(int j = 0;j<organizerCompanys.length;j++){
+						if(j>=1 && j<organizerCompanys.length-1){
+							otherOrganizerCompanys += organizerCompanys[j] + ",";
+						}else if(j==organizerCompanys.length-1){
+							otherOrganizerCompanys += organizerCompanys[j];
+						}
+					}
+					projectData.setOtherOrganizerCompany(otherOrganizerCompanys);
+				}
 				//所有承办单位
-				projectData.setOrganizerCompany(row.getCell(13).getStringCellValue());
+				projectData.setOrganizer(allOrganizerCompany);
 				//项目负责人
-				projectData.setProjectLeader(row.getCell(14).getStringCellValue());
+				projectData.setProjectLeader(row.getCell(12).getStringCellValue());
 				//团队成员
-				projectData.setTeamMembers(row.getCell(15).getStringCellValue());
-				//奖项级别
-				projectData.setPrizeCategoryGrade(row.getCell(16).getStringCellValue());
-				//奖项类别
-				projectData.setPrizeCategory(row.getCell(17).getStringCellValue());
-				if (projectData.getPrizeCategory() != null && projectData.getPrizeCategory().length() > 0) {
-					//查询奖项字典表里是否有修改的奖项，如果有就不用重新添加新的奖项，如果没有就新增新的奖项类别
-					TPrizeCategoryExample example = new TPrizeCategoryExample();
-					TPrizeCategoryExample.Criteria criteria = example.createCriteria();
-					criteria.andPrizeCategoryEqualTo(projectData.getPrizeCategory());
-					List<TPrizeCategory> prizeCategoryList = prizeCategoryMapper.selectByExample(example);
-					if(prizeCategoryList == null || prizeCategoryList.size()<=0) {
-						TPrizeCategory prizeCategory = new TPrizeCategory();
-						prizeCategory.setGrade(projectData.getPrizeCategoryGrade());
-						prizeCategory.setPrizeCategory(projectData.getPrizeCategory());
-						prizeCategory.setStatus("1");
-						//将新增好的项目字典信息插入到数据库里
-						prizeCategoryMapper.insert(prizeCategory);
-					}
-				}
-				//奖项名称
-				projectData.setPrizeName(row.getCell(18).getStringCellValue());
-				//获奖时间
-				if(titleRow.getCell(19).getStringCellValue().indexOf("获奖时间")>=0){
-					Cell cell19 = row.getCell(19);
-					//将double类型的数据转换未字符串，然后将字符串转换为date类型
-					SimpleDateFormat format = new SimpleDateFormat("yyyy");
-					if(cell19!=null && cell19.getCellType()==cell19.CELL_TYPE_NUMERIC){
-						cell19.setCellType(Cell.CELL_TYPE_STRING);
-						//将double转换为String
-						String sDate=cell19.getStringCellValue().trim();
-						//将String装换为Date
-						Date date = format.parse(sDate);
-						projectData.setPrizeTime(date);
-					}
-				}
+				projectData.setTeamMembers(row.getCell(13).getStringCellValue());
 				projectData.setStatus("1");
 				//默认为未确认
-				projectData.setConfirmPrizeStatus("2");
-				projectData.setConfirmProjectStatus("2");
+				projectData.setConfirmStatus("2");
 				list.add(projectData);
+			}
+		}
+		return list;
+	}/**
+	 * 解析(读取)Excel内容(TPrizeData)
+	 * @param sheet
+	 * @return
+	 */
+	//告诉编译器忽略指定的警告，不用在编译完成后出现警告信息。
+	@SuppressWarnings("static-access")
+	public List<TPrizeData> getPrizeDataExcelContent(Sheet sheet)throws Exception{
+		List<TPrizeData> list = new ArrayList<TPrizeData>();
+		//行数
+		int rowNumber = 0;
+		//总行数
+		int rowCount = sheet.getPhysicalNumberOfRows();
+		if(rowCount>1){
+			//标题行
+			Row titleRow = sheet.getRow(0);
+			//遍历行，略过标题行，从第二行开始
+			for(int i=1;i<rowCount;i++){
+				Row row = sheet.getRow(i);
+				//跳过空行
+				if(i>=1){
+					if(row==null){continue;}
+					else if(StringUtils.isEmpty(getValue(row.getCell(0)))&&StringUtils.isEmpty(getValue(row.getCell(1)))){
+						continue;
+					}
+				}
+
+				TPrizeData prizeData = new TPrizeData();
+				//行数
+				rowNumber = row.getRowNum();
+				System.out.println(rowNumber+1);
+				//项目名称
+				prizeData.setProjectName(row.getCell(0).getStringCellValue());
+				//项目类别
+				if(titleRow.getCell(1).getStringCellValue().indexOf("项目类别")>=0){
+					if(row.getCell(1)!=null && row.getCell(1).getCellType()==row.getCell(1).CELL_TYPE_NUMERIC){
+						row.getCell(1).setCellType(Cell.CELL_TYPE_STRING);
+						prizeData.setPrizeCategory(row.getCell(1).getStringCellValue().trim());
+					}else if(row.getCell(1)!=null && row.getCell(1).getCellType()==row.getCell(1).CELL_TYPE_STRING){
+						prizeData.setPrizeCategory(row.getCell(1).getStringCellValue().trim());
+					}
+					if (prizeData.getPrizeCategory() != null && prizeData.getPrizeCategory().length() > 0) {
+						//查询奖励字典表里是否有修改的奖励，如果有就不用重新添加新的奖励，如果没有就新增新的奖励类别
+						TPrizeCategoryExample example = new TPrizeCategoryExample();
+						TPrizeCategoryExample.Criteria criteria = example.createCriteria();
+						criteria.andPrizeCategoryEqualTo(prizeData.getPrizeCategory());
+						List<TPrizeCategory> prizeCategoryList = prizeCategoryMapper.selectByExample(example);
+
+						if(prizeCategoryList == null || prizeCategoryList.size()<=0){
+							TPrizeCategory prizeCategory = new TPrizeCategory();
+							prizeCategory.setGrade(prizeData.getPrizeCategoryGrade());
+							prizeCategory.setPrizeCategory(prizeData.getProjectCategory());
+							prizeCategory.setStatus("1");
+							//将新增好的奖励字典信息插入到数据库里
+							prizeCategoryMapper.insert(prizeCategory);
+						}
+					}
+				}
+				//一级学科分类
+				prizeData.setSubjectName1(row.getCell(2).getStringCellValue());
+				//二级学科分类
+				prizeData.setSubjectName2(row.getCell(3).getStringCellValue());
+				//承办单位
+				String allOrganizerCompany = row.getCell(4).getStringCellValue();
+				String[] organizerCompanys = allOrganizerCompany.split(",");
+				//将第一个承办单位存到实体中
+				prizeData.setFirstOrganizerCompany(organizerCompanys[0]);
+				//其他承办单位
+				//如果承办单位大于1个，就将第一承办单位以外的其他单位放在其他承办单位里面
+				if(organizerCompanys.length>1){
+					String otherOrganizerCompanys = "";
+					for(int j = 0;j<organizerCompanys.length;j++){
+						if(j>=1 && j<organizerCompanys.length-1){
+							otherOrganizerCompanys += organizerCompanys[j] + ",";
+						}else if(j==organizerCompanys.length-1){
+							otherOrganizerCompanys += organizerCompanys[j];
+						}
+					}
+					prizeData.setOtherOrganizerCompany(otherOrganizerCompanys);
+				}
+				//		一级学科分类	二级学科分类	承担单位	所在地区	项目负责人	团队成员	奖励级别	所获奖项	奖项等级	获奖时间
+				//所在地区
+				prizeData.setArea(row.getCell(5).getStringCellValue());
+				//项目负责人
+				prizeData.setProjectLeader(row.getCell(6).getStringCellValue());
+				//团队成员
+				prizeData.setTeamMembers(row.getCell(7).getStringCellValue());
+				//奖励级别
+				prizeData.setPrizeCategoryGrade(row.getCell(8).getStringCellValue());
+				//所获奖项
+				prizeData.setPrizeCategory(row.getCell(9).getStringCellValue());
+				//奖项等级
+				prizeData.setAwardGrade(row.getCell(10).getStringCellValue());
+				//获奖时间
+				if(titleRow.getCell(11).getStringCellValue().indexOf("立项时间")>=0){
+					if(row.getCell(11)!=null && row.getCell(11).getCellType()==row.getCell(11).CELL_TYPE_NUMERIC){
+						row.getCell(11).setCellType(Cell.CELL_TYPE_STRING);
+						prizeData.setPrizeTime(row.getCell(11).getStringCellValue().trim());
+					}else if(row.getCell(11)!=null && row.getCell(11).getCellType()==row.getCell(11).CELL_TYPE_STRING){
+						prizeData.setPrizeTime(row.getCell(11).getStringCellValue().trim());
+					}
+				}
+				prizeData.setStatus("1");
+				//默认为未确认
+				prizeData.setConfirmStatus("2");
+				list.add(prizeData);
 			}
 		}
 		return list;

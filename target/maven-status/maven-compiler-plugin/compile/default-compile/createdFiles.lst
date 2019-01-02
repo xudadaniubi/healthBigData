@@ -3,6 +3,7 @@ com\boku\www\pojo\TPatent.class
 com\boku\www\pojo\TPrizeCategory.class
 com\boku\www\pojo\TPrizeCategoryExample$GeneratedCriteria.class
 com\boku\www\pojo\TAreaAndCompanyExample$GeneratedCriteria.class
+com\boku\www\pojo\TPrizeDataExample$Criterion.class
 com\boku\www\pojo\system\UUserRole.class
 com\boku\www\controller\ProjectCategoryController.class
 com\boku\www\mapper\TProjectDataMapper.class
@@ -46,6 +47,7 @@ com\boku\www\service\ThesisForChineseService.class
 com\boku\www\pojo\TAreaExample$GeneratedCriteria.class
 com\boku\www\service\impl\ExcelImportAndBuildServiceImpl.class
 com\boku\www\pojo\TProjectCategoryExample$Criteria.class
+com\boku\www\pojo\TPrizeDataExample$GeneratedCriteria.class
 com\boku\www\service\PrizeCategoryService.class
 com\boku\www\pojo\system\URolePermission.class
 com\boku\www\pojo\TThesisForChinese.class
@@ -53,8 +55,11 @@ com\boku\www\pojo\TAreaExample.class
 com\boku\www\mapper\TBooksMapper.class
 com\boku\www\mapper\TThesisForChineseMapper.class
 com\boku\www\service\system\PermissionService.class
+com\boku\www\pojo\TPrizeDataExample$Criteria.class
 com\boku\www\pojo\TSubjectCategoryExample$Criterion.class
+com\boku\www\service\impl\PrizeDataServiceImpl.class
 com\boku\www\pojo\TProjectDataExample$Criteria.class
+com\boku\www\pojo\TPrizeData.class
 com\boku\www\service\impl\ProjectDataServiceImpl.class
 com\boku\www\mapper\TProjectCategoryMapper.class
 com\boku\www\service\ThesisForEnglishService.class
@@ -90,10 +95,12 @@ com\boku\www\pojo\TAreaAndCompanyExample$Criterion.class
 com\boku\www\utils\DownloadCommonExcelUtils.class
 com\boku\www\mapper\system\URoleDao.class
 com\boku\www\pojo\TSubjectCategoryExample.class
+com\boku\www\controller\PrizeDataController.class
 com\boku\www\mapper\system\URolePermissionDao.class
 com\boku\www\pojo\TAreaExample$Criteria.class
 com\boku\www\pojo\TThesisForChineseExample$Criterion.class
 com\boku\www\service\impl\ProjectCategoryServiceImpl.class
+com\boku\www\mapper\TPrizeDataMapper.class
 com\boku\www\pojo\TBooksExample$Criterion.class
 com\boku\www\pojo\TProjectCategoryExample$Criterion.class
 com\boku\www\utils\CurrentUser.class
@@ -104,6 +111,7 @@ com\boku\www\SpringbootMybatisApplication.class
 com\boku\www\mapper\system\UUserRoleDao.class
 com\boku\www\pojo\TPrizeCategoryExample$Criterion.class
 com\boku\www\controller\AreaController.class
+com\boku\www\service\PrizeDataService.class
 com\boku\www\service\system\RoleService.class
 com\boku\www\pojo\TSubjectCategoryExample$GeneratedCriteria.class
 com\boku\www\service\system\impl\UserServiceImpl.class
@@ -123,4 +131,5 @@ com\boku\www\pojo\TPatentExample.class
 com\boku\www\pojo\TThesisForEnglishExample.class
 com\boku\www\pojo\TBooksExample$Criteria.class
 com\boku\www\pojo\TProjectData.class
+com\boku\www\pojo\TPrizeDataExample.class
 com\boku\www\pojo\TThesisForEnglishExample$Criteria.class

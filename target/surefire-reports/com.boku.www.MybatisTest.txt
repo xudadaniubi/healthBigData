@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 Test set: com.boku.www.MybatisTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.229 s <<< FAILURE! - in com.boku.www.MybatisTest
-initializationError(com.boku.www.MybatisTest)  Time elapsed: 0.004 s  <<< ERROR!
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.196 s <<< FAILURE! - in com.boku.www.MybatisTest
+initializationError(com.boku.www.MybatisTest)  Time elapsed: 0.003 s  <<< ERROR!
 java.lang.Exception: No runnable methods
 
