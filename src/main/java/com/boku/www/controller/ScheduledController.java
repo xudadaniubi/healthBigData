@@ -10,7 +10,7 @@
  */
 package com.boku.www.controller;
 
-import com.boku.www.service.ScheduledService;
+import com.boku.www.service.ScheduledSqlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,12 +28,12 @@ import java.util.List;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping("scheduled")
+@RequestMapping("/scheduled")
 //解决跨域问题
 @CrossOrigin
 public class ScheduledController {
 	@Autowired
-	private ScheduledService scheduledService;
+	private ScheduledSqlService scheduledSqlService;
 	/**
 	 *返回已保存的sql文件
 	 * @return
@@ -42,7 +42,7 @@ public class ScheduledController {
 	@RequestMapping("/returnSqlList")
 	public List returnSqlList(){
 		try {
-			return scheduledService.returnSqlList();
+			return scheduledSqlService.returnSqlList();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
