@@ -40,4 +40,14 @@ public class TProjectCategory {
     public void setStatus(String status) {
         this.status = status == null ? null : status.trim();
     }
+
+	@Override
+	public String toString() {
+		return "TProjectCategory{" +
+				"id=" + id +
+				", grade='" + grade + '\'' +
+				", projectCategory='" + projectCategory + '\'' +
+				", status='" + status + '\'' +
+				'}';
+	}
 }

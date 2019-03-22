@@ -66,7 +66,8 @@ public class ProjectCategoryController {
 	@RequestMapping("/add")
 	public Result add(@RequestBody TProjectCategory projectCategory){
 		try {
-			projectCategoryService.add(projectCategory);
+			System.out.println(projectCategory);
+			//projectCategoryService.add(projectCategory);
 			return new Result(true, "增加成功");
 		} catch (Exception e) {
 			logger.info("用户"+ CurrentUser.returnCurrentUser()+"增加项目分类失败,Exception:"+e);
@@ -167,7 +168,6 @@ public class ProjectCategoryController {
 			}
 			return null;
 		} catch (Exception e) {
-			logger.info("用户"+ CurrentUser.returnCurrentUser()+"根据级别查询对应的项目类别失败,Exception:"+e);
 			e.printStackTrace();
 			return null;
 		}
