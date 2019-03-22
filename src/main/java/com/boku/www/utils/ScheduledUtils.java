@@ -106,7 +106,7 @@ public class ScheduledUtils {
 		logger.info("end delete data scheduled!");
 	}
 
-	private ArrayList<String> getSqlUrlList() {
+	public ArrayList<String> getSqlUrlList() {
 		ArrayList<String> sqlUrlList = new ArrayList<>();
 		File file=new File(fileDir);
 		File[] files=file.listFiles();

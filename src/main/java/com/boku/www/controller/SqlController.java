@@ -10,7 +10,7 @@
  */
 package com.boku.www.controller;
 
-import com.boku.www.service.ScheduledSqlService;
+import com.boku.www.service.SqlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +21,7 @@ import java.util.List;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈定时任务〉
+ * 〈SQL〉
  *
  * @author dell
  * @create 2019/3/22
@@ -31,9 +31,9 @@ import java.util.List;
 @RequestMapping("/scheduled")
 //解决跨域问题
 @CrossOrigin
-public class ScheduledController {
+public class SqlController {
 	@Autowired
-	private ScheduledSqlService scheduledSqlService;
+	private SqlService scheduledSqlService;
 	/**
 	 *返回已保存的sql文件
 	 * @return
