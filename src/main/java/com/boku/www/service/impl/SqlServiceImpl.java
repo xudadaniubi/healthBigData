@@ -36,6 +36,6 @@ public class SqlServiceImpl implements SqlService {
 	@Override
 	public List returnSqlList(){
 		ScheduledUtils scheduledUtils = new ScheduledUtils();
-		return scheduledUtils.getSqlUrlList();
+		return null;
 	}
 }
