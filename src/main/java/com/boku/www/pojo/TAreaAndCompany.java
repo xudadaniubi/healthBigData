@@ -9,6 +9,8 @@ public class TAreaAndCompany {
 
     private String company;
 
+    private String companyId;
+
     private String status;
 
     public Integer getId() {
@@ -43,6 +45,14 @@ public class TAreaAndCompany {
         this.company = company == null ? null : company.trim();
     }
 
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId == null ? null : companyId.trim();
+    }
+
     public String getStatus() {
         return status;
     }
@@ -50,15 +60,4 @@ public class TAreaAndCompany {
     public void setStatus(String status) {
         this.status = status == null ? null : status.trim();
     }
-
-	@Override
-	public String toString() {
-		return "TAreaAndCompany{" +
-				"id=" + id +
-				", city='" + city + '\'' +
-				", district='" + district + '\'' +
-				", company='" + company + '\'' +
-				", status='" + status + '\'' +
-				'}';
-	}
 }

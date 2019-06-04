@@ -78,4 +78,6 @@ public interface ThesisForChineseService {
 	 * 统计各地区论文的数量
 	 */
 	public List<Count> countTheNumberOfThesisForChineseInEachArea();
+
+	public void addCommpanyId();
 }

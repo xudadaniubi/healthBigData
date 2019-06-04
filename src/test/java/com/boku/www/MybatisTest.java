@@ -7,6 +7,7 @@ import com.boku.www.pojo.TThesisForEnglish;
 import com.boku.www.pojo.system.UUserRole;
 import com.boku.www.service.ExcelImportAndBuildService;
 import com.boku.www.service.ProjectDataService;
+import com.boku.www.service.ThesisForChineseService;
 import com.boku.www.service.ThesisForEnglishService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,8 +23,8 @@ import java.util.List;
 @SpringBootTest(classes = SpringbootMybatisApplication.class)
 public class MybatisTest {
 
-	/*@Autowired
-	private ImportTThesisForChineseExcel importTThesisForChineseExcel;*/
+	@Autowired
+	private ThesisForChineseService thesisForChineseService;
 
 	@Autowired
 	private ProjectDataService projectDataService;
@@ -39,17 +40,17 @@ public class MybatisTest {
 
 	@Autowired
 	private UUserRoleDao userRoleDao;
-	/*@Test
+	@Test
 	public void test2() throws Exception {
 		//String filePath = "E:\\模板.xls";
-		String filePath = "E:\\项目数据表.xlsx";
+		String filePath = "E:\\healthybigdata\\2019年5月20日飞蝶给的数据\\浙江大学国家课题项目.xls";
 		File file = new File(filePath);
 		//截取字符串名称
 		String fileName = filePath.substring(filePath.lastIndexOf("\\")+1);
 		System.out.println(fileName);
 		String message = excelImportAndBuildService.importProjectDataExcel(file, fileName);
 		System.out.println(message);
-	}*/
+	}
 	/*@Test
 	public void test3() throws Exception {
 		//String filePath = "E:\\模板.xls";
@@ -168,7 +169,7 @@ public class MybatisTest {
 		String message = excelImportAndBuildService.importAreaExcel(file, fileName);
 		System.out.println(message);
 	}*/
-	/*@Test
+	@Test
 	public void test10() throws Exception {
 		String filePath = "E:\\地区表.xlsx";
 		File file = new File(filePath);
@@ -177,7 +178,12 @@ public class MybatisTest {
 		System.out.println(fileName);
 		String message = excelImportAndBuildService.importAreaAndCompanyExcel(file, fileName);
 		System.out.println(message);
-	}*/
+	}
+	@Test
+	public void addCommpanyId() throws Exception {
+		thesisForChineseService.addCommpanyId();
+		System.out.println("添加成功");
+	}
 	/*@Test
 	public void test11() throws Exception {
 		String filePath = "E:\\地区表.xlsx";

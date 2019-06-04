@@ -1,5 +1,8 @@
 package com.boku.www.pojo;
 
+import lombok.Data;
+
+@Data
 public class TProjectData {
     private Integer id;
 	//项目管理单位

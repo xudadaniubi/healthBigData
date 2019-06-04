@@ -1,5 +1,8 @@
 package com.boku.www.pojo;
 
+import lombok.Data;
+
+@Data
 public class TThesisForChinese {
     private Integer id;
 	//成果名称,标题

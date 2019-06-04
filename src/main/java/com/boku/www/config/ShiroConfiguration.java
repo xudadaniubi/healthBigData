@@ -99,7 +99,7 @@ public class ShiroConfiguration {
 		filterChainDefinitionManager.put("/thesisForChinese/countTheNumberOfThesisForChineseInEachArea", "anon");
 		filterChainDefinitionManager.put("/ajaxLogin", "anon");//anon 可以理解为不拦截
 		filterChainDefinitionManager.put("/statistic/**",  "anon");//静态资源不拦截
-		//filterChainDefinitionManager.put("/**",  "authc");//认证后可以访问所有页面		原数据：其他资源全部拦截"authc,roles[user]"
+		filterChainDefinitionManager.put("/**",  "authc");//认证后可以访问所有页面		原数据：其他资源全部拦截"authc,roles[user]"
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionManager);
 		shiroFilterFactoryBean.setLoginUrl("/login");//设置未登录跳转页面
 		shiroFilterFactoryBean.setSuccessUrl("/");//登录成功提示页面

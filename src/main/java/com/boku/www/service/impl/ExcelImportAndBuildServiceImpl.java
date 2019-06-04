@@ -272,7 +272,6 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 						continue;
 					}
 				}
-
 				TProjectData projectData = new TProjectData();
 				//行数
 				rowNumber = row.getRowNum();
@@ -314,6 +313,12 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 				projectData.setProjectName(row.getCell(5).getStringCellValue());
 				//项目子类
 				projectData.setProjectKidcat(row.getCell(6).getStringCellValue());
+				if(titleRow.getCell(6).getStringCellValue().indexOf("项目子类")>=0){
+					//页码有可能是纯数字
+					if(row.getCell(6)!=null && row.getCell(6).getCellType()==row.getCell(6).CELL_TYPE_STRING){
+						projectData.setProjectKidcat(row.getCell(6).getStringCellValue().trim());
+					}
+				}
 				//类目
 				projectData.setCategory(row.getCell(7).getStringCellValue());
 				//立项时间
@@ -363,6 +368,7 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 				projectData.setStatus("1");
 				//默认为未确认
 				projectData.setConfirmStatus("2");
+				System.out.println(projectData);
 				list.add(projectData);
 			}
 		}
@@ -1074,6 +1080,14 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 				if (titleRow.getCell(2).getStringCellValue().indexOf("单位") >= 0) {
 					if (row.getCell(2) != null && row.getCell(2).getCellType() == row.getCell(2).CELL_TYPE_STRING) {
 						entity.setCompany(row.getCell(2).getStringCellValue().trim());
+					}
+				}
+				if (titleRow.getCell(3).getStringCellValue().indexOf("单位id") >= 0) {
+					if (row.getCell(3) != null && row.getCell(3).getCellType() == row.getCell(3).CELL_TYPE_STRING) {
+						entity.setCompanyId(row.getCell(3).getStringCellValue().trim());
+					}else if(row.getCell(3) != null && row.getCell(3).getCellType() == row.getCell(3).CELL_TYPE_NUMERIC){
+						row.getCell(3).setCellType(Cell.CELL_TYPE_STRING);
+						entity.setCompanyId(row.getCell(3).getStringCellValue().trim());
 					}
 				}
 				entity.setStatus("1");

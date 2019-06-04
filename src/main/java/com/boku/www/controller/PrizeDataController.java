@@ -143,6 +143,7 @@ public class PrizeDataController {
 	 */
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
 	public PageResult search(@RequestBody TPrizeData prizeData, int page, int rows  ){
+		System.out.println(prizeData);
 		try {
 			return prizeDataService.findPage(prizeData, page, rows);
 		} catch (Exception e) {

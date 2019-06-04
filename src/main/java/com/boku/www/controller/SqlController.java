@@ -24,6 +24,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
@@ -73,7 +74,7 @@ public class SqlController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/returnSqlList")
-	public List returnSqlList(){
+	public @ResponseBody List returnSqlList(){
 		try {
 			return getSqlUrlList();
 		} catch (Exception e) {
@@ -89,8 +90,8 @@ public class SqlController {
 	//异步调用方法注解
 	@Async
 	//计划任务声明
-	//@Scheduled(cron="0 0 1 ? * SUN") //每周日凌晨1点执行一次
-	@Scheduled(cron="0/10 * *  * * ?") //每五秒执行一次
+	@Scheduled(cron="0 0 1 ? * SUN") //每周日凌晨1点执行一次
+	//@Scheduled(cron="0/10 * *  * * ?") //每五秒执行一次
 	//@Scheduled(cron="0 */10 * * * ?") //每十分钟执行一次
 	public void backup() throws  Exception{
 		logger.info("start push data scheduled!");
@@ -115,8 +116,8 @@ public class SqlController {
 	 * @throws Exception
 	 */
 	@Async
-	//@Scheduled(cron="0 0 1 ? * SUN") //每周日凌晨1点执行一次
-	@Scheduled(cron="0 */5 * * * ?") //每5分钟执行一次
+	@Scheduled(cron="0 0 1 ? * SUN") //每周日凌晨1点执行一次
+	//@Scheduled(cron="0 */5 * * * ?") //每5分钟执行一次
 	//@Scheduled(cron="0/5 * *  * * ?") //每五秒执行一次
 	public void deleteBackup() throws  Exception{
 		logger.info("start delete data scheduled!");
@@ -128,8 +129,8 @@ public class SqlController {
 			long fileTime = date.getTime();
 			long currentTime = System.currentTimeMillis();
 			//如果两个时间相减超过三个月则删除该文件  1000*60*60*24*90 = 86400000*90 = 7776000000
-			//long threeMonth = 7776000000L;
-			long threeMonth = 600000L;
+			long threeMonth = 7776000000L;
+			//long threeMonth = 600000L;
 			if((currentTime-fileTime)>threeMonth){
 				DeleteFileUtil.deleteFile(sqlUrl);
 				logger.info(time_+":"+date.getTime()+"删除的文件为："+sqlUrl);

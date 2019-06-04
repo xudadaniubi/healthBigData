@@ -214,7 +214,7 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 		}
 		//所属地区
 		if(thesisForChinese.getArea()!=null && thesisForChinese.getArea().length()>0){
-			criteria.andAreaEqualTo(thesisForChinese.getArea());
+			criteria.andAreaLike("%"+thesisForChinese.getArea()+"%");
 		}
 
 		//确认状态
@@ -250,25 +250,25 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 				}else if("地市级".equals(role.getName())){
 					if(currentUser.getArea()!=null && currentUser.getArea().length()>0){
 						//添加本市的名称
-						criteria.andAreaEqualTo(currentUser.getArea());
+						criteria.andAreaLike("%"+currentUser.getArea()+"%");
 					}
 				}else if("医院".equals(role.getName())){
 					if(currentUser.getCompany()!=null && currentUser.getCompany().length()>0){
-						//添加本单位的名称
-						criteria.andAuthorCompanyEqualTo(currentUser.getCompany());
+						//添加本单位的名称,由于一篇文献有多个单位，所以单位查询条件只能用模糊查询
+						criteria.andAuthorCompanyLike("%"+currentUser.getCompany()+"%");
 					}
 					if(currentUser.getArea()!=null && currentUser.getArea().length()>0){
 						//添加本人所属地区
-						criteria.andAreaEqualTo(currentUser.getArea());
+						criteria.andAreaLike("%"+currentUser.getArea()+"%");
 					}
 				}else if("个人".equals(role.getName())){
 					if(currentUser.getCompany()!=null && currentUser.getCompany().length()>0){
-						//添加本单位的名称
-						criteria.andAuthorCompanyEqualTo(currentUser.getCompany());
+						//添加本单位的名称,由于一篇文献有多个单位，所以单位查询条件只能用模糊查询
+						criteria.andAuthorCompanyLike("%"+currentUser.getCompany()+"%");
 					}
 					if(currentUser.getArea()!=null && currentUser.getArea().length()>0){
 						//添加本人所属地区
-						criteria.andAreaEqualTo(currentUser.getArea());
+						criteria.andAreaLike("%"+currentUser.getArea()+"%");
 					}
 					if(currentUser.getUsername()!=null && currentUser.getUsername().length()>0){
 						//添加本人的名称
@@ -321,5 +321,26 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 	@Override
 	public List<Count> countTheNumberOfThesisForChineseInEachArea(){
 		return thesisForChineseMapper.countTheNumberOfThesisForChineseInEachArea();
+	}
+	/**
+	 * 给论文添加单位标识
+	 */
+	@Override
+	public void addCommpanyId(){
+		int pageNum=0;
+		int pageSize = 2000;
+		while (true){
+			TThesisForChineseExample example = new TThesisForChineseExample();
+			PageHelper.startPage(pageNum, pageSize);
+			Page<TThesisForChinese> page= (Page<TThesisForChinese>)thesisForChineseMapper.selectByExample(example);
+			List<TThesisForChinese> list = page.getResult();
+			for (TThesisForChinese thesisForChinese:list) {
+				System.out.println(thesisForChinese);
+			}
+			break;
+			/*if(page == null && page.getPageSize()==0){
+				break;
+			}*/
+		}
 	}
 }
