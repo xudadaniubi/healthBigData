@@ -1,6 +1,9 @@
 package com.boku.www.service.impl;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import com.boku.www.mapper.TAreaAndCompanyMapper;
 import com.boku.www.mapper.TThesisForChineseMapper;
 import com.boku.www.pojo.*;
 import com.boku.www.pojo.system.URole;
@@ -10,6 +13,7 @@ import com.boku.www.service.system.RoleService;
 import com.boku.www.utils.Count;
 import com.boku.www.utils.CurrentUser;
 import com.boku.www.utils.PageResult;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +38,9 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 
 	@Autowired
 	private RoleService roleService;
+
+	@Autowired
+	private TAreaAndCompanyMapper areaAndCompanyMapper;
 
 	/**
 	 * 查询全部
@@ -327,6 +334,7 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 	 */
 	@Override
 	public void addCommpanyId(){
+		ExecutorService executorService = Executors.newFixedThreadPool(4);
 		int pageNum=0;
 		int pageSize = 2000;
 		while (true){
@@ -335,12 +343,34 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 			Page<TThesisForChinese> page= (Page<TThesisForChinese>)thesisForChineseMapper.selectByExample(example);
 			List<TThesisForChinese> list = page.getResult();
 			for (TThesisForChinese thesisForChinese:list) {
-				System.out.println(thesisForChinese);
+				if(StringUtils.isNotBlank(thesisForChinese.getAuthorCompany())){
+					String companyId = "";
+					String[] splitCompany = thesisForChinese.getAuthorCompany().split(";");
+					for (int i =0; i<splitCompany.length;i++) {
+						TAreaAndCompanyExample areaAndCompanyExample = new TAreaAndCompanyExample();
+						TAreaAndCompanyExample.Criteria criteria = areaAndCompanyExample.createCriteria();
+						criteria.andCompanyEqualTo(splitCompany[i]);
+						List<TAreaAndCompany> andCompanyList = areaAndCompanyMapper.selectByExample(areaAndCompanyExample);
+						if(andCompanyList != null && andCompanyList.size() >0){
+							if(i==splitCompany.length-1){
+								companyId += andCompanyList.get(0).getCompanyId();
+							}else{
+								companyId += andCompanyList.get(0).getCompanyId()+";";
+							}
+						}
+					}
+					thesisForChinese.setAuthorCompanyId(companyId);
+					executorService.execute(new Runnable() {
+						@Override
+						public void run() {
+							thesisForChineseMapper.updateByPrimaryKey(thesisForChinese);
+						}
+					});
+				}
 			}
-			break;
-			/*if(page == null && page.getPageSize()==0){
+			if(page == null && page.getPageSize()==0){
 				break;
-			}*/
+			}
 		}
 	}
 }
