@@ -375,4 +375,10 @@
     <select id="countTheNumberOfThesisForChineseInEachArea" resultMap="CountResultMap">
         select  area ,count(*) AS 'count' from t_thesis_for_chinese group by area
     </select>
+
+    <select id="findByPage"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_thesis_for_chinese  limit #{currIndex} , #{pageSize};
+    </select>
 </mapper>

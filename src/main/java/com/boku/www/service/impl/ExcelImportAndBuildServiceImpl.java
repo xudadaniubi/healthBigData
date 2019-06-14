@@ -229,7 +229,14 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 
 		//将集合中所有的数据存入到数据库中
 		for (TAreaAndCompany areaAndCompany : areaAndCompanyList) {
-			areaAndCompanyMapper.insert(areaAndCompany);
+			TAreaAndCompanyExample example = new TAreaAndCompanyExample();
+			TAreaAndCompanyExample.Criteria criteria = example.createCriteria();
+			criteria.andCompanyIdEqualTo(areaAndCompany.getCompanyId());
+			List<TAreaAndCompany> areaAndCompanies = areaAndCompanyMapper.selectByExample(example);
+			//如果查询出来为空，说明之前已经添加了该单位和区域了
+			if(areaAndCompanies.isEmpty()){
+				areaAndCompanyMapper.insert(areaAndCompany);
+			}
 		}
 		return message;
 	}
@@ -242,7 +249,10 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 
 		//将集合中所有的数据存入到数据库中
 		for (UUser user : userList) {
-			userDao.insert(user);
+			List<UUser> list = userDao.selectByUsername(user.getUsername());
+			if(list.isEmpty()){
+				userDao.insert(user);
+			}
 		}
 		return message;
 	}
@@ -306,21 +316,35 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 					}
 				}
 				//一级学科分类
-				projectData.setSubjectName1(row.getCell(3).getStringCellValue());
+				if(titleRow.getCell(3).getStringCellValue().indexOf("一级学科")>=0){
+					if(row.getCell(3)!=null && row.getCell(3).getCellType()==row.getCell(3).CELL_TYPE_STRING){
+						projectData.setSubjectName1(row.getCell(3).getStringCellValue().trim());
+					}
+				}
+				//projectData.setSubjectName1(row.getCell(3).getStringCellValue());
 				//二级学科分类
-				projectData.setSubjectName2(row.getCell(4).getStringCellValue());
+				if(titleRow.getCell(4).getStringCellValue().indexOf("二级学科")>=0){
+					if(row.getCell(4)!=null && row.getCell(4).getCellType()==row.getCell(4).CELL_TYPE_STRING){
+						projectData.setSubjectName2(row.getCell(4).getStringCellValue().trim());
+					}
+				}
+				//projectData.setSubjectName2(row.getCell(4).getStringCellValue());
 				//项目名称
 				projectData.setProjectName(row.getCell(5).getStringCellValue());
 				//项目子类
-				projectData.setProjectKidcat(row.getCell(6).getStringCellValue());
+				//projectData.setProjectKidcat(row.getCell(6).getStringCellValue());
 				if(titleRow.getCell(6).getStringCellValue().indexOf("项目子类")>=0){
-					//页码有可能是纯数字
 					if(row.getCell(6)!=null && row.getCell(6).getCellType()==row.getCell(6).CELL_TYPE_STRING){
 						projectData.setProjectKidcat(row.getCell(6).getStringCellValue().trim());
 					}
 				}
 				//类目
-				projectData.setCategory(row.getCell(7).getStringCellValue());
+				if(titleRow.getCell(7).getStringCellValue().indexOf("类目")>=0){
+					if(row.getCell(7)!=null && row.getCell(7).getCellType()==row.getCell(7).CELL_TYPE_STRING){
+						projectData.setCategory(row.getCell(7).getStringCellValue().trim());
+					}
+				}
+				//projectData.setCategory(row.getCell(7).getStringCellValue());
 				//立项时间
 				if(titleRow.getCell(8).getStringCellValue().indexOf("立项时间")>=0){
 					if(row.getCell(8)!=null && row.getCell(8).getCellType()==row.getCell(8).CELL_TYPE_NUMERIC){
@@ -364,7 +388,12 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 				//项目负责人
 				projectData.setProjectLeader(row.getCell(12).getStringCellValue());
 				//团队成员
-				projectData.setTeamMembers(row.getCell(13).getStringCellValue());
+				if(titleRow.getCell(13).getStringCellValue().indexOf("团队成员")>=0){
+					if(row.getCell(13)!=null && row.getCell(13).getCellType()==row.getCell(13).CELL_TYPE_STRING){
+						projectData.setTeamMembers(row.getCell(13).getStringCellValue().trim());
+					}
+				}
+				//projectData.setTeamMembers(row.getCell(13).getStringCellValue());
 				projectData.setStatus("1");
 				//默认为未确认
 				projectData.setConfirmStatus("2");
@@ -1125,13 +1154,21 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 					}
 				}
 
-
 				if (titleRow.getCell(2).getStringCellValue().indexOf("单位") >= 0) {
 					if (row.getCell(2) != null && row.getCell(2).getCellType() == row.getCell(2).CELL_TYPE_STRING) {
 						entity.setUsername(row.getCell(2).getStringCellValue().trim());
 						entity.setCompany(row.getCell(2).getStringCellValue().trim());
 					}
 				}
+				if (titleRow.getCell(3).getStringCellValue().indexOf("单位id") >= 0) {
+					if (row.getCell(3) != null && row.getCell(3).getCellType() == row.getCell(3).CELL_TYPE_STRING) {
+						entity.setCompanyId(row.getCell(3).getStringCellValue().trim());
+					}else if(row.getCell(3) != null && row.getCell(3).getCellType() == row.getCell(3).CELL_TYPE_NUMERIC){
+						row.getCell(3).setCellType(Cell.CELL_TYPE_STRING);
+						entity.setCompanyId(row.getCell(3).getStringCellValue().trim());
+					}
+				}
+				entity.setCreateTime(new Date());
 				entity.setPswd("123456");
 				entity.setStatus("1");
 				list.add(entity);

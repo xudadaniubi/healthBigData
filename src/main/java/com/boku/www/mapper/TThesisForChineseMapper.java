@@ -36,4 +36,7 @@ public interface TThesisForChineseMapper {
 	 * 统计各地区论文的数量
 	 */
 	List<Count> countTheNumberOfThesisForChineseInEachArea();
+
+	List<TThesisForChinese> findByPage(@Param("currIndex") int currIndex,@Param("pageSize")int pageSize);
+
 }

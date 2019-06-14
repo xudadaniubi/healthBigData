@@ -260,18 +260,18 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 						criteria.andAreaLike("%"+currentUser.getArea()+"%");
 					}
 				}else if("医院".equals(role.getName())){
-					if(currentUser.getCompany()!=null && currentUser.getCompany().length()>0){
+					if(currentUser.getCompanyId()!=null && currentUser.getCompanyId().length()>0){
 						//添加本单位的名称,由于一篇文献有多个单位，所以单位查询条件只能用模糊查询
-						criteria.andAuthorCompanyLike("%"+currentUser.getCompany()+"%");
+						criteria.andAuthorCompanyIdLike("%"+currentUser.getCompanyId()+"%");
 					}
 					if(currentUser.getArea()!=null && currentUser.getArea().length()>0){
 						//添加本人所属地区
 						criteria.andAreaLike("%"+currentUser.getArea()+"%");
 					}
 				}else if("个人".equals(role.getName())){
-					if(currentUser.getCompany()!=null && currentUser.getCompany().length()>0){
+					if(currentUser.getCompanyId()!=null && currentUser.getCompanyId().length()>0){
 						//添加本单位的名称,由于一篇文献有多个单位，所以单位查询条件只能用模糊查询
-						criteria.andAuthorCompanyLike("%"+currentUser.getCompany()+"%");
+						criteria.andAuthorCompanyIdLike("%"+currentUser.getCompanyId()+"%");
 					}
 					if(currentUser.getArea()!=null && currentUser.getArea().length()>0){
 						//添加本人所属地区
@@ -334,14 +334,12 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 	 */
 	@Override
 	public void addCommpanyId(){
-		ExecutorService executorService = Executors.newFixedThreadPool(4);
-		int pageNum=0;
+
+		int index=1;
 		int pageSize = 2000;
 		while (true){
-			TThesisForChineseExample example = new TThesisForChineseExample();
-			PageHelper.startPage(pageNum, pageSize);
-			Page<TThesisForChinese> page= (Page<TThesisForChinese>)thesisForChineseMapper.selectByExample(example);
-			List<TThesisForChinese> list = page.getResult();
+			List<TThesisForChinese> list = thesisForChineseMapper.findByPage(index*pageSize, pageSize);;
+			System.out.println(list.size());
 			for (TThesisForChinese thesisForChinese:list) {
 				if(StringUtils.isNotBlank(thesisForChinese.getAuthorCompany())){
 					String companyId = "";
@@ -360,17 +358,14 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 						}
 					}
 					thesisForChinese.setAuthorCompanyId(companyId);
-					executorService.execute(new Runnable() {
-						@Override
-						public void run() {
-							thesisForChineseMapper.updateByPrimaryKey(thesisForChinese);
-						}
-					});
+					thesisForChineseMapper.updateByPrimaryKey(thesisForChinese);
+
 				}
 			}
-			if(page == null && page.getPageSize()==0){
+			if(list.isEmpty()){
 				break;
 			}
+			index++;
 		}
 	}
 }

@@ -5,10 +5,8 @@ import com.boku.www.mapper.system.UUserDao;
 import com.boku.www.mapper.system.UUserRoleDao;
 import com.boku.www.pojo.TThesisForEnglish;
 import com.boku.www.pojo.system.UUserRole;
-import com.boku.www.service.ExcelImportAndBuildService;
-import com.boku.www.service.ProjectDataService;
-import com.boku.www.service.ThesisForChineseService;
-import com.boku.www.service.ThesisForEnglishService;
+import com.boku.www.service.*;
+import com.boku.www.service.system.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +28,9 @@ public class MybatisTest {
 	private ProjectDataService projectDataService;
 
 	@Autowired
+	private PrizeDataService prizeDataService;
+
+	@Autowired
 	private ExcelImportAndBuildService excelImportAndBuildService;
 
 	@Autowired
@@ -40,10 +41,13 @@ public class MybatisTest {
 
 	@Autowired
 	private UUserRoleDao userRoleDao;
+
+	@Autowired
+	private UserService userService;
 	@Test
 	public void test2() throws Exception {
 		//String filePath = "E:\\模板.xls";
-		String filePath = "E:\\healthybigdata\\2019年5月20日飞蝶给的数据\\浙江大学国家课题项目.xls";
+		String filePath = "E:\\healthybigdata\\2019年5月20日飞蝶给的数据\\浙江省自然基金项目.xlsx";
 		File file = new File(filePath);
 		//截取字符串名称
 		String fileName = filePath.substring(filePath.lastIndexOf("\\")+1);
@@ -179,12 +183,56 @@ public class MybatisTest {
 		String message = excelImportAndBuildService.importAreaAndCompanyExcel(file, fileName);
 		System.out.println(message);
 	}
-	@Test
+	/*@Test
 	public void addCommpanyId() throws Exception {
 		thesisForChineseService.addCommpanyId();
 		System.out.println("添加成功");
 	}
-	/*@Test
+	@Test
+	*//**
+	 * 给用户的单位添加单位id
+	 *//*
+	public void addUnitId(){
+		try {
+			userService.addUnitId();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+	}*/
+	@Test
+	/**
+	 * 清理项目数据的单位信息
+	 */
+	public void cleanProjectData(){
+		try {
+			projectDataService.cleanProjectData();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	@Test
+	/**
+	 * 清理奖励数据的单位信息，并添加单位id
+	 */
+	public void cleanPrizeData(){
+		try {
+			prizeDataService.cleanPrizeData();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	@Test
+	/**
+	 * 清理奖励数据的单位信息，并添加单位id
+	 */
+	public void cleanThesisForEnglish(){
+		try {
+			thesisForEnglishService.cleanThesisForEnglish();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	@Test
 	public void test11() throws Exception {
 		String filePath = "E:\\地区表.xlsx";
 		File file = new File(filePath);
@@ -193,7 +241,7 @@ public class MybatisTest {
 		System.out.println(fileName);
 		String message = excelImportAndBuildService.importAreaAndCompanyExcelToUser(file, fileName);
 		System.out.println(message);
-	}*/
+	}
 	/*@Test
 	public void test9() throws Exception {
 		String filePath = "E:\\专利数据（张老师）.xlsx";
@@ -213,4 +261,18 @@ public class MybatisTest {
 		System.out.println("null");
 		}
 	}*/
+
+	@Test
+	public void repeatCompany() throws Exception {
+		String filePath = "E:\\healthybigdata\\项目数据替换单位.xlsx";
+		File file = new File(filePath);
+		//截取字符串名称
+		String fileName = filePath.substring(filePath.lastIndexOf("\\")+1);
+		System.out.println(fileName);
+		projectDataService.repeatCompany(file, fileName);
+	}
+	@Test
+	public void insertCompanyAndArea() throws Exception {
+		projectDataService.insertCompanyAndArea();
+	}
 }

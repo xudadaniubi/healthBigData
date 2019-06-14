@@ -1,5 +1,8 @@
 package com.boku.www.pojo;
 
+import lombok.Data;
+
+@Data
 public class TAreaAndCompany {
     private Integer id;
 

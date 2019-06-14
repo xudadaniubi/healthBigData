@@ -1,5 +1,9 @@
 package com.boku.www.service.impl;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import com.boku.www.mapper.TAreaAndCompanyMapper;
 import com.boku.www.mapper.TThesisForEnglishMapper;
 import com.boku.www.pojo.*;
 import com.boku.www.pojo.system.URole;
@@ -8,6 +12,7 @@ import com.boku.www.service.system.RoleService;
 import com.boku.www.utils.Count;
 import com.boku.www.utils.CurrentUser;
 import com.boku.www.utils.PageResult;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +38,9 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 
 	@Autowired
 	private RoleService roleService;
+
+	@Autowired
+	private TAreaAndCompanyMapper areaAndCompanyMapper;
 	/**
 	 * 查询全部
 	 */
@@ -312,5 +320,33 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 	@Override
 	public List<Count> countTheNumberOfThesisForEnglishInEachArea(){
 		return thesisForEnglishMapper.countTheNumberOfThesisForEnglishInEachArea();
+	}
+
+	@Override
+	public void cleanThesisForEnglish() throws Exception{
+		Set<String> set = new HashSet();
+		Set<String> setNew = new HashSet();
+		List<String> organizerList = thesisForEnglishMapper.selectDistinctOrganizer();
+		for (String organizer:organizerList) {
+			if(StringUtils.isNotBlank(organizer)){
+				String[] split = organizer.split(";");
+				for (String s:split) {
+					set.add(s);
+				}
+			}
+		}
+		for (String organizer:set) {
+			TAreaAndCompanyExample example = new TAreaAndCompanyExample();
+			TAreaAndCompanyExample.Criteria criteria = example.createCriteria();
+			criteria.andCompanyEqualTo(organizer);
+			List<TAreaAndCompany> areaAndCompanyList = areaAndCompanyMapper.selectByExample(example);
+			if(areaAndCompanyList.isEmpty()){
+				setNew.add(organizer);
+			}
+		}
+		for (String organizer:setNew) {
+			System.out.println(organizer);
+		}
+		System.out.println(setNew.size());
 	}
 }

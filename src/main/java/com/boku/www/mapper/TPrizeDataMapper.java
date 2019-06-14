@@ -34,4 +34,8 @@ public interface TPrizeDataMapper {
 	 * 统计各地区奖励的数量
 	 */
 	List<Count> countTheNumberOfPrizeDataInEachArea();
+
+	List<String> selectDistinctFirstOrganizerCompany();
+
+	List<String> selectDistinctOtherOrganizerCompany();
 }

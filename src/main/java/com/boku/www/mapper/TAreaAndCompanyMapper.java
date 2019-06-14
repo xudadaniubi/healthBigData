@@ -31,4 +31,5 @@ public interface TAreaAndCompanyMapper {
     int updateByPrimaryKey(TAreaAndCompany record);
 
 	List<String> selectAllCompany();
+
 }

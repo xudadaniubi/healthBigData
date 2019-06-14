@@ -12,6 +12,7 @@
         <id column="last_login_time" property="lastLoginTime" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
         <id column="status" property="status" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <id column="company" property="company" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <id column="company_id" property="companyId" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <id column="area" property="area" javaType="java.lang.String" jdbcType="VARCHAR"/>
 </resultMap>
 
@@ -19,7 +20,7 @@
 
 <!-- 全部字段，一般用于明细查询 -->
 <sql id="AllColumnlist">
- id,username,email,pswd,create_time,last_login_time,company,area,status
+ id,username,email,pswd,create_time,last_login_time,company,company_id,area,status
 </sql>
 
 
@@ -34,10 +35,32 @@
 
     <insert id="insert" parameterType="com.boku.www.pojo.system.UUser" >
         insert into u_user (id, username, pswd,
-        email, create_time, last_login_time,company, area, status)
+        email, create_time, last_login_time,company,company_id, area, status)
         values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{pswd,jdbcType=VARCHAR},
         #{email,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE},
-        #{lastLoginTime,jdbcType=DATE}, #{company,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR},
+        #{lastLoginTime,jdbcType=DATE}, #{company,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR},
         #{status,jdbcType=VARCHAR})
     </insert>
+
+    <select id="selectAllUser"  resultMap="UUser">
+        SELECT <include refid="AllColumnlist"/> from u_user
+    </select>
+
+    <select id="selectByUsername"  resultMap="UUser" parameterType="java.lang.String">
+        SELECT <include refid="AllColumnlist"/> from u_user where username = #{username,jdbcType=VARCHAR}
+    </select>
+
+    <update id="updateByPrimaryKey" parameterType="com.boku.www.pojo.system.UUser" >
+        update u_user
+        set username = #{username,jdbcType=VARCHAR},
+        pswd = #{pswd,jdbcType=VARCHAR},
+        email = #{email,jdbcType=VARCHAR},
+        create_time = #{createTime,jdbcType=DATE},
+        last_login_time = #{lastLoginTime,jdbcType=DATE},
+        company = #{company,jdbcType=VARCHAR},
+        company_id = #{companyId,jdbcType=VARCHAR},
+        area = #{area,jdbcType=VARCHAR},
+        status = #{status,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>

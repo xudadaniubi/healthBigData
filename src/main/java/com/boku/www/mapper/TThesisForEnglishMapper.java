@@ -42,4 +42,6 @@ public interface TThesisForEnglishMapper {
 	 * 统计各地区论文的数量
 	 */
 	List<Count> countTheNumberOfThesisForEnglishInEachArea();
+
+	List<String> selectDistinctOrganizer();
 }

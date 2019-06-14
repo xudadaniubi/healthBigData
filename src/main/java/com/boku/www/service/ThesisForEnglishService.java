@@ -78,4 +78,6 @@ public interface ThesisForEnglishService {
 	 * 统计各地区论文的数量
 	 */
 	public List<Count> countTheNumberOfThesisForEnglishInEachArea();
+
+	public void cleanThesisForEnglish() throws Exception;
 }

@@ -4,6 +4,7 @@ import com.boku.www.mapper.system.URoleDao;
 import com.boku.www.pojo.system.URole;
 import com.boku.www.pojo.system.UUser;
 import com.boku.www.service.system.RoleService;
+import com.boku.www.service.system.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
@@ -35,6 +36,9 @@ public class AdminController {
 
     @Autowired
     private URoleDao uRoleDao;
+
+    @Autowired
+	private UserService userService;
 
     //登陆验证，这里方便url测试，正式上线需要使用POST方式提交
     @RequestMapping(value = "/ajaxLogin",method= RequestMethod.POST)
@@ -102,6 +106,15 @@ public class AdminController {
 	@RequestMapping("/getRoleGrade")
     public String getRoleGrade(){
 		return roleService.getRoleGrade() ;
+	}
+
+	@RequestMapping("/addUnitId")
+	public void addUnitId(){
+		try {
+			userService.addUnitId();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
 	}
 }
 

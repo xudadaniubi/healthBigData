@@ -8,4 +8,6 @@ public interface UserService {
 	 * @param name
 	 */
 	public UUser findByName(String name);
+
+	public void addUnitId();
 }

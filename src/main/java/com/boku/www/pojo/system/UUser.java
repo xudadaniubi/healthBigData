@@ -1,4 +1,6 @@
 package com.boku.www.pojo.system;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.List;
  * @date 2017-5-10 0:13:08
  * @version V1.0   
  */
+@Data
 public class UUser  implements Serializable {
 	 /** serialVersionUID. */
  	private static final long serialVersionUID =1493049839167L;
@@ -26,6 +29,7 @@ public class UUser  implements Serializable {
 	private Date lastLoginTime;//最后登录时间
 	private String status;//1:有效，0:禁止登录
 	private String company;//所属单位
+	private String companyId;//所属单位id
 	private String area;//所属地区
 
 	private List<String> roleStrlist;
@@ -118,23 +122,6 @@ public class UUser  implements Serializable {
 
 	//generate toString method
 
-
-	@Override
-	public String toString() {
-		return "UUser{" +
-				"id=" + id +
-				", username='" + username + '\'' +
-				", email='" + email + '\'' +
-				", pswd='" + pswd + '\'' +
-				", createTime=" + createTime +
-				", lastLoginTime=" + lastLoginTime +
-				", status='" + status + '\'' +
-				", company='" + company + '\'' +
-				", area='" + area + '\'' +
-				", roleStrlist=" + roleStrlist +
-				", perminsStrlist=" + perminsStrlist +
-				'}';
-	}
 
 	public List<String> getRoleStrlist() {
 		return roleStrlist;

@@ -451,4 +451,9 @@
     <select id="countTheNumberOfThesisForEnglishInEachArea" resultMap="CountResultMap">
         select  area ,count(*) AS 'count' from t_thesis_for_english group by area
     </select>
+
+    <!--查询不同的单位-->
+    <select id="selectDistinctOrganizer" resultType="string">
+        SELECT DISTINCT author_company FROM t_thesis_for_english ;
+    </select>
 </mapper>

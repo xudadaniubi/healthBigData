@@ -4,6 +4,7 @@ import com.boku.www.pojo.TProjectData;
 import com.boku.www.utils.Count;
 import com.boku.www.utils.PageResult;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -82,4 +83,10 @@ public interface ProjectDataService {
 	 * 统计各地区项目的数量
 	 */
 	public List<Count> countTheNumberOfProjectDataInEachArea();
+
+	public void cleanProjectData() throws Exception;
+
+	public void repeatCompany(File file, String fileName) throws Exception;
+
+	public void insertCompanyAndArea()throws Exception;
 }

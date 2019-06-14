@@ -79,4 +79,6 @@ public interface PrizeDataService {
 	 * 统计各地区项目的数量
 	 */
 	public List<Count> countTheNumberOfPrizeDataInEachArea();
+
+	public void cleanPrizeData() throws Exception;
 }

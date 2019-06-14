@@ -391,4 +391,13 @@
     <select id="countTheNumberOfPrizeDataInEachArea" resultMap="CountResultMap">
         select  area ,count(*) AS 'count' from t_project_data group by area
     </select>
+
+    <!--查询不同的单位-->
+    <select id="selectDistinctFirstOrganizerCompany" resultType="string">
+        SELECT DISTINCT first_organizer_company FROM t_prize_data ;
+    </select>
+    <!--查询不同的单位-->
+    <select id="selectDistinctOtherOrganizerCompany" resultType="string">
+        SELECT DISTINCT other_organizer_company FROM t_prize_data ;
+    </select>
 </mapper>

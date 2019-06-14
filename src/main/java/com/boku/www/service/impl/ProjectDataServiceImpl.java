@@ -1,7 +1,10 @@
 package com.boku.www.service.impl;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.boku.www.mapper.*;
 import com.boku.www.pojo.*;
@@ -12,6 +15,11 @@ import com.boku.www.utils.Count;
 import com.boku.www.utils.CurrentUser;
 import com.boku.www.utils.PageResult;
 
+import com.boku.www.utils.ParseExcelUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -20,6 +28,8 @@ import com.boku.www.service.ProjectDataService;
 import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static javax.xml.bind.JAXBIntrospector.getValue;
 
 /**
  * 服务实现层
@@ -54,6 +64,9 @@ public class ProjectDataServiceImpl implements ProjectDataService {
 
 	@Autowired
 	private  TProjectCategoryMapper projectCategoryMapper;
+
+	@Autowired
+	private TAreaAndCompanyMapper areaAndCompanyMapper;
 
 	/**
 	 * 查询全部
@@ -183,7 +196,7 @@ public class ProjectDataServiceImpl implements ProjectDataService {
 		UUser currentUser = CurrentUser.returnCurrentUser();
 		if (currentUser != null) {
 			String roleGrade = null;
-			projectDataMapper.selectByPrimaryKey(1);
+			//projectDataMapper.selectByPrimaryKey(1);
 			List<URole> rlist = roleService.findRoleByUid(currentUser.getId());//获取用户角色
 			//根据角色的获取不同的数据，如果是admin或省级角色，查询所有的数据，如果是市级权限，查询本市的数据，
 			// 如果是单位权限，查询本单位的数据，如果是个人的角色，查询个人的数据
@@ -390,4 +403,206 @@ public class ProjectDataServiceImpl implements ProjectDataService {
 	public List<Count> countTheNumberOfProjectDataInEachArea(){
 		return projectDataMapper.countTheNumberOfProjectDataInEachArea();
 	}
+
+	/**
+	 * 根据用户的单位信息清理项目数据
+	 * 	由于项目数据的1单位与用户的单位数据不完全对应，所以在做数据权限的时候查询出来的数据会出现偏差
+	 * 	所以必须先清理好数据的单位信息，将数据添加单位id的信息，这样就能够精确匹配到数据，为客户提供更加准确地数据
+	 * 	1.查询出所有不同的单位数据，装入set集合中
+	 * 	2.在用户表中查询所有的单位是否有用户id，有用户id的，说明单位信息是正确的，没有用户id的说明查询的时候该单位的数据无法查询出来
+	 * 	3.将无法查询出来的数据添加到集合中
+	 *
+	 * 	人工确认哪些数据是需要查询出来的
+	 * 	补充新添加的单位和id
+	 * 	替换需要查询出来的数据的单位名称
+	 * 	替换完成后将单位的id拼接到单位id的字段中，并更新数据，这样查询出来的数据就能够准确的查询数据了
+	 */
+	@Override
+	public void cleanProjectData() throws Exception{
+		Set<String> set = new HashSet();
+		Set<String> setNew = new HashSet();
+		List<String> organizerList = projectDataMapper.selectDistinctOrganizer();
+		for (String organizer:organizerList) {
+			String[] split = organizer.split(",");
+			for (String s:split) {
+				set.add(s);
+			}
+		}
+		for (String organizer:set) {
+			TAreaAndCompanyExample example = new TAreaAndCompanyExample();
+			TAreaAndCompanyExample.Criteria criteria = example.createCriteria();
+			criteria.andCompanyEqualTo(organizer);
+			List<TAreaAndCompany> areaAndCompanyList = areaAndCompanyMapper.selectByExample(example);
+			if(areaAndCompanyList.isEmpty()){
+				setNew.add(organizer);
+			}
+		}
+		for (String organizer:setNew) {
+			System.out.println(organizer);
+		}
+		System.out.println(setNew.size());
+
+
+	}
+
+	/**
+	 * 替换项目数据的单位
+	 * 	由于项目数据里的单位与省卫计委标准名称不一致，所以在检索和替换单位id的时候会出现问题，所以需要将这些单位数据进行替换为标准数据，然后进行清理
+	 */
+	@Override
+	public void repeatCompany(File file, String fileName) throws Exception {
+		Sheet sheet = ParseExcelUtils.parseExcel(file, fileName);
+		//行数
+		int rowNumber = 0;
+		//总行数
+		int rowCount = sheet.getPhysicalNumberOfRows();
+		if(rowCount>1){
+			//标题行
+			Row titleRow = sheet.getRow(0);
+			//遍历行，略过标题行，从第二行开始
+			for(int i=1;i<rowCount;i++){
+				Row row = sheet.getRow(i);
+				//跳过空行
+				if(i>=1){
+					if(row==null){continue;}
+					else if(org.springframework.util.StringUtils.isEmpty(getValue(row.getCell(0)))&&org.springframework.util.StringUtils.isEmpty(getValue(row.getCell(1)))){
+						continue;
+					}
+				}
+				//行数
+				rowNumber = row.getRowNum();
+				//System.out.println(rowNumber+1);
+				//被替换的单位
+				String repeatCompany = row.getCell(0).getStringCellValue();
+				//省卫计委名下单位
+				String provinceCompany = row.getCell(1).getStringCellValue();
+				String companyId = null;
+				//单位id
+				if(titleRow.getCell(2).getStringCellValue().indexOf("单位id")>=0){
+					if(row.getCell(2)!=null && row.getCell(2).getCellType()==row.getCell(2).CELL_TYPE_NUMERIC){
+						row.getCell(2).setCellType(Cell.CELL_TYPE_STRING);
+						companyId = row.getCell(2).getStringCellValue().trim();
+					}else if(row.getCell(2)!=null && row.getCell(2).getCellType()==row.getCell(2).CELL_TYPE_STRING){
+						companyId = row.getCell(2).getStringCellValue().trim();
+					}
+				}
+				//System.out.println("替换单位："+repeatCompany + "，省卫计委单位："+provinceCompany + "，单位id："+companyId);
+				//将手工处理的医院进行替换
+				//1.查询出所有的项目数据
+				TProjectDataExample example = new TProjectDataExample();
+				List<TProjectData> projectDataList = projectDataMapper.selectByExample(example);
+				for (TProjectData projectData:projectDataList) {
+					String organizer = projectData.getOrganizer();
+					String otherOrganizerCompany = projectData.getOtherOrganizerCompany();
+					String firstOrganizerCompany = projectData.getFirstOrganizerCompany();
+					if(StringUtils.isNotBlank(organizer)){
+						String[] split = organizer.split(",");
+						for (String s:split) {
+							//如果项目数据的单位里存在和需要替换的单位相同的，将其进行替换
+							if(repeatCompany.equals(s)){
+								//如果原数据库里不包含需要替换的单位就替换单位，如果有就不替换，避免重复
+								if(!organizer.contains(provinceCompany)){
+									organizer = organizer.replace(repeatCompany,provinceCompany);
+									projectData.setOrganizer(organizer);
+								}else {
+									//江山衢州市人民医院 衢州市人民医院 避免这种情况不替换的情况
+									if(repeatCompany.contains(provinceCompany)){
+										organizer = organizer.replace(repeatCompany,provinceCompany);
+										projectData.setOrganizer(organizer);
+									}
+								}
+								//如果不为空就拼接，为空就直接添加
+								if(StringUtils.isNotBlank(projectData.getOrganizerCompanyId())){
+									//如果不包含当前的id，就拼接，如果包含了，说明重复了，就不做处理
+									if(!projectData.getOrganizerCompanyId().contains(companyId)){
+										projectData.setOrganizerCompanyId(projectData.getOrganizerCompanyId()+","+companyId);
+										System.out.println(projectData.getOrganizerCompanyId());
+									}
+								}else if(StringUtils.isBlank(projectData.getOrganizerCompanyId())){
+									projectData.setOrganizerCompanyId(companyId);
+
+								}
+							}
+						}
+					}
+					if(StringUtils.isNotBlank(otherOrganizerCompany)){
+						String[] split = otherOrganizerCompany.split(",");
+						for (String s:split) {
+							//如果项目数据的单位里存在和需要替换的单位向同的，将其进行替换
+							if(repeatCompany.equals(s)){
+								//如果原数据库里不包含需要替换的单位就替换单位，如果有就不替换，避免重复
+								if(!otherOrganizerCompany.contains(provinceCompany)){
+									otherOrganizerCompany = otherOrganizerCompany.replace(repeatCompany,provinceCompany);
+									projectData.setOtherOrganizerCompany(otherOrganizerCompany);
+								}else {
+									//江山衢州市人民医院 衢州市人民医院 避免这种情况不替换的情况
+									if(repeatCompany.contains(provinceCompany)){
+										otherOrganizerCompany = otherOrganizerCompany.replace(repeatCompany,provinceCompany);
+										projectData.setOtherOrganizerCompany(otherOrganizerCompany);
+									}
+								}
+								//System.out.println("其他单位："+otherOrganizerCompany);
+							}
+						}
+					}
+					if(StringUtils.isNotBlank(firstOrganizerCompany)){
+						//如果原数据库里不包含需要替换的单位就替换单位，如果有就不替换，避免重复
+						if(!firstOrganizerCompany.contains(provinceCompany)){
+							//如果项目数据的单位里存在和需要替换的单位向同的，将其进行替换
+							if(repeatCompany.equals(firstOrganizerCompany)){
+								firstOrganizerCompany = firstOrganizerCompany.replace(repeatCompany,provinceCompany);
+								projectData.setFirstOrganizerCompany(firstOrganizerCompany);
+								//System.out.println("第一单位："+firstOrganizerCompany);
+							}
+						}else {
+							//江山衢州市人民医院 衢州市人民医院 避免这种情况不替换的情况
+							if(repeatCompany.contains(provinceCompany)){
+								firstOrganizerCompany = firstOrganizerCompany.replace(repeatCompany,provinceCompany);
+								projectData.setFirstOrganizerCompany(firstOrganizerCompany);
+							}
+						}
+					}
+					if(StringUtils.isNotBlank(projectData.getOrganizerCompanyId())){
+						//System.out.println(projectData);
+						projectDataMapper.updateByPrimaryKey(projectData);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * 根据单位信息表插入单位所属区域和单位id
+	 * @throws Exception
+	 */
+	@Override
+	public void insertCompanyAndArea()throws Exception{
+		TProjectDataExample example = new TProjectDataExample();
+		List<TProjectData> projectDataList = projectDataMapper.selectByExample(example);
+		for (TProjectData projectData:projectDataList) {
+			String organizer = projectData.getOrganizer();
+			if(StringUtils.isNotBlank(organizer)) {
+				String[] split = organizer.split(",");
+				for (String s : split) {
+					TAreaAndCompanyExample areaAndCompanyExample = new TAreaAndCompanyExample();
+					TAreaAndCompanyExample.Criteria criteria = areaAndCompanyExample.createCriteria();
+					criteria.andCompanyEqualTo(s);
+					List<TAreaAndCompany> areaAndCompanyList = areaAndCompanyMapper.selectByExample(areaAndCompanyExample);
+					if(areaAndCompanyList!=null && areaAndCompanyList.size()>0){
+						projectData.setArea(areaAndCompanyList.get(0).getCity());
+						if(StringUtils.isNotBlank(projectData.getOrganizerCompanyId())){
+							if(!projectData.getOrganizerCompanyId().contains(areaAndCompanyList.get(0).getCompanyId())){
+								projectData.setOrganizerCompanyId(projectData.getOrganizerCompanyId()+","+areaAndCompanyList.get(0).getCompanyId());
+							}
+						}else{
+							projectData.setOrganizerCompanyId(areaAndCompanyList.get(0).getCompanyId());
+						}
+					}
+				}
+			}
+			projectDataMapper.updateByPrimaryKey(projectData);
+			System.out.println("地区："+projectData.getArea()+"---单位："+projectData.getOrganizer()+"---单位id："+projectData.getOrganizerCompanyId());
+		}
+	}
+
 }

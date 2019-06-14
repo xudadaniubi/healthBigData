@@ -1144,6 +1144,76 @@ public class TProjectDataExample {
 			return (Criteria) this;
 		}
 
+		public Criteria andOrganizerCompanyIdIsNull() {
+			addCriterion("organizer_company_id is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andOrganizerCompanyIdIsNotNull() {
+			addCriterion("organizer_company_id is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andOrganizerCompanyIdEqualTo(String value) {
+			addCriterion("organizer_company_id =", value, "organizerCompanyId");
+			return (Criteria) this;
+		}
+
+		public Criteria andOrganizerCompanyIdNotEqualTo(String value) {
+			addCriterion("organizer_company_id <>", value, "organizerCompanyId");
+			return (Criteria) this;
+		}
+
+		public Criteria andOrganizerCompanyIdGreaterThan(String value) {
+			addCriterion("organizer_company_id >", value, "organizerCompanyId");
+			return (Criteria) this;
+		}
+
+		public Criteria andOrganizerCompanyIdGreaterThanOrEqualTo(String value) {
+			addCriterion("organizer_company_id >=", value, "organizerCompanyId");
+			return (Criteria) this;
+		}
+
+		public Criteria andOrganizerCompanyIdLessThan(String value) {
+			addCriterion("organizer_company_id <", value, "organizerCompanyId");
+			return (Criteria) this;
+		}
+
+		public Criteria andOrganizerCompanyIdLessThanOrEqualTo(String value) {
+			addCriterion("organizer_company_id <=", value, "organizerCompanyId");
+			return (Criteria) this;
+		}
+
+		public Criteria andOrganizerCompanyIdLike(String value) {
+			addCriterion("organizer_company_id like", value, "organizerCompanyId");
+			return (Criteria) this;
+		}
+
+		public Criteria andOrganizerCompanyIdNotLike(String value) {
+			addCriterion("organizer_company_id not like", value, "organizerCompanyId");
+			return (Criteria) this;
+		}
+
+		public Criteria andOrganizerCompanyIdIn(List<String> values) {
+			addCriterion("organizer_company_id in", values, "organizerCompanyId");
+			return (Criteria) this;
+		}
+
+		public Criteria andOrganizerCompanyIdNotIn(List<String> values) {
+			addCriterion("organizer_company_id not in", values, "organizerCompanyId");
+			return (Criteria) this;
+		}
+
+		public Criteria andOrganizerCompanyIdBetween(String value1, String value2) {
+			addCriterion("organizer_company_id between", value1, value2, "organizerCompanyId");
+			return (Criteria) this;
+		}
+
+		public Criteria andOrganizerCompanyIdNotBetween(String value1, String value2) {
+			addCriterion("organizer_company_id not between", value1, value2, "organizerCompanyId");
+			return (Criteria) this;
+		}
+
 		public Criteria andProjectLeaderIsNull() {
 			addCriterion("project_leader is null");
 			return (Criteria) this;

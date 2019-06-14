@@ -173,4 +173,16 @@ public class ThesisForChineseController {
 			return null;
 		}
 	}
+	/**
+	 * 统计各地区论文的数量
+	 */
+	@RequestMapping("/addCommpanyId")
+	public void addCommpanyId(){
+		try {
+			thesisForChineseService.addCommpanyId();
+		} catch (Exception e) {
+			logger.info("添加失败");
+			e.printStackTrace();
+		}
+	}
 }

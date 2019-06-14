@@ -21,11 +21,14 @@ import com.boku.www.utils.CurrentUser;
 import com.boku.www.utils.PageResult;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -51,6 +54,8 @@ public class PrizeDataServiceImpl implements PrizeDataService {
 	@Autowired
 	private RoleService roleService;
 
+	@Autowired
+	private TAreaAndCompanyMapper areaAndCompanyMapper;
 	/**
 	 * 查询全部
 	 */
@@ -178,7 +183,7 @@ public class PrizeDataServiceImpl implements PrizeDataService {
 		UUser currentUser = CurrentUser.returnCurrentUser();
 		if (currentUser != null) {
 			String roleGrade = null;
-			prizeDataMapper.selectByPrimaryKey(1);
+			//prizeDataMapper.selectByPrimaryKey(1);
 			List<URole> rlist = roleService.findRoleByUid(currentUser.getId());//获取用户角色
 			//根据角色的获取不同的数据，如果是admin或省级角色，查询所有的数据，如果是市级权限，查询本市的数据，
 			// 如果是单位权限，查询本单位的数据，如果是个人的角色，查询个人的数据
@@ -382,5 +387,40 @@ public class PrizeDataServiceImpl implements PrizeDataService {
 	@Override
 	public List<Count> countTheNumberOfPrizeDataInEachArea(){
 		return prizeDataMapper.countTheNumberOfPrizeDataInEachArea();
+	}
+
+	@Override
+	public void cleanPrizeData() throws Exception{
+		Set<String> set = new HashSet();
+		Set<String> setNew = new HashSet();
+		List<String> firstOrganizerList = prizeDataMapper.selectDistinctFirstOrganizerCompany();
+		List<String> otherOrganizerList = prizeDataMapper.selectDistinctOtherOrganizerCompany();
+		for (String organizer:firstOrganizerList) {
+			String[] split = organizer.split(",");
+			for (String s:split) {
+				set.add(s);
+			}
+		}
+		for (String organizer:otherOrganizerList) {
+			if(StringUtils.isNotBlank(organizer)){
+				String[] split = organizer.split(",");
+				for (String s:split) {
+					set.add(s);
+				}
+			}
+		}
+		for (String organizer:set) {
+			TAreaAndCompanyExample example = new TAreaAndCompanyExample();
+			TAreaAndCompanyExample.Criteria criteria = example.createCriteria();
+			criteria.andCompanyEqualTo(organizer);
+			List<TAreaAndCompany> areaAndCompanyList = areaAndCompanyMapper.selectByExample(example);
+			if(areaAndCompanyList.isEmpty()){
+				setNew.add(organizer);
+			}
+		}
+		for (String organizer:setNew) {
+			System.out.println(organizer);
+		}
+		System.out.println(setNew.size());
 	}
 }
