@@ -34,4 +34,6 @@ public interface ExcelImportAndBuildService {
 
 	//将地区表的部分信息传入用户表
 	public String importAreaAndCompanyExcelToUser(File file, String fileName) throws Exception;
+
+	public String importUser(File file, String fileName) throws Exception;
 }

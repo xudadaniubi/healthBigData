@@ -4,6 +4,7 @@ import com.boku.www.pojo.TPrizeData;
 import com.boku.www.utils.Count;
 import com.boku.www.utils.PageResult;
 
+import java.io.File;
 import java.util.List;
 /**
  * 服务层接口
@@ -81,4 +82,7 @@ public interface PrizeDataService {
 	public List<Count> countTheNumberOfPrizeDataInEachArea();
 
 	public void cleanPrizeData() throws Exception;
+
+	public void repeatCompany(File file, String fileName) throws Exception;
+	public void insertCompanyAndArea()throws Exception;
 }

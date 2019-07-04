@@ -19,16 +19,23 @@ import com.boku.www.service.system.RoleService;
 import com.boku.www.utils.Count;
 import com.boku.www.utils.CurrentUser;
 import com.boku.www.utils.PageResult;
+import com.boku.www.utils.ParseExcelUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static javax.xml.bind.JAXBIntrospector.getValue;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -198,22 +205,22 @@ public class PrizeDataServiceImpl implements PrizeDataService {
 						criteria.andAreaEqualTo(currentUser.getArea());
 					}
 				}else if("医院".equals(role.getName())){
-					if(currentUser.getCompany()!=null && currentUser.getCompany().length()>0){
+					if(currentUser.getCompanyId()!=null && currentUser.getCompanyId().length()>0){
 						//添加本单位的名称
-						criteria.andFirstOrganizerCompanyEqualTo(currentUser.getCompany());
+						criteria.andOrganizerCompanyIdLike("%"+currentUser.getCompanyId()+"%");
 					}
 					if(currentUser.getArea()!=null && currentUser.getArea().length()>0){
 						//添加本人所属地区
-						criteria.andAreaEqualTo(currentUser.getArea());
+						criteria.andAreaLike("%"+currentUser.getArea()+"%");
 					}
 				}else if("个人".equals(role.getName())){
-					if(currentUser.getCompany()!=null && currentUser.getCompany().length()>0){
+					if(currentUser.getCompanyId()!=null && currentUser.getCompanyId().length()>0){
 						//添加本单位的名称
-						criteria.andFirstOrganizerCompanyEqualTo(currentUser.getCompany());
+						criteria.andOrganizerCompanyIdLike("%"+currentUser.getCompanyId()+"%");
 					}
 					if(currentUser.getArea()!=null && currentUser.getArea().length()>0){
 						//添加本人所属地区
-						criteria.andAreaEqualTo(currentUser.getArea());
+						criteria.andAreaLike("%"+currentUser.getArea()+"%");
 					}
 					if(currentUser.getUsername()!=null && currentUser.getUsername().length()>0){
 						//添加本人的名称
@@ -382,7 +389,7 @@ public class PrizeDataServiceImpl implements PrizeDataService {
 	}
 
 	/**
-	 * 统计各地区项目的数量
+	 * 统计各地区奖励的数量
 	 */
 	@Override
 	public List<Count> countTheNumberOfPrizeDataInEachArea(){
@@ -422,5 +429,125 @@ public class PrizeDataServiceImpl implements PrizeDataService {
 			System.out.println(organizer);
 		}
 		System.out.println(setNew.size());
+	}
+
+	/**
+	 * 替换奖励数据的单位
+	 * 	由于奖励数据里的单位与省卫计委标准名称不一致，所以在检索和替换单位id的时候会出现问题，所以需要将这些单位数据进行替换为标准数据，然后进行清理
+	 */
+	@Override
+	public void repeatCompany(File file, String fileName) throws Exception {
+		Sheet sheet = ParseExcelUtils.parseExcel(file, fileName);
+		//行数
+		int rowNumber = 0;
+		//总行数
+		int rowCount = sheet.getPhysicalNumberOfRows();
+		if(rowCount>1){
+			//标题行
+			Row titleRow = sheet.getRow(0);
+			//遍历行，略过标题行，从第二行开始
+			for(int i=1;i<rowCount;i++){
+				Row row = sheet.getRow(i);
+				//跳过空行
+				if(i>=1){
+					if(row==null){continue;}
+					else if(org.springframework.util.StringUtils.isEmpty(getValue(row.getCell(0)))&&org.springframework.util.StringUtils.isEmpty(getValue(row.getCell(1)))){
+						continue;
+					}
+				}
+				//行数
+				rowNumber = row.getRowNum();
+				//被替换的单位
+				String repeatCompany = row.getCell(0).getStringCellValue();
+				//省卫计委名下单位
+				String provinceCompany = row.getCell(1).getStringCellValue();
+				String companyId = null;
+				//单位id
+				if(titleRow.getCell(2).getStringCellValue().indexOf("单位id")>=0){
+					if(row.getCell(2)!=null && row.getCell(2).getCellType()==row.getCell(2).CELL_TYPE_NUMERIC){
+						row.getCell(2).setCellType(Cell.CELL_TYPE_STRING);
+						companyId = row.getCell(2).getStringCellValue().trim();
+					}else if(row.getCell(2)!=null && row.getCell(2).getCellType()==row.getCell(2).CELL_TYPE_STRING){
+						companyId = row.getCell(2).getStringCellValue().trim();
+					}
+				}
+				//System.out.println("替换单位："+repeatCompany + "，省卫计委单位："+provinceCompany + "，单位id："+companyId);
+				//将手工处理的医院进行替换
+				//1.查询出所有的项目数据
+				TPrizeDataExample example = new TPrizeDataExample();
+				List<TPrizeData> prizeDataList = prizeDataMapper.selectByExample(example);
+				for (TPrizeData prizeData:prizeDataList) {
+					String otherOrganizerCompany = prizeData.getOtherOrganizerCompany();
+					String firstOrganizerCompany = prizeData.getFirstOrganizerCompany();
+					boolean flag = false;
+					if(StringUtils.isNotBlank(firstOrganizerCompany)){
+						if(repeatCompany.equals(firstOrganizerCompany)){
+							firstOrganizerCompany = firstOrganizerCompany.replace(repeatCompany,provinceCompany);
+							flag = true;
+						}
+					}
+					if(StringUtils.isNotBlank(otherOrganizerCompany)){
+						String[] split = otherOrganizerCompany.split(",");
+						for (String s:split) {
+							//如果项目数据的单位里存在和需要替换的单位相同的，将其进行替换
+							if(repeatCompany.equals(s)){
+								otherOrganizerCompany = otherOrganizerCompany.replace(repeatCompany,provinceCompany);
+								flag = true;
+							}
+						}
+					}
+
+					if(flag){
+						prizeData.setFirstOrganizerCompany(firstOrganizerCompany);
+						prizeData.setOtherOrganizerCompany(otherOrganizerCompany);
+						System.out.println(prizeData);
+						prizeDataMapper.updateByPrimaryKey(prizeData);
+					}
+
+				}
+			}
+		}
+	}
+	@Override
+	public void insertCompanyAndArea()throws Exception{
+		TPrizeDataExample example = new TPrizeDataExample();
+		List<TPrizeData> prizeDataList = prizeDataMapper.selectByExample(example);
+		for (TPrizeData prizeData:prizeDataList) {
+			String organizer = null;
+			if(StringUtils.isNotBlank(prizeData.getFirstOrganizerCompany())){
+				if(StringUtils.isNotBlank(prizeData.getOtherOrganizerCompany())){
+					organizer = prizeData.getFirstOrganizerCompany() + ","+ prizeData.getOtherOrganizerCompany();
+				}else{
+					organizer = prizeData.getFirstOrganizerCompany();
+				}
+			}
+			String companyId = "";
+			if(StringUtils.isNotBlank(organizer)) {
+				String[] split = organizer.split(",");
+				for (String s : split) {
+					TAreaAndCompanyExample areaAndCompanyExample = new TAreaAndCompanyExample();
+					TAreaAndCompanyExample.Criteria criteria = areaAndCompanyExample.createCriteria();
+					criteria.andCompanyEqualTo(s);
+					List<TAreaAndCompany> areaAndCompanyList = areaAndCompanyMapper.selectByExample(areaAndCompanyExample);
+					if(areaAndCompanyList!=null && areaAndCompanyList.size()>0){
+						prizeData.setArea(areaAndCompanyList.get(0).getCity());
+						if(StringUtils.isNotBlank(prizeData.getOrganizerCompanyId())){
+							if(!prizeData.getOrganizerCompanyId().contains(areaAndCompanyList.get(0).getCompanyId())){
+								companyId += prizeData.getOrganizerCompanyId()+","+areaAndCompanyList.get(0).getCompanyId()+",";
+							}
+						}else{
+							companyId += areaAndCompanyList.get(0).getCompanyId()+",";
+
+						}
+					}
+				}
+			}
+			if(StringUtils.isNotBlank(companyId)){
+				companyId = companyId.substring(0,companyId.lastIndexOf(","));
+			}
+			prizeData.setOrganizerCompanyId(companyId);
+			prizeDataMapper.updateByPrimaryKey(prizeData);
+			System.out.println("地区："+prizeData.getArea()+"---单位："+organizer+"---单位id："+companyId);
+		}
 	}
 }

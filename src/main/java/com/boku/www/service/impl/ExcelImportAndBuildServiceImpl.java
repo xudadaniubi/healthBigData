@@ -75,6 +75,9 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 	@Autowired
 	private UUserDao userDao;
 
+	@Autowired
+	private TUserForPersonageMapper userForPersonageMapper;
+
 	/**插入项目数据到数据库
 	 * @param file
 	 * @param fileName
@@ -254,6 +257,14 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 				userDao.insert(user);
 			}
 		}
+		return message;
+
+	}
+	@Override
+	public String importUser(File file, String fileName) throws Exception {
+		String message = "Import success";
+		Sheet sheet =ParseExcelUtils.parseExcel(file, fileName);
+		importUser(sheet);
 		return message;
 	}
 	/**
@@ -1176,4 +1187,89 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 		}
 		return list;
 	}
+
+	/**
+	 * 省卫计委提供了27个表格，里面是个人用户的名单。现在将这些用户全部导入到数据库，然后进行去重
+	 */
+	public void importUser (Sheet sheet) throws Exception {
+		int rowCount = sheet.getPhysicalNumberOfRows();//总行数
+		if (rowCount > 1) {
+			Row titleRow = sheet.getRow(0);//标题行
+			for (int i = 1; i < rowCount; i++) {//遍历行，略过标题行，从第二行开始
+				Row row = sheet.getRow(i);
+				//跳过空行
+				if(i>=1){
+					if(row==null){continue;}
+					else if(StringUtils.isEmpty(getValue(row.getCell(0)))&&StringUtils.isEmpty(getValue(row.getCell(1)))){
+						continue;
+					}
+				}
+				TUserForPersonage entity = new TUserForPersonage();
+
+				if (titleRow.getCell(1).getStringCellValue().indexOf("证件号") >= 0) {
+					if (row.getCell(1) != null && row.getCell(1).getCellType() == row.getCell(1).CELL_TYPE_STRING) {
+						entity.setIdCard(row.getCell(1).getStringCellValue().trim());
+					}else if(row.getCell(1) != null && row.getCell(1).getCellType() == row.getCell(1).CELL_TYPE_NUMERIC){
+						row.getCell(1).setCellType(Cell.CELL_TYPE_STRING);
+						entity.setIdCard(row.getCell(1).getStringCellValue().trim());
+					}
+				}
+
+				if (titleRow.getCell(2).getStringCellValue().indexOf("专业名称") >= 0) {
+					if (row.getCell(2) != null && row.getCell(2).getCellType() == row.getCell(2).CELL_TYPE_STRING) {
+						entity.setMajorName(row.getCell(2).getStringCellValue().trim());
+					}
+				}
+				if (titleRow.getCell(3).getStringCellValue().indexOf("单位名称") >= 0) {
+					if (row.getCell(3) != null && row.getCell(3).getCellType() == row.getCell(3).CELL_TYPE_STRING) {
+						entity.setCompany(row.getCell(3).getStringCellValue().trim());
+					}
+				}
+
+				if (titleRow.getCell(0).getStringCellValue().indexOf("姓名") >= 0) {
+					if (row.getCell(0) != null && row.getCell(0).getCellType() == row.getCell(0).CELL_TYPE_STRING) {
+						if(org.apache.commons.lang3.StringUtils.isNotBlank(entity.getIdCard())){
+							String idCaed = entity.getIdCard().substring(entity.getIdCard().length()-4);
+							entity.setUsername(row.getCell(0).getStringCellValue().trim()+idCaed);
+						}
+					}
+				}
+
+				if(org.apache.commons.lang3.StringUtils.isNotBlank(entity.getUsername())){
+					TUserForPersonageExample example = new TUserForPersonageExample();
+					example.createCriteria().andUsernameEqualTo(entity.getUsername());
+					List<TUserForPersonage> userForPersonages = userForPersonageMapper.selectByExample(example);
+					if(userForPersonages.isEmpty()){
+						userForPersonageMapper.insert(entity);
+					}else{
+						String company = "";
+						boolean flag = false;
+						//判断数据库的单位是否为空
+						if(org.apache.commons.lang3.StringUtils.isNotBlank(userForPersonages.get(0).getCompany())){
+							//不为空，判断两个单位是否相等
+							if(!userForPersonages.get(0).getCompany().equals(entity.getCompany())){
+								//不相等，拼接
+								company = userForPersonages.get(0).getCompany()+";"+entity.getCompany();
+								flag = true;
+							}
+						}else{
+							//为空，判断excel中单位是否为空
+							if(org.apache.commons.lang3.StringUtils.isNotBlank(entity.getCompany())){
+								//不为空
+								company = entity.getCompany();
+								flag = true;
+							}
+						}
+						//如果单位有变化，就update
+						if(flag){
+							entity.setCompany(company);
+							userForPersonageMapper.updateByPrimaryKey(entity);
+							System.out.println(entity);
+						}
+					}
+				}
+			}
+		}
+	}
+
 }

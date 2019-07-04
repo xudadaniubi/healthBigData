@@ -29,4 +29,5 @@ public class CurrentUser {
 		UUser currentUser = (UUser)subject.getPrincipal();
 		return currentUser;
 	}
+
 }

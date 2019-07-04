@@ -1,5 +1,8 @@
 package com.boku.www.pojo;
 
+import lombok.Data;
+
+@Data
 public class TPrizeData {
     private Integer id;
 		//项目名称
@@ -14,6 +17,8 @@ public class TPrizeData {
 		private String firstOrganizerCompany;
 		//其他承担单位
 		private String otherOrganizerCompany;
+		//单位id
+		private String organizerCompanyId;
 		//所在地区
 		private String area;
 		//项目负责人

@@ -1,388 +1,405 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.boku.www.mapper.TPrizeDataMapper" >
-  <resultMap id="BaseResultMap" type="com.boku.www.pojo.TPrizeData" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
-    <result column="project_category" property="projectCategory" jdbcType="VARCHAR" />
-    <result column="subject_name1" property="subjectName1" jdbcType="VARCHAR" />
-    <result column="subject_name2" property="subjectName2" jdbcType="VARCHAR" />
-    <result column="first_organizer_company" property="firstOrganizerCompany" jdbcType="VARCHAR" />
-    <result column="other_organizer_company" property="otherOrganizerCompany" jdbcType="VARCHAR" />
-    <result column="area" property="area" jdbcType="VARCHAR" />
-    <result column="project_leader" property="projectLeader" jdbcType="VARCHAR" />
-    <result column="team_members" property="teamMembers" jdbcType="VARCHAR" />
-    <result column="prize_category_grade" property="prizeCategoryGrade" jdbcType="VARCHAR" />
-    <result column="prize_category" property="prizeCategory" jdbcType="VARCHAR" />
-    <result column="award_grade" property="awardGrade" jdbcType="VARCHAR" />
-    <result column="prize_time" property="prizeTime" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="VARCHAR" />
-    <result column="confirm_status" property="confirmStatus" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
+    <resultMap id="BaseResultMap" type="com.boku.www.pojo.TPrizeData" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+        <result column="project_category" property="projectCategory" jdbcType="VARCHAR" />
+        <result column="subject_name1" property="subjectName1" jdbcType="VARCHAR" />
+        <result column="subject_name2" property="subjectName2" jdbcType="VARCHAR" />
+        <result column="first_organizer_company" property="firstOrganizerCompany" jdbcType="VARCHAR" />
+        <result column="other_organizer_company" property="otherOrganizerCompany" jdbcType="VARCHAR" />
+        <result column="organizer_company_id" property="organizerCompanyId" jdbcType="VARCHAR" />
+        <result column="area" property="area" jdbcType="VARCHAR" />
+        <result column="project_leader" property="projectLeader" jdbcType="VARCHAR" />
+        <result column="team_members" property="teamMembers" jdbcType="VARCHAR" />
+        <result column="prize_category_grade" property="prizeCategoryGrade" jdbcType="VARCHAR" />
+        <result column="prize_category" property="prizeCategory" jdbcType="VARCHAR" />
+        <result column="award_grade" property="awardGrade" jdbcType="VARCHAR" />
+        <result column="prize_time" property="prizeTime" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="VARCHAR" />
+        <result column="confirm_status" property="confirmStatus" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Example_Where_Clause" >
+        <where >
+            <foreach collection="oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
             </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause" >
+        <where >
+            <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
             </foreach>
-          </trim>
+        </where>
+    </sql>
+    <sql id="Base_Column_List" >
+        id, project_name, project_category, subject_name1, subject_name2, first_organizer_company,
+        other_organizer_company, organizer_company_id, area, project_leader, team_members,
+        prize_category_grade, prize_category, award_grade, prize_time, status, confirm_status
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.boku.www.pojo.TPrizeDataExample" >
+        select
+        <if test="distinct" >
+            distinct
         </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List" >
-    id, project_name, project_category, subject_name1, subject_name2, first_organizer_company, 
-    other_organizer_company, area, project_leader, team_members, prize_category_grade, 
-    prize_category, award_grade, prize_time, status, confirm_status
-  </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.boku.www.pojo.TPrizeDataExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from t_prize_data
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from t_prize_data
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from t_prize_data
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.boku.www.pojo.TPrizeDataExample" >
-    delete from t_prize_data
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.boku.www.pojo.TPrizeData" >
-    insert into t_prize_data (id, project_name, project_category, 
-      subject_name1, subject_name2, first_organizer_company, 
-      other_organizer_company, area, project_leader, 
-      team_members, prize_category_grade, prize_category, 
-      award_grade, prize_time, status, 
-      confirm_status)
-    values (#{id,jdbcType=INTEGER}, #{projectName,jdbcType=VARCHAR}, #{projectCategory,jdbcType=VARCHAR}, 
-      #{subjectName1,jdbcType=VARCHAR}, #{subjectName2,jdbcType=VARCHAR}, #{firstOrganizerCompany,jdbcType=VARCHAR}, 
-      #{otherOrganizerCompany,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{projectLeader,jdbcType=VARCHAR}, 
-      #{teamMembers,jdbcType=VARCHAR}, #{prizeCategoryGrade,jdbcType=VARCHAR}, #{prizeCategory,jdbcType=VARCHAR}, 
-      #{awardGrade,jdbcType=VARCHAR}, #{prizeTime,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
-      #{confirmStatus,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.boku.www.pojo.TPrizeData" >
-    insert into t_prize_data
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="projectName != null" >
-        project_name,
-      </if>
-      <if test="projectCategory != null" >
-        project_category,
-      </if>
-      <if test="subjectName1 != null" >
-        subject_name1,
-      </if>
-      <if test="subjectName2 != null" >
-        subject_name2,
-      </if>
-      <if test="firstOrganizerCompany != null" >
-        first_organizer_company,
-      </if>
-      <if test="otherOrganizerCompany != null" >
-        other_organizer_company,
-      </if>
-      <if test="area != null" >
-        area,
-      </if>
-      <if test="projectLeader != null" >
-        project_leader,
-      </if>
-      <if test="teamMembers != null" >
-        team_members,
-      </if>
-      <if test="prizeCategoryGrade != null" >
-        prize_category_grade,
-      </if>
-      <if test="prizeCategory != null" >
-        prize_category,
-      </if>
-      <if test="awardGrade != null" >
-        award_grade,
-      </if>
-      <if test="prizeTime != null" >
-        prize_time,
-      </if>
-      <if test="status != null" >
-        status,
-      </if>
-      <if test="confirmStatus != null" >
-        confirm_status,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="projectName != null" >
-        #{projectName,jdbcType=VARCHAR},
-      </if>
-      <if test="projectCategory != null" >
-        #{projectCategory,jdbcType=VARCHAR},
-      </if>
-      <if test="subjectName1 != null" >
-        #{subjectName1,jdbcType=VARCHAR},
-      </if>
-      <if test="subjectName2 != null" >
-        #{subjectName2,jdbcType=VARCHAR},
-      </if>
-      <if test="firstOrganizerCompany != null" >
-        #{firstOrganizerCompany,jdbcType=VARCHAR},
-      </if>
-      <if test="otherOrganizerCompany != null" >
-        #{otherOrganizerCompany,jdbcType=VARCHAR},
-      </if>
-      <if test="area != null" >
-        #{area,jdbcType=VARCHAR},
-      </if>
-      <if test="projectLeader != null" >
-        #{projectLeader,jdbcType=VARCHAR},
-      </if>
-      <if test="teamMembers != null" >
-        #{teamMembers,jdbcType=VARCHAR},
-      </if>
-      <if test="prizeCategoryGrade != null" >
-        #{prizeCategoryGrade,jdbcType=VARCHAR},
-      </if>
-      <if test="prizeCategory != null" >
-        #{prizeCategory,jdbcType=VARCHAR},
-      </if>
-      <if test="awardGrade != null" >
-        #{awardGrade,jdbcType=VARCHAR},
-      </if>
-      <if test="prizeTime != null" >
-        #{prizeTime,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=VARCHAR},
-      </if>
-      <if test="confirmStatus != null" >
-        #{confirmStatus,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.boku.www.pojo.TPrizeDataExample" resultType="java.lang.Integer" >
-    select count(*) from t_prize_data
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map" >
-    update t_prize_data
-    <set >
-      <if test="record.id != null" >
-        id = #{record.id,jdbcType=INTEGER},
-      </if>
-      <if test="record.projectName != null" >
+        <include refid="Base_Column_List" />
+        from t_prize_data
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null" >
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from t_prize_data
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from t_prize_data
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.boku.www.pojo.TPrizeDataExample" >
+        delete from t_prize_data
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.boku.www.pojo.TPrizeData" >
+        insert into t_prize_data (id, project_name, project_category,
+        subject_name1, subject_name2, first_organizer_company,
+        other_organizer_company, organizer_company_id,
+        area, project_leader, team_members,
+        prize_category_grade, prize_category, award_grade,
+        prize_time, status, confirm_status
+        )
+        values (#{id,jdbcType=INTEGER}, #{projectName,jdbcType=VARCHAR}, #{projectCategory,jdbcType=VARCHAR},
+        #{subjectName1,jdbcType=VARCHAR}, #{subjectName2,jdbcType=VARCHAR}, #{firstOrganizerCompany,jdbcType=VARCHAR},
+        #{otherOrganizerCompany,jdbcType=VARCHAR}, #{organizerCompanyId,jdbcType=VARCHAR},
+        #{area,jdbcType=VARCHAR}, #{projectLeader,jdbcType=VARCHAR}, #{teamMembers,jdbcType=VARCHAR},
+        #{prizeCategoryGrade,jdbcType=VARCHAR}, #{prizeCategory,jdbcType=VARCHAR}, #{awardGrade,jdbcType=VARCHAR},
+        #{prizeTime,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{confirmStatus,jdbcType=VARCHAR}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.boku.www.pojo.TPrizeData" >
+        insert into t_prize_data
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="projectName != null" >
+                project_name,
+            </if>
+            <if test="projectCategory != null" >
+                project_category,
+            </if>
+            <if test="subjectName1 != null" >
+                subject_name1,
+            </if>
+            <if test="subjectName2 != null" >
+                subject_name2,
+            </if>
+            <if test="firstOrganizerCompany != null" >
+                first_organizer_company,
+            </if>
+            <if test="otherOrganizerCompany != null" >
+                other_organizer_company,
+            </if>
+            <if test="organizerCompanyId != null" >
+                organizer_company_id,
+            </if>
+            <if test="area != null" >
+                area,
+            </if>
+            <if test="projectLeader != null" >
+                project_leader,
+            </if>
+            <if test="teamMembers != null" >
+                team_members,
+            </if>
+            <if test="prizeCategoryGrade != null" >
+                prize_category_grade,
+            </if>
+            <if test="prizeCategory != null" >
+                prize_category,
+            </if>
+            <if test="awardGrade != null" >
+                award_grade,
+            </if>
+            <if test="prizeTime != null" >
+                prize_time,
+            </if>
+            <if test="status != null" >
+                status,
+            </if>
+            <if test="confirmStatus != null" >
+                confirm_status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="projectName != null" >
+                #{projectName,jdbcType=VARCHAR},
+            </if>
+            <if test="projectCategory != null" >
+                #{projectCategory,jdbcType=VARCHAR},
+            </if>
+            <if test="subjectName1 != null" >
+                #{subjectName1,jdbcType=VARCHAR},
+            </if>
+            <if test="subjectName2 != null" >
+                #{subjectName2,jdbcType=VARCHAR},
+            </if>
+            <if test="firstOrganizerCompany != null" >
+                #{firstOrganizerCompany,jdbcType=VARCHAR},
+            </if>
+            <if test="otherOrganizerCompany != null" >
+                #{otherOrganizerCompany,jdbcType=VARCHAR},
+            </if>
+            <if test="organizerCompanyId != null" >
+                #{organizerCompanyId,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null" >
+                #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="projectLeader != null" >
+                #{projectLeader,jdbcType=VARCHAR},
+            </if>
+            <if test="teamMembers != null" >
+                #{teamMembers,jdbcType=VARCHAR},
+            </if>
+            <if test="prizeCategoryGrade != null" >
+                #{prizeCategoryGrade,jdbcType=VARCHAR},
+            </if>
+            <if test="prizeCategory != null" >
+                #{prizeCategory,jdbcType=VARCHAR},
+            </if>
+            <if test="awardGrade != null" >
+                #{awardGrade,jdbcType=VARCHAR},
+            </if>
+            <if test="prizeTime != null" >
+                #{prizeTime,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="confirmStatus != null" >
+                #{confirmStatus,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.boku.www.pojo.TPrizeDataExample" resultType="java.lang.Integer" >
+        select count(*) from t_prize_data
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map" >
+        update t_prize_data
+        <set >
+            <if test="record.id != null" >
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.projectName != null" >
+                project_name = #{record.projectName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.projectCategory != null" >
+                project_category = #{record.projectCategory,jdbcType=VARCHAR},
+            </if>
+            <if test="record.subjectName1 != null" >
+                subject_name1 = #{record.subjectName1,jdbcType=VARCHAR},
+            </if>
+            <if test="record.subjectName2 != null" >
+                subject_name2 = #{record.subjectName2,jdbcType=VARCHAR},
+            </if>
+            <if test="record.firstOrganizerCompany != null" >
+                first_organizer_company = #{record.firstOrganizerCompany,jdbcType=VARCHAR},
+            </if>
+            <if test="record.otherOrganizerCompany != null" >
+                other_organizer_company = #{record.otherOrganizerCompany,jdbcType=VARCHAR},
+            </if>
+            <if test="record.organizerCompanyId != null" >
+                organizer_company_id = #{record.organizerCompanyId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.area != null" >
+                area = #{record.area,jdbcType=VARCHAR},
+            </if>
+            <if test="record.projectLeader != null" >
+                project_leader = #{record.projectLeader,jdbcType=VARCHAR},
+            </if>
+            <if test="record.teamMembers != null" >
+                team_members = #{record.teamMembers,jdbcType=VARCHAR},
+            </if>
+            <if test="record.prizeCategoryGrade != null" >
+                prize_category_grade = #{record.prizeCategoryGrade,jdbcType=VARCHAR},
+            </if>
+            <if test="record.prizeCategory != null" >
+                prize_category = #{record.prizeCategory,jdbcType=VARCHAR},
+            </if>
+            <if test="record.awardGrade != null" >
+                award_grade = #{record.awardGrade,jdbcType=VARCHAR},
+            </if>
+            <if test="record.prizeTime != null" >
+                prize_time = #{record.prizeTime,jdbcType=VARCHAR},
+            </if>
+            <if test="record.status != null" >
+                status = #{record.status,jdbcType=VARCHAR},
+            </if>
+            <if test="record.confirmStatus != null" >
+                confirm_status = #{record.confirmStatus,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map" >
+        update t_prize_data
+        set id = #{record.id,jdbcType=INTEGER},
         project_name = #{record.projectName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.projectCategory != null" >
         project_category = #{record.projectCategory,jdbcType=VARCHAR},
-      </if>
-      <if test="record.subjectName1 != null" >
         subject_name1 = #{record.subjectName1,jdbcType=VARCHAR},
-      </if>
-      <if test="record.subjectName2 != null" >
         subject_name2 = #{record.subjectName2,jdbcType=VARCHAR},
-      </if>
-      <if test="record.firstOrganizerCompany != null" >
         first_organizer_company = #{record.firstOrganizerCompany,jdbcType=VARCHAR},
-      </if>
-      <if test="record.otherOrganizerCompany != null" >
         other_organizer_company = #{record.otherOrganizerCompany,jdbcType=VARCHAR},
-      </if>
-      <if test="record.area != null" >
+        organizer_company_id = #{record.organizerCompanyId,jdbcType=VARCHAR},
         area = #{record.area,jdbcType=VARCHAR},
-      </if>
-      <if test="record.projectLeader != null" >
         project_leader = #{record.projectLeader,jdbcType=VARCHAR},
-      </if>
-      <if test="record.teamMembers != null" >
         team_members = #{record.teamMembers,jdbcType=VARCHAR},
-      </if>
-      <if test="record.prizeCategoryGrade != null" >
         prize_category_grade = #{record.prizeCategoryGrade,jdbcType=VARCHAR},
-      </if>
-      <if test="record.prizeCategory != null" >
         prize_category = #{record.prizeCategory,jdbcType=VARCHAR},
-      </if>
-      <if test="record.awardGrade != null" >
         award_grade = #{record.awardGrade,jdbcType=VARCHAR},
-      </if>
-      <if test="record.prizeTime != null" >
         prize_time = #{record.prizeTime,jdbcType=VARCHAR},
-      </if>
-      <if test="record.status != null" >
         status = #{record.status,jdbcType=VARCHAR},
-      </if>
-      <if test="record.confirmStatus != null" >
-        confirm_status = #{record.confirmStatus,jdbcType=VARCHAR},
-      </if>
-    </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map" >
-    update t_prize_data
-    set id = #{record.id,jdbcType=INTEGER},
-      project_name = #{record.projectName,jdbcType=VARCHAR},
-      project_category = #{record.projectCategory,jdbcType=VARCHAR},
-      subject_name1 = #{record.subjectName1,jdbcType=VARCHAR},
-      subject_name2 = #{record.subjectName2,jdbcType=VARCHAR},
-      first_organizer_company = #{record.firstOrganizerCompany,jdbcType=VARCHAR},
-      other_organizer_company = #{record.otherOrganizerCompany,jdbcType=VARCHAR},
-      area = #{record.area,jdbcType=VARCHAR},
-      project_leader = #{record.projectLeader,jdbcType=VARCHAR},
-      team_members = #{record.teamMembers,jdbcType=VARCHAR},
-      prize_category_grade = #{record.prizeCategoryGrade,jdbcType=VARCHAR},
-      prize_category = #{record.prizeCategory,jdbcType=VARCHAR},
-      award_grade = #{record.awardGrade,jdbcType=VARCHAR},
-      prize_time = #{record.prizeTime,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=VARCHAR},
-      confirm_status = #{record.confirmStatus,jdbcType=VARCHAR}
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.boku.www.pojo.TPrizeData" >
-    update t_prize_data
-    <set >
-      <if test="projectName != null" >
-        project_name = #{projectName,jdbcType=VARCHAR},
-      </if>
-      <if test="projectCategory != null" >
+        confirm_status = #{record.confirmStatus,jdbcType=VARCHAR}
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.boku.www.pojo.TPrizeData" >
+        update t_prize_data
+        <set >
+            <if test="projectName != null" >
+                project_name = #{projectName,jdbcType=VARCHAR},
+            </if>
+            <if test="projectCategory != null" >
+                project_category = #{projectCategory,jdbcType=VARCHAR},
+            </if>
+            <if test="subjectName1 != null" >
+                subject_name1 = #{subjectName1,jdbcType=VARCHAR},
+            </if>
+            <if test="subjectName2 != null" >
+                subject_name2 = #{subjectName2,jdbcType=VARCHAR},
+            </if>
+            <if test="firstOrganizerCompany != null" >
+                first_organizer_company = #{firstOrganizerCompany,jdbcType=VARCHAR},
+            </if>
+            <if test="otherOrganizerCompany != null" >
+                other_organizer_company = #{otherOrganizerCompany,jdbcType=VARCHAR},
+            </if>
+            <if test="organizerCompanyId != null" >
+                organizer_company_id = #{organizerCompanyId,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null" >
+                area = #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="projectLeader != null" >
+                project_leader = #{projectLeader,jdbcType=VARCHAR},
+            </if>
+            <if test="teamMembers != null" >
+                team_members = #{teamMembers,jdbcType=VARCHAR},
+            </if>
+            <if test="prizeCategoryGrade != null" >
+                prize_category_grade = #{prizeCategoryGrade,jdbcType=VARCHAR},
+            </if>
+            <if test="prizeCategory != null" >
+                prize_category = #{prizeCategory,jdbcType=VARCHAR},
+            </if>
+            <if test="awardGrade != null" >
+                award_grade = #{awardGrade,jdbcType=VARCHAR},
+            </if>
+            <if test="prizeTime != null" >
+                prize_time = #{prizeTime,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="confirmStatus != null" >
+                confirm_status = #{confirmStatus,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.boku.www.pojo.TPrizeData" >
+        update t_prize_data
+        set project_name = #{projectName,jdbcType=VARCHAR},
         project_category = #{projectCategory,jdbcType=VARCHAR},
-      </if>
-      <if test="subjectName1 != null" >
         subject_name1 = #{subjectName1,jdbcType=VARCHAR},
-      </if>
-      <if test="subjectName2 != null" >
         subject_name2 = #{subjectName2,jdbcType=VARCHAR},
-      </if>
-      <if test="firstOrganizerCompany != null" >
         first_organizer_company = #{firstOrganizerCompany,jdbcType=VARCHAR},
-      </if>
-      <if test="otherOrganizerCompany != null" >
         other_organizer_company = #{otherOrganizerCompany,jdbcType=VARCHAR},
-      </if>
-      <if test="area != null" >
+        organizer_company_id = #{organizerCompanyId,jdbcType=VARCHAR},
         area = #{area,jdbcType=VARCHAR},
-      </if>
-      <if test="projectLeader != null" >
         project_leader = #{projectLeader,jdbcType=VARCHAR},
-      </if>
-      <if test="teamMembers != null" >
         team_members = #{teamMembers,jdbcType=VARCHAR},
-      </if>
-      <if test="prizeCategoryGrade != null" >
         prize_category_grade = #{prizeCategoryGrade,jdbcType=VARCHAR},
-      </if>
-      <if test="prizeCategory != null" >
         prize_category = #{prizeCategory,jdbcType=VARCHAR},
-      </if>
-      <if test="awardGrade != null" >
         award_grade = #{awardGrade,jdbcType=VARCHAR},
-      </if>
-      <if test="prizeTime != null" >
         prize_time = #{prizeTime,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
-      </if>
-      <if test="confirmStatus != null" >
-        confirm_status = #{confirmStatus,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.boku.www.pojo.TPrizeData" >
-    update t_prize_data
-    set project_name = #{projectName,jdbcType=VARCHAR},
-      project_category = #{projectCategory,jdbcType=VARCHAR},
-      subject_name1 = #{subjectName1,jdbcType=VARCHAR},
-      subject_name2 = #{subjectName2,jdbcType=VARCHAR},
-      first_organizer_company = #{firstOrganizerCompany,jdbcType=VARCHAR},
-      other_organizer_company = #{otherOrganizerCompany,jdbcType=VARCHAR},
-      area = #{area,jdbcType=VARCHAR},
-      project_leader = #{projectLeader,jdbcType=VARCHAR},
-      team_members = #{teamMembers,jdbcType=VARCHAR},
-      prize_category_grade = #{prizeCategoryGrade,jdbcType=VARCHAR},
-      prize_category = #{prizeCategory,jdbcType=VARCHAR},
-      award_grade = #{awardGrade,jdbcType=VARCHAR},
-      prize_time = #{prizeTime,jdbcType=VARCHAR},
-      status = #{status,jdbcType=VARCHAR},
-      confirm_status = #{confirmStatus,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+        confirm_status = #{confirmStatus,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
     <resultMap id="CountResultMap" type="com.boku.www.utils.Count" >
         <result column="area" property="area" jdbcType="VARCHAR" />
         <result column="count" property="count" jdbcType="INTEGER" />

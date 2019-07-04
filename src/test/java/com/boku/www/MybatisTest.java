@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -223,6 +224,34 @@ public class MybatisTest {
 	}
 	@Test
 	/**
+	 * 替换奖励数据的单位信息，并添加单位id
+	 */
+	public void repeatPrizeDataCompany(){
+
+		try {
+			String filePath = "E:\\healthybigdata\\奖励数据替换单位.xlsx";
+			File file = new File(filePath);
+			//截取字符串名称
+			String fileName = filePath.substring(filePath.lastIndexOf("\\")+1);
+			System.out.println(fileName);
+			prizeDataService.repeatCompany(file, fileName);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	@Test
+	/**
+	 * 替换奖励数据的单位信息，并添加单位id
+	 */
+	public void insertPrizeCompanyAndArea(){
+		try {
+			prizeDataService.insertCompanyAndArea();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	@Test
+	/**
 	 * 清理奖励数据的单位信息，并添加单位id
 	 */
 	public void cleanThesisForEnglish(){
@@ -241,6 +270,24 @@ public class MybatisTest {
 		System.out.println(fileName);
 		String message = excelImportAndBuildService.importAreaAndCompanyExcelToUser(file, fileName);
 		System.out.println(message);
+	}
+	@Test
+	public void test12() throws Exception {
+		File file=new File("E:\\healthybigdata\\2019年5月20日飞蝶给的数据\\2004-2018职称系统信息（删减版+）");
+		File[] files=file.listFiles();
+
+		for(File a:files) {
+			String filePath = a.getAbsolutePath();
+			System.out.println(filePath);
+			File myFile = new File(filePath);
+
+			//截取字符串名称
+			String fileName = filePath.substring(filePath.lastIndexOf("\\") + 1);
+			System.out.println(fileName);
+			String message = excelImportAndBuildService.importUser(myFile, fileName);
+			System.out.println(message);
+		}
+
 	}
 	/*@Test
 	public void test9() throws Exception {

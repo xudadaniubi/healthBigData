@@ -14,6 +14,9 @@ public class PageResult implements Serializable{
 		this.total = total;
 		this.rows = rows;
 	}
+	public PageResult() {
+		super();
+	}
 
 	public Integer getConfirmedCount() {
 		return confirmedCount;
