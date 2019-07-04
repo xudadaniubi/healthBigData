@@ -95,7 +95,7 @@ public class ShiroConfiguration {
 		filterChainDefinitionManager.put("/file/downloadTemplateThesisForChineseExcel", "anon");
 		filterChainDefinitionManager.put("/file/downloadTemplateThesisForEnglishExcel", "anon");
 		filterChainDefinitionManager.put("/file/downloadTemplatePatentExcel", "anon");
-		//filterChainDefinitionManager.put("/projectData/findAll", "anon");//anon 可以理解为不拦截
+		filterChainDefinitionManager.put("/projectData/findAll", "anon");//anon 可以理解为不拦截
 		filterChainDefinitionManager.put("/thesisForChinese/countTheNumberOfThesisForChineseInEachArea", "anon");
 		filterChainDefinitionManager.put("/ajaxLogin", "anon");//anon 可以理解为不拦截
 		filterChainDefinitionManager.put("/fileUpload", "anon");//anon 可以理解为不拦截

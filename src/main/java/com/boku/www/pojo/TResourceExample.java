@@ -234,6 +234,76 @@ public class TResourceExample {
 			return (Criteria) this;
 		}
 
+		public Criteria andSkipUrlIsNull() {
+			addCriterion("skip_url is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andSkipUrlIsNotNull() {
+			addCriterion("skip_url is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andSkipUrlEqualTo(String value) {
+			addCriterion("skip_url =", value, "skipUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andSkipUrlNotEqualTo(String value) {
+			addCriterion("skip_url <>", value, "skipUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andSkipUrlGreaterThan(String value) {
+			addCriterion("skip_url >", value, "skipUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andSkipUrlGreaterThanOrEqualTo(String value) {
+			addCriterion("skip_url >=", value, "skipUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andSkipUrlLessThan(String value) {
+			addCriterion("skip_url <", value, "skipUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andSkipUrlLessThanOrEqualTo(String value) {
+			addCriterion("skip_url <=", value, "skipUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andSkipUrlLike(String value) {
+			addCriterion("skip_url like", value, "skipUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andSkipUrlNotLike(String value) {
+			addCriterion("skip_url not like", value, "skipUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andSkipUrlIn(List<String> values) {
+			addCriterion("skip_url in", values, "skipUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andSkipUrlNotIn(List<String> values) {
+			addCriterion("skip_url not in", values, "skipUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andSkipUrlBetween(String value1, String value2) {
+			addCriterion("skip_url between", value1, value2, "skipUrl");
+			return (Criteria) this;
+		}
+
+		public Criteria andSkipUrlNotBetween(String value1, String value2) {
+			addCriterion("skip_url not between", value1, value2, "skipUrl");
+			return (Criteria) this;
+		}
+
 		public Criteria andCategoryIsNull() {
 			addCriterion("category is null");
 			return (Criteria) this;

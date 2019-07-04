@@ -13,10 +13,7 @@ package com.boku.www.service.impl;
 import com.boku.www.mapper.TResearchMapper;
 import com.boku.www.mapper.TResourceMapper;
 import com.boku.www.mapper.system.URoleDao;
-import com.boku.www.pojo.TResearch;
-import com.boku.www.pojo.TResearchExample;
-import com.boku.www.pojo.TResource;
-import com.boku.www.pojo.TResourceExample;
+import com.boku.www.pojo.*;
 import com.boku.www.pojo.system.URole;
 import com.boku.www.pojo.system.UUser;
 import com.boku.www.service.ResourceService;
@@ -103,5 +100,10 @@ public class ResourceServiceImpl implements ResourceService {
 				}
 			}
 		}
+	}
+
+	@Override
+	public List<TResourceCategory> initCategory(){
+		return researchMapper.initCategory();
 	}
 }

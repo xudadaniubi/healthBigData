@@ -63,7 +63,7 @@ public class FileUploadController {
     public Result upload(@RequestParam("file")MultipartFile file ){
 		try {
 			//1定义要上传文件 的存放路径
-			//String localPath="D:/image";
+			//String localPath="E:/image";
 			//2获得文件名字
 			String fileName=file.getOriginalFilename();
 			//2上传失败提示

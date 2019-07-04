@@ -12,6 +12,7 @@ package com.boku.www.controller;
 
 import com.boku.www.pojo.TResearch;
 import com.boku.www.pojo.TResource;
+import com.boku.www.pojo.TResourceCategory;
 import com.boku.www.service.ResearchService;
 import com.boku.www.service.ResourceService;
 import com.boku.www.utils.CurrentUser;
@@ -21,6 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -72,6 +75,17 @@ public class ResourceController {
 			logger.info("用户"+ CurrentUser.returnCurrentUser()+"删除数据失败,Exception:"+e);
 			e.printStackTrace();
 			return new Result(false, "删除失败");
+		}
+	}
+
+	@RequestMapping(value = "/initCategory",method = RequestMethod.GET )
+	public List<TResourceCategory> initCategory(){
+		try {
+			return resourceService.initCategory();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"初始化资源分类数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
 		}
 	}
 

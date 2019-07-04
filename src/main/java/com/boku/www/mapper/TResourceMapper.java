@@ -1,6 +1,7 @@
 package com.boku.www.mapper;
 
 import com.boku.www.pojo.TResource;
+import com.boku.www.pojo.TResourceCategory;
 import com.boku.www.pojo.TResourceExample;
 import java.util.List;
 
@@ -35,4 +36,6 @@ public interface TResourceMapper {
     int updateByPrimaryKeyWithBLOBs(TResource record);
 
     int updateByPrimaryKey(TResource record);
+
+    List<TResourceCategory> initCategory();
 }
