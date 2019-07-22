@@ -27,6 +27,14 @@ public class TThesisForChinese {
     private String authorCompany;
     //作者id
     private String authorCompanyId;
+	//关键词
+	private String keywords;
+	//学科
+	private String subject;
+	//核心期刊
+	private String corePerio;
+	//第一作者
+	private String firstAuthor;
 	//状态
     private String status;
 

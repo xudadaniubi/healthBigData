@@ -1,0 +1,1282 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.boku.www.mapper.TbWanfangJournalMapper" >
+    <resultMap id="BaseResultMap" type="com.boku.www.pojo.TbWanfangJournal" >
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <result column="perio_title" property="perioTitle" jdbcType="VARCHAR" />
+        <result column="former_name" property="formerName" jdbcType="VARCHAR" />
+        <result column="pinyin_title" property="pinyinTitle" jdbcType="VARCHAR" />
+        <result column="trans_title" property="transTitle" jdbcType="VARCHAR" />
+        <result column="proprieter" property="proprieter" jdbcType="VARCHAR" />
+        <result column="avg_perio_down" property="avgPerioDown" jdbcType="DOUBLE" />
+        <result column="keywords" property="keywords" jdbcType="VARCHAR" />
+        <result column="perio_id" property="perioId" jdbcType="VARCHAR" />
+        <result column="language" property="language" jdbcType="VARCHAR" />
+        <result column="major_editor" property="majorEditor" jdbcType="VARCHAR" />
+        <result column="class_type" property="classType" jdbcType="VARCHAR" />
+        <result column="start_year02" property="startYear02" jdbcType="BIGINT" />
+        <result column="perio_format" property="perioFormat" jdbcType="VARCHAR" />
+        <result column="issue_postcode" property="issuePostcode" jdbcType="VARCHAR" />
+        <result column="fax" property="fax" jdbcType="VARCHAR" />
+        <result column="share_num" property="shareNum" jdbcType="INTEGER" />
+        <result column="classcode_level" property="classcodeLevel" jdbcType="VARCHAR" />
+        <result column="publish_cycle" property="publishCycle" jdbcType="VARCHAR" />
+        <result column="avg_article_down" property="avgArticleDown" jdbcType="VARCHAR" />
+        <result column="hostunit_name" property="hostunitName" jdbcType="VARCHAR" />
+        <result column="director" property="director" jdbcType="VARCHAR" />
+        <result column="postcode" property="postcode" jdbcType="VARCHAR" />
+        <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+        <result column="cite_num" property="citeNum" jdbcType="INTEGER" />
+        <result column="country_code" property="countryCode" jdbcType="VARCHAR" />
+        <result column="issn" property="issn" jdbcType="VARCHAR" />
+        <result column="data_state" property="dataState" jdbcType="VARCHAR" />
+        <result column="ef_name" property="efName" jdbcType="VARCHAR" />
+        <result column="release_cycle" property="releaseCycle" jdbcType="VARCHAR" />
+        <result column="end_issue" property="endIssue" jdbcType="VARCHAR" />
+        <result column="start_year" property="startYear" jdbcType="VARCHAR" />
+        <result column="end_year" property="endYear" jdbcType="BIGINT" />
+        <result column="core_perio" property="corePerio" jdbcType="VARCHAR" />
+        <result column="tag_num" property="tagNum" jdbcType="INTEGER" />
+        <result column="hostunit_area" property="hostunitArea" jdbcType="VARCHAR" />
+        <result column="thirdparty_links_num" property="thirdpartyLinksNum" jdbcType="INTEGER" />
+        <result column="import_num" property="importNum" jdbcType="INTEGER" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="source_db" property="sourceDb" jdbcType="VARCHAR" />
+        <result column="cn" property="cn" jdbcType="VARCHAR" />
+        <result column="collection_num" property="collectionNum" jdbcType="INTEGER" />
+        <result column="dep_name" property="depName" jdbcType="VARCHAR" />
+        <result column="download_num" property="downloadNum" jdbcType="VARCHAR" />
+        <result column="first_publish" property="firstPublish" jdbcType="VARCHAR" />
+        <result column="affectoi" property="affectoi" jdbcType="DOUBLE" />
+        <result column="subarea" property="subarea" jdbcType="VARCHAR" />
+        <result column="article_num" property="articleNum" jdbcType="INTEGER" />
+        <result column="fulltext_reading_num" property="fulltextReadingNum" jdbcType="INTEGER" />
+        <result column="note_num" property="noteNum" jdbcType="INTEGER" />
+        <result column="class_code" property="classCode" jdbcType="VARCHAR" />
+        <result column="has_foreign_key" property="hasForeignKey" jdbcType="INTEGER" />
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.boku.www.pojo.TbWanfangJournalWithBLOBs" extends="BaseResultMap" >
+        <result column="main_column" property="mainColumn" jdbcType="LONGVARCHAR" />
+        <result column="solicit_notice" property="solicitNotice" jdbcType="LONGVARCHAR" />
+        <result column="subscribe_notice" property="subscribeNotice" jdbcType="LONGVARCHAR" />
+        <result column="summary" property="summary" jdbcType="LONGVARCHAR" />
+        <result column="op" property="op" jdbcType="LONGVARCHAR" />
+        <result column="committee" property="committee" jdbcType="LONGVARCHAR" />
+        <result column="perio_desc" property="perioDesc" jdbcType="LONGVARCHAR" />
+        <result column="win_prize" property="winPrize" jdbcType="LONGVARCHAR" />
+    </resultMap>
+    <sql id="Example_Where_Clause" >
+        <where >
+            <foreach collection="oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause" >
+        <where >
+            <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List" >
+        id, perio_title, former_name, pinyin_title, trans_title, proprieter, avg_perio_down,
+        keywords, perio_id, language, major_editor, class_type, start_year02, perio_format,
+        issue_postcode, fax, share_num, classcode_level, publish_cycle, avg_article_down,
+        hostunit_name, director, postcode, telephone, cite_num, country_code, issn, data_state,
+        ef_name, release_cycle, end_issue, start_year, end_year, core_perio, tag_num, hostunit_area,
+        thirdparty_links_num, import_num, email, address, source_db, cn, collection_num,
+        dep_name, download_num, first_publish, affectoi, subarea, article_num, fulltext_reading_num,
+        note_num, class_code, has_foreign_key
+    </sql>
+    <sql id="Blob_Column_List" >
+        main_column, solicit_notice, subscribe_notice, summary, op, committee, perio_desc,
+        win_prize
+    </sql>
+    <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.boku.www.pojo.TbWanfangJournalExample" >
+        select
+        <if test="distinct" >
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from tb_wanfang_journal
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null" >
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.boku.www.pojo.TbWanfangJournalExample" >
+        select
+        <if test="distinct" >
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        from tb_wanfang_journal
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null" >
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from tb_wanfang_journal
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+        delete from tb_wanfang_journal
+        where id = #{id,jdbcType=VARCHAR}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.boku.www.pojo.TbWanfangJournalExample" >
+        delete from tb_wanfang_journal
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.boku.www.pojo.TbWanfangJournalWithBLOBs" >
+        insert into tb_wanfang_journal (id, perio_title, former_name,
+        pinyin_title, trans_title, proprieter,
+        avg_perio_down, keywords, perio_id,
+        language, major_editor, class_type,
+        start_year02, perio_format, issue_postcode,
+        fax, share_num, classcode_level,
+        publish_cycle, avg_article_down, hostunit_name,
+        director, postcode, telephone,
+        cite_num, country_code, issn,
+        data_state, ef_name, release_cycle,
+        end_issue, start_year, end_year,
+        core_perio, tag_num, hostunit_area,
+        thirdparty_links_num, import_num, email,
+        address, source_db, cn,
+        collection_num, dep_name, download_num,
+        first_publish, affectoi, subarea,
+        article_num, fulltext_reading_num, note_num,
+        class_code, has_foreign_key, main_column,
+        solicit_notice, subscribe_notice,
+        summary, op, committee,
+        perio_desc, win_prize)
+        values (#{id,jdbcType=VARCHAR}, #{perioTitle,jdbcType=VARCHAR}, #{formerName,jdbcType=VARCHAR},
+        #{pinyinTitle,jdbcType=VARCHAR}, #{transTitle,jdbcType=VARCHAR}, #{proprieter,jdbcType=VARCHAR},
+        #{avgPerioDown,jdbcType=DOUBLE}, #{keywords,jdbcType=VARCHAR}, #{perioId,jdbcType=VARCHAR},
+        #{language,jdbcType=VARCHAR}, #{majorEditor,jdbcType=VARCHAR}, #{classType,jdbcType=VARCHAR},
+        #{startYear02,jdbcType=BIGINT}, #{perioFormat,jdbcType=VARCHAR}, #{issuePostcode,jdbcType=VARCHAR},
+        #{fax,jdbcType=VARCHAR}, #{shareNum,jdbcType=INTEGER}, #{classcodeLevel,jdbcType=VARCHAR},
+        #{publishCycle,jdbcType=VARCHAR}, #{avgArticleDown,jdbcType=VARCHAR}, #{hostunitName,jdbcType=VARCHAR},
+        #{director,jdbcType=VARCHAR}, #{postcode,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR},
+        #{citeNum,jdbcType=INTEGER}, #{countryCode,jdbcType=VARCHAR}, #{issn,jdbcType=VARCHAR},
+        #{dataState,jdbcType=VARCHAR}, #{efName,jdbcType=VARCHAR}, #{releaseCycle,jdbcType=VARCHAR},
+        #{endIssue,jdbcType=VARCHAR}, #{startYear,jdbcType=VARCHAR}, #{endYear,jdbcType=BIGINT},
+        #{corePerio,jdbcType=VARCHAR}, #{tagNum,jdbcType=INTEGER}, #{hostunitArea,jdbcType=VARCHAR},
+        #{thirdpartyLinksNum,jdbcType=INTEGER}, #{importNum,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR},
+        #{address,jdbcType=VARCHAR}, #{sourceDb,jdbcType=VARCHAR}, #{cn,jdbcType=VARCHAR},
+        #{collectionNum,jdbcType=INTEGER}, #{depName,jdbcType=VARCHAR}, #{downloadNum,jdbcType=VARCHAR},
+        #{firstPublish,jdbcType=VARCHAR}, #{affectoi,jdbcType=DOUBLE}, #{subarea,jdbcType=VARCHAR},
+        #{articleNum,jdbcType=INTEGER}, #{fulltextReadingNum,jdbcType=INTEGER}, #{noteNum,jdbcType=INTEGER},
+        #{classCode,jdbcType=VARCHAR}, #{hasForeignKey,jdbcType=INTEGER}, #{mainColumn,jdbcType=LONGVARCHAR},
+        #{solicitNotice,jdbcType=LONGVARCHAR}, #{subscribeNotice,jdbcType=LONGVARCHAR},
+        #{summary,jdbcType=LONGVARCHAR}, #{op,jdbcType=LONGVARCHAR}, #{committee,jdbcType=LONGVARCHAR},
+        #{perioDesc,jdbcType=LONGVARCHAR}, #{winPrize,jdbcType=LONGVARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.boku.www.pojo.TbWanfangJournalWithBLOBs" >
+        insert into tb_wanfang_journal
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="perioTitle != null" >
+                perio_title,
+            </if>
+            <if test="formerName != null" >
+                former_name,
+            </if>
+            <if test="pinyinTitle != null" >
+                pinyin_title,
+            </if>
+            <if test="transTitle != null" >
+                trans_title,
+            </if>
+            <if test="proprieter != null" >
+                proprieter,
+            </if>
+            <if test="avgPerioDown != null" >
+                avg_perio_down,
+            </if>
+            <if test="keywords != null" >
+                keywords,
+            </if>
+            <if test="perioId != null" >
+                perio_id,
+            </if>
+            <if test="language != null" >
+                language,
+            </if>
+            <if test="majorEditor != null" >
+                major_editor,
+            </if>
+            <if test="classType != null" >
+                class_type,
+            </if>
+            <if test="startYear02 != null" >
+                start_year02,
+            </if>
+            <if test="perioFormat != null" >
+                perio_format,
+            </if>
+            <if test="issuePostcode != null" >
+                issue_postcode,
+            </if>
+            <if test="fax != null" >
+                fax,
+            </if>
+            <if test="shareNum != null" >
+                share_num,
+            </if>
+            <if test="classcodeLevel != null" >
+                classcode_level,
+            </if>
+            <if test="publishCycle != null" >
+                publish_cycle,
+            </if>
+            <if test="avgArticleDown != null" >
+                avg_article_down,
+            </if>
+            <if test="hostunitName != null" >
+                hostunit_name,
+            </if>
+            <if test="director != null" >
+                director,
+            </if>
+            <if test="postcode != null" >
+                postcode,
+            </if>
+            <if test="telephone != null" >
+                telephone,
+            </if>
+            <if test="citeNum != null" >
+                cite_num,
+            </if>
+            <if test="countryCode != null" >
+                country_code,
+            </if>
+            <if test="issn != null" >
+                issn,
+            </if>
+            <if test="dataState != null" >
+                data_state,
+            </if>
+            <if test="efName != null" >
+                ef_name,
+            </if>
+            <if test="releaseCycle != null" >
+                release_cycle,
+            </if>
+            <if test="endIssue != null" >
+                end_issue,
+            </if>
+            <if test="startYear != null" >
+                start_year,
+            </if>
+            <if test="endYear != null" >
+                end_year,
+            </if>
+            <if test="corePerio != null" >
+                core_perio,
+            </if>
+            <if test="tagNum != null" >
+                tag_num,
+            </if>
+            <if test="hostunitArea != null" >
+                hostunit_area,
+            </if>
+            <if test="thirdpartyLinksNum != null" >
+                thirdparty_links_num,
+            </if>
+            <if test="importNum != null" >
+                import_num,
+            </if>
+            <if test="email != null" >
+                email,
+            </if>
+            <if test="address != null" >
+                address,
+            </if>
+            <if test="sourceDb != null" >
+                source_db,
+            </if>
+            <if test="cn != null" >
+                cn,
+            </if>
+            <if test="collectionNum != null" >
+                collection_num,
+            </if>
+            <if test="depName != null" >
+                dep_name,
+            </if>
+            <if test="downloadNum != null" >
+                download_num,
+            </if>
+            <if test="firstPublish != null" >
+                first_publish,
+            </if>
+            <if test="affectoi != null" >
+                affectoi,
+            </if>
+            <if test="subarea != null" >
+                subarea,
+            </if>
+            <if test="articleNum != null" >
+                article_num,
+            </if>
+            <if test="fulltextReadingNum != null" >
+                fulltext_reading_num,
+            </if>
+            <if test="noteNum != null" >
+                note_num,
+            </if>
+            <if test="classCode != null" >
+                class_code,
+            </if>
+            <if test="hasForeignKey != null" >
+                has_foreign_key,
+            </if>
+            <if test="mainColumn != null" >
+                main_column,
+            </if>
+            <if test="solicitNotice != null" >
+                solicit_notice,
+            </if>
+            <if test="subscribeNotice != null" >
+                subscribe_notice,
+            </if>
+            <if test="summary != null" >
+                summary,
+            </if>
+            <if test="op != null" >
+                op,
+            </if>
+            <if test="committee != null" >
+                committee,
+            </if>
+            <if test="perioDesc != null" >
+                perio_desc,
+            </if>
+            <if test="winPrize != null" >
+                win_prize,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="perioTitle != null" >
+                #{perioTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="formerName != null" >
+                #{formerName,jdbcType=VARCHAR},
+            </if>
+            <if test="pinyinTitle != null" >
+                #{pinyinTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="transTitle != null" >
+                #{transTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="proprieter != null" >
+                #{proprieter,jdbcType=VARCHAR},
+            </if>
+            <if test="avgPerioDown != null" >
+                #{avgPerioDown,jdbcType=DOUBLE},
+            </if>
+            <if test="keywords != null" >
+                #{keywords,jdbcType=VARCHAR},
+            </if>
+            <if test="perioId != null" >
+                #{perioId,jdbcType=VARCHAR},
+            </if>
+            <if test="language != null" >
+                #{language,jdbcType=VARCHAR},
+            </if>
+            <if test="majorEditor != null" >
+                #{majorEditor,jdbcType=VARCHAR},
+            </if>
+            <if test="classType != null" >
+                #{classType,jdbcType=VARCHAR},
+            </if>
+            <if test="startYear02 != null" >
+                #{startYear02,jdbcType=BIGINT},
+            </if>
+            <if test="perioFormat != null" >
+                #{perioFormat,jdbcType=VARCHAR},
+            </if>
+            <if test="issuePostcode != null" >
+                #{issuePostcode,jdbcType=VARCHAR},
+            </if>
+            <if test="fax != null" >
+                #{fax,jdbcType=VARCHAR},
+            </if>
+            <if test="shareNum != null" >
+                #{shareNum,jdbcType=INTEGER},
+            </if>
+            <if test="classcodeLevel != null" >
+                #{classcodeLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="publishCycle != null" >
+                #{publishCycle,jdbcType=VARCHAR},
+            </if>
+            <if test="avgArticleDown != null" >
+                #{avgArticleDown,jdbcType=VARCHAR},
+            </if>
+            <if test="hostunitName != null" >
+                #{hostunitName,jdbcType=VARCHAR},
+            </if>
+            <if test="director != null" >
+                #{director,jdbcType=VARCHAR},
+            </if>
+            <if test="postcode != null" >
+                #{postcode,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone != null" >
+                #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="citeNum != null" >
+                #{citeNum,jdbcType=INTEGER},
+            </if>
+            <if test="countryCode != null" >
+                #{countryCode,jdbcType=VARCHAR},
+            </if>
+            <if test="issn != null" >
+                #{issn,jdbcType=VARCHAR},
+            </if>
+            <if test="dataState != null" >
+                #{dataState,jdbcType=VARCHAR},
+            </if>
+            <if test="efName != null" >
+                #{efName,jdbcType=VARCHAR},
+            </if>
+            <if test="releaseCycle != null" >
+                #{releaseCycle,jdbcType=VARCHAR},
+            </if>
+            <if test="endIssue != null" >
+                #{endIssue,jdbcType=VARCHAR},
+            </if>
+            <if test="startYear != null" >
+                #{startYear,jdbcType=VARCHAR},
+            </if>
+            <if test="endYear != null" >
+                #{endYear,jdbcType=BIGINT},
+            </if>
+            <if test="corePerio != null" >
+                #{corePerio,jdbcType=VARCHAR},
+            </if>
+            <if test="tagNum != null" >
+                #{tagNum,jdbcType=INTEGER},
+            </if>
+            <if test="hostunitArea != null" >
+                #{hostunitArea,jdbcType=VARCHAR},
+            </if>
+            <if test="thirdpartyLinksNum != null" >
+                #{thirdpartyLinksNum,jdbcType=INTEGER},
+            </if>
+            <if test="importNum != null" >
+                #{importNum,jdbcType=INTEGER},
+            </if>
+            <if test="email != null" >
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null" >
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="sourceDb != null" >
+                #{sourceDb,jdbcType=VARCHAR},
+            </if>
+            <if test="cn != null" >
+                #{cn,jdbcType=VARCHAR},
+            </if>
+            <if test="collectionNum != null" >
+                #{collectionNum,jdbcType=INTEGER},
+            </if>
+            <if test="depName != null" >
+                #{depName,jdbcType=VARCHAR},
+            </if>
+            <if test="downloadNum != null" >
+                #{downloadNum,jdbcType=VARCHAR},
+            </if>
+            <if test="firstPublish != null" >
+                #{firstPublish,jdbcType=VARCHAR},
+            </if>
+            <if test="affectoi != null" >
+                #{affectoi,jdbcType=DOUBLE},
+            </if>
+            <if test="subarea != null" >
+                #{subarea,jdbcType=VARCHAR},
+            </if>
+            <if test="articleNum != null" >
+                #{articleNum,jdbcType=INTEGER},
+            </if>
+            <if test="fulltextReadingNum != null" >
+                #{fulltextReadingNum,jdbcType=INTEGER},
+            </if>
+            <if test="noteNum != null" >
+                #{noteNum,jdbcType=INTEGER},
+            </if>
+            <if test="classCode != null" >
+                #{classCode,jdbcType=VARCHAR},
+            </if>
+            <if test="hasForeignKey != null" >
+                #{hasForeignKey,jdbcType=INTEGER},
+            </if>
+            <if test="mainColumn != null" >
+                #{mainColumn,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="solicitNotice != null" >
+                #{solicitNotice,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="subscribeNotice != null" >
+                #{subscribeNotice,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="summary != null" >
+                #{summary,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="op != null" >
+                #{op,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="committee != null" >
+                #{committee,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="perioDesc != null" >
+                #{perioDesc,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="winPrize != null" >
+                #{winPrize,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.boku.www.pojo.TbWanfangJournalExample" resultType="java.lang.Integer" >
+        select count(*) from tb_wanfang_journal
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map" >
+        update tb_wanfang_journal
+        <set >
+            <if test="record.id != null" >
+                id = #{record.id,jdbcType=VARCHAR},
+            </if>
+            <if test="record.perioTitle != null" >
+                perio_title = #{record.perioTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="record.formerName != null" >
+                former_name = #{record.formerName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.pinyinTitle != null" >
+                pinyin_title = #{record.pinyinTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="record.transTitle != null" >
+                trans_title = #{record.transTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="record.proprieter != null" >
+                proprieter = #{record.proprieter,jdbcType=VARCHAR},
+            </if>
+            <if test="record.avgPerioDown != null" >
+                avg_perio_down = #{record.avgPerioDown,jdbcType=DOUBLE},
+            </if>
+            <if test="record.keywords != null" >
+                keywords = #{record.keywords,jdbcType=VARCHAR},
+            </if>
+            <if test="record.perioId != null" >
+                perio_id = #{record.perioId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.language != null" >
+                language = #{record.language,jdbcType=VARCHAR},
+            </if>
+            <if test="record.majorEditor != null" >
+                major_editor = #{record.majorEditor,jdbcType=VARCHAR},
+            </if>
+            <if test="record.classType != null" >
+                class_type = #{record.classType,jdbcType=VARCHAR},
+            </if>
+            <if test="record.startYear02 != null" >
+                start_year02 = #{record.startYear02,jdbcType=BIGINT},
+            </if>
+            <if test="record.perioFormat != null" >
+                perio_format = #{record.perioFormat,jdbcType=VARCHAR},
+            </if>
+            <if test="record.issuePostcode != null" >
+                issue_postcode = #{record.issuePostcode,jdbcType=VARCHAR},
+            </if>
+            <if test="record.fax != null" >
+                fax = #{record.fax,jdbcType=VARCHAR},
+            </if>
+            <if test="record.shareNum != null" >
+                share_num = #{record.shareNum,jdbcType=INTEGER},
+            </if>
+            <if test="record.classcodeLevel != null" >
+                classcode_level = #{record.classcodeLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="record.publishCycle != null" >
+                publish_cycle = #{record.publishCycle,jdbcType=VARCHAR},
+            </if>
+            <if test="record.avgArticleDown != null" >
+                avg_article_down = #{record.avgArticleDown,jdbcType=VARCHAR},
+            </if>
+            <if test="record.hostunitName != null" >
+                hostunit_name = #{record.hostunitName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.director != null" >
+                director = #{record.director,jdbcType=VARCHAR},
+            </if>
+            <if test="record.postcode != null" >
+                postcode = #{record.postcode,jdbcType=VARCHAR},
+            </if>
+            <if test="record.telephone != null" >
+                telephone = #{record.telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="record.citeNum != null" >
+                cite_num = #{record.citeNum,jdbcType=INTEGER},
+            </if>
+            <if test="record.countryCode != null" >
+                country_code = #{record.countryCode,jdbcType=VARCHAR},
+            </if>
+            <if test="record.issn != null" >
+                issn = #{record.issn,jdbcType=VARCHAR},
+            </if>
+            <if test="record.dataState != null" >
+                data_state = #{record.dataState,jdbcType=VARCHAR},
+            </if>
+            <if test="record.efName != null" >
+                ef_name = #{record.efName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.releaseCycle != null" >
+                release_cycle = #{record.releaseCycle,jdbcType=VARCHAR},
+            </if>
+            <if test="record.endIssue != null" >
+                end_issue = #{record.endIssue,jdbcType=VARCHAR},
+            </if>
+            <if test="record.startYear != null" >
+                start_year = #{record.startYear,jdbcType=VARCHAR},
+            </if>
+            <if test="record.endYear != null" >
+                end_year = #{record.endYear,jdbcType=BIGINT},
+            </if>
+            <if test="record.corePerio != null" >
+                core_perio = #{record.corePerio,jdbcType=VARCHAR},
+            </if>
+            <if test="record.tagNum != null" >
+                tag_num = #{record.tagNum,jdbcType=INTEGER},
+            </if>
+            <if test="record.hostunitArea != null" >
+                hostunit_area = #{record.hostunitArea,jdbcType=VARCHAR},
+            </if>
+            <if test="record.thirdpartyLinksNum != null" >
+                thirdparty_links_num = #{record.thirdpartyLinksNum,jdbcType=INTEGER},
+            </if>
+            <if test="record.importNum != null" >
+                import_num = #{record.importNum,jdbcType=INTEGER},
+            </if>
+            <if test="record.email != null" >
+                email = #{record.email,jdbcType=VARCHAR},
+            </if>
+            <if test="record.address != null" >
+                address = #{record.address,jdbcType=VARCHAR},
+            </if>
+            <if test="record.sourceDb != null" >
+                source_db = #{record.sourceDb,jdbcType=VARCHAR},
+            </if>
+            <if test="record.cn != null" >
+                cn = #{record.cn,jdbcType=VARCHAR},
+            </if>
+            <if test="record.collectionNum != null" >
+                collection_num = #{record.collectionNum,jdbcType=INTEGER},
+            </if>
+            <if test="record.depName != null" >
+                dep_name = #{record.depName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.downloadNum != null" >
+                download_num = #{record.downloadNum,jdbcType=VARCHAR},
+            </if>
+            <if test="record.firstPublish != null" >
+                first_publish = #{record.firstPublish,jdbcType=VARCHAR},
+            </if>
+            <if test="record.affectoi != null" >
+                affectoi = #{record.affectoi,jdbcType=DOUBLE},
+            </if>
+            <if test="record.subarea != null" >
+                subarea = #{record.subarea,jdbcType=VARCHAR},
+            </if>
+            <if test="record.articleNum != null" >
+                article_num = #{record.articleNum,jdbcType=INTEGER},
+            </if>
+            <if test="record.fulltextReadingNum != null" >
+                fulltext_reading_num = #{record.fulltextReadingNum,jdbcType=INTEGER},
+            </if>
+            <if test="record.noteNum != null" >
+                note_num = #{record.noteNum,jdbcType=INTEGER},
+            </if>
+            <if test="record.classCode != null" >
+                class_code = #{record.classCode,jdbcType=VARCHAR},
+            </if>
+            <if test="record.hasForeignKey != null" >
+                has_foreign_key = #{record.hasForeignKey,jdbcType=INTEGER},
+            </if>
+            <if test="record.mainColumn != null" >
+                main_column = #{record.mainColumn,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="record.solicitNotice != null" >
+                solicit_notice = #{record.solicitNotice,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="record.subscribeNotice != null" >
+                subscribe_notice = #{record.subscribeNotice,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="record.summary != null" >
+                summary = #{record.summary,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="record.op != null" >
+                op = #{record.op,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="record.committee != null" >
+                committee = #{record.committee,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="record.perioDesc != null" >
+                perio_desc = #{record.perioDesc,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="record.winPrize != null" >
+                win_prize = #{record.winPrize,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByExampleWithBLOBs" parameterType="map" >
+        update tb_wanfang_journal
+        set id = #{record.id,jdbcType=VARCHAR},
+        perio_title = #{record.perioTitle,jdbcType=VARCHAR},
+        former_name = #{record.formerName,jdbcType=VARCHAR},
+        pinyin_title = #{record.pinyinTitle,jdbcType=VARCHAR},
+        trans_title = #{record.transTitle,jdbcType=VARCHAR},
+        proprieter = #{record.proprieter,jdbcType=VARCHAR},
+        avg_perio_down = #{record.avgPerioDown,jdbcType=DOUBLE},
+        keywords = #{record.keywords,jdbcType=VARCHAR},
+        perio_id = #{record.perioId,jdbcType=VARCHAR},
+        language = #{record.language,jdbcType=VARCHAR},
+        major_editor = #{record.majorEditor,jdbcType=VARCHAR},
+        class_type = #{record.classType,jdbcType=VARCHAR},
+        start_year02 = #{record.startYear02,jdbcType=BIGINT},
+        perio_format = #{record.perioFormat,jdbcType=VARCHAR},
+        issue_postcode = #{record.issuePostcode,jdbcType=VARCHAR},
+        fax = #{record.fax,jdbcType=VARCHAR},
+        share_num = #{record.shareNum,jdbcType=INTEGER},
+        classcode_level = #{record.classcodeLevel,jdbcType=VARCHAR},
+        publish_cycle = #{record.publishCycle,jdbcType=VARCHAR},
+        avg_article_down = #{record.avgArticleDown,jdbcType=VARCHAR},
+        hostunit_name = #{record.hostunitName,jdbcType=VARCHAR},
+        director = #{record.director,jdbcType=VARCHAR},
+        postcode = #{record.postcode,jdbcType=VARCHAR},
+        telephone = #{record.telephone,jdbcType=VARCHAR},
+        cite_num = #{record.citeNum,jdbcType=INTEGER},
+        country_code = #{record.countryCode,jdbcType=VARCHAR},
+        issn = #{record.issn,jdbcType=VARCHAR},
+        data_state = #{record.dataState,jdbcType=VARCHAR},
+        ef_name = #{record.efName,jdbcType=VARCHAR},
+        release_cycle = #{record.releaseCycle,jdbcType=VARCHAR},
+        end_issue = #{record.endIssue,jdbcType=VARCHAR},
+        start_year = #{record.startYear,jdbcType=VARCHAR},
+        end_year = #{record.endYear,jdbcType=BIGINT},
+        core_perio = #{record.corePerio,jdbcType=VARCHAR},
+        tag_num = #{record.tagNum,jdbcType=INTEGER},
+        hostunit_area = #{record.hostunitArea,jdbcType=VARCHAR},
+        thirdparty_links_num = #{record.thirdpartyLinksNum,jdbcType=INTEGER},
+        import_num = #{record.importNum,jdbcType=INTEGER},
+        email = #{record.email,jdbcType=VARCHAR},
+        address = #{record.address,jdbcType=VARCHAR},
+        source_db = #{record.sourceDb,jdbcType=VARCHAR},
+        cn = #{record.cn,jdbcType=VARCHAR},
+        collection_num = #{record.collectionNum,jdbcType=INTEGER},
+        dep_name = #{record.depName,jdbcType=VARCHAR},
+        download_num = #{record.downloadNum,jdbcType=VARCHAR},
+        first_publish = #{record.firstPublish,jdbcType=VARCHAR},
+        affectoi = #{record.affectoi,jdbcType=DOUBLE},
+        subarea = #{record.subarea,jdbcType=VARCHAR},
+        article_num = #{record.articleNum,jdbcType=INTEGER},
+        fulltext_reading_num = #{record.fulltextReadingNum,jdbcType=INTEGER},
+        note_num = #{record.noteNum,jdbcType=INTEGER},
+        class_code = #{record.classCode,jdbcType=VARCHAR},
+        has_foreign_key = #{record.hasForeignKey,jdbcType=INTEGER},
+        main_column = #{record.mainColumn,jdbcType=LONGVARCHAR},
+        solicit_notice = #{record.solicitNotice,jdbcType=LONGVARCHAR},
+        subscribe_notice = #{record.subscribeNotice,jdbcType=LONGVARCHAR},
+        summary = #{record.summary,jdbcType=LONGVARCHAR},
+        op = #{record.op,jdbcType=LONGVARCHAR},
+        committee = #{record.committee,jdbcType=LONGVARCHAR},
+        perio_desc = #{record.perioDesc,jdbcType=LONGVARCHAR},
+        win_prize = #{record.winPrize,jdbcType=LONGVARCHAR}
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map" >
+        update tb_wanfang_journal
+        set id = #{record.id,jdbcType=VARCHAR},
+        perio_title = #{record.perioTitle,jdbcType=VARCHAR},
+        former_name = #{record.formerName,jdbcType=VARCHAR},
+        pinyin_title = #{record.pinyinTitle,jdbcType=VARCHAR},
+        trans_title = #{record.transTitle,jdbcType=VARCHAR},
+        proprieter = #{record.proprieter,jdbcType=VARCHAR},
+        avg_perio_down = #{record.avgPerioDown,jdbcType=DOUBLE},
+        keywords = #{record.keywords,jdbcType=VARCHAR},
+        perio_id = #{record.perioId,jdbcType=VARCHAR},
+        language = #{record.language,jdbcType=VARCHAR},
+        major_editor = #{record.majorEditor,jdbcType=VARCHAR},
+        class_type = #{record.classType,jdbcType=VARCHAR},
+        start_year02 = #{record.startYear02,jdbcType=BIGINT},
+        perio_format = #{record.perioFormat,jdbcType=VARCHAR},
+        issue_postcode = #{record.issuePostcode,jdbcType=VARCHAR},
+        fax = #{record.fax,jdbcType=VARCHAR},
+        share_num = #{record.shareNum,jdbcType=INTEGER},
+        classcode_level = #{record.classcodeLevel,jdbcType=VARCHAR},
+        publish_cycle = #{record.publishCycle,jdbcType=VARCHAR},
+        avg_article_down = #{record.avgArticleDown,jdbcType=VARCHAR},
+        hostunit_name = #{record.hostunitName,jdbcType=VARCHAR},
+        director = #{record.director,jdbcType=VARCHAR},
+        postcode = #{record.postcode,jdbcType=VARCHAR},
+        telephone = #{record.telephone,jdbcType=VARCHAR},
+        cite_num = #{record.citeNum,jdbcType=INTEGER},
+        country_code = #{record.countryCode,jdbcType=VARCHAR},
+        issn = #{record.issn,jdbcType=VARCHAR},
+        data_state = #{record.dataState,jdbcType=VARCHAR},
+        ef_name = #{record.efName,jdbcType=VARCHAR},
+        release_cycle = #{record.releaseCycle,jdbcType=VARCHAR},
+        end_issue = #{record.endIssue,jdbcType=VARCHAR},
+        start_year = #{record.startYear,jdbcType=VARCHAR},
+        end_year = #{record.endYear,jdbcType=BIGINT},
+        core_perio = #{record.corePerio,jdbcType=VARCHAR},
+        tag_num = #{record.tagNum,jdbcType=INTEGER},
+        hostunit_area = #{record.hostunitArea,jdbcType=VARCHAR},
+        thirdparty_links_num = #{record.thirdpartyLinksNum,jdbcType=INTEGER},
+        import_num = #{record.importNum,jdbcType=INTEGER},
+        email = #{record.email,jdbcType=VARCHAR},
+        address = #{record.address,jdbcType=VARCHAR},
+        source_db = #{record.sourceDb,jdbcType=VARCHAR},
+        cn = #{record.cn,jdbcType=VARCHAR},
+        collection_num = #{record.collectionNum,jdbcType=INTEGER},
+        dep_name = #{record.depName,jdbcType=VARCHAR},
+        download_num = #{record.downloadNum,jdbcType=VARCHAR},
+        first_publish = #{record.firstPublish,jdbcType=VARCHAR},
+        affectoi = #{record.affectoi,jdbcType=DOUBLE},
+        subarea = #{record.subarea,jdbcType=VARCHAR},
+        article_num = #{record.articleNum,jdbcType=INTEGER},
+        fulltext_reading_num = #{record.fulltextReadingNum,jdbcType=INTEGER},
+        note_num = #{record.noteNum,jdbcType=INTEGER},
+        class_code = #{record.classCode,jdbcType=VARCHAR},
+        has_foreign_key = #{record.hasForeignKey,jdbcType=INTEGER}
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.boku.www.pojo.TbWanfangJournalWithBLOBs" >
+        update tb_wanfang_journal
+        <set >
+            <if test="perioTitle != null" >
+                perio_title = #{perioTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="formerName != null" >
+                former_name = #{formerName,jdbcType=VARCHAR},
+            </if>
+            <if test="pinyinTitle != null" >
+                pinyin_title = #{pinyinTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="transTitle != null" >
+                trans_title = #{transTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="proprieter != null" >
+                proprieter = #{proprieter,jdbcType=VARCHAR},
+            </if>
+            <if test="avgPerioDown != null" >
+                avg_perio_down = #{avgPerioDown,jdbcType=DOUBLE},
+            </if>
+            <if test="keywords != null" >
+                keywords = #{keywords,jdbcType=VARCHAR},
+            </if>
+            <if test="perioId != null" >
+                perio_id = #{perioId,jdbcType=VARCHAR},
+            </if>
+            <if test="language != null" >
+                language = #{language,jdbcType=VARCHAR},
+            </if>
+            <if test="majorEditor != null" >
+                major_editor = #{majorEditor,jdbcType=VARCHAR},
+            </if>
+            <if test="classType != null" >
+                class_type = #{classType,jdbcType=VARCHAR},
+            </if>
+            <if test="startYear02 != null" >
+                start_year02 = #{startYear02,jdbcType=BIGINT},
+            </if>
+            <if test="perioFormat != null" >
+                perio_format = #{perioFormat,jdbcType=VARCHAR},
+            </if>
+            <if test="issuePostcode != null" >
+                issue_postcode = #{issuePostcode,jdbcType=VARCHAR},
+            </if>
+            <if test="fax != null" >
+                fax = #{fax,jdbcType=VARCHAR},
+            </if>
+            <if test="shareNum != null" >
+                share_num = #{shareNum,jdbcType=INTEGER},
+            </if>
+            <if test="classcodeLevel != null" >
+                classcode_level = #{classcodeLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="publishCycle != null" >
+                publish_cycle = #{publishCycle,jdbcType=VARCHAR},
+            </if>
+            <if test="avgArticleDown != null" >
+                avg_article_down = #{avgArticleDown,jdbcType=VARCHAR},
+            </if>
+            <if test="hostunitName != null" >
+                hostunit_name = #{hostunitName,jdbcType=VARCHAR},
+            </if>
+            <if test="director != null" >
+                director = #{director,jdbcType=VARCHAR},
+            </if>
+            <if test="postcode != null" >
+                postcode = #{postcode,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone != null" >
+                telephone = #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="citeNum != null" >
+                cite_num = #{citeNum,jdbcType=INTEGER},
+            </if>
+            <if test="countryCode != null" >
+                country_code = #{countryCode,jdbcType=VARCHAR},
+            </if>
+            <if test="issn != null" >
+                issn = #{issn,jdbcType=VARCHAR},
+            </if>
+            <if test="dataState != null" >
+                data_state = #{dataState,jdbcType=VARCHAR},
+            </if>
+            <if test="efName != null" >
+                ef_name = #{efName,jdbcType=VARCHAR},
+            </if>
+            <if test="releaseCycle != null" >
+                release_cycle = #{releaseCycle,jdbcType=VARCHAR},
+            </if>
+            <if test="endIssue != null" >
+                end_issue = #{endIssue,jdbcType=VARCHAR},
+            </if>
+            <if test="startYear != null" >
+                start_year = #{startYear,jdbcType=VARCHAR},
+            </if>
+            <if test="endYear != null" >
+                end_year = #{endYear,jdbcType=BIGINT},
+            </if>
+            <if test="corePerio != null" >
+                core_perio = #{corePerio,jdbcType=VARCHAR},
+            </if>
+            <if test="tagNum != null" >
+                tag_num = #{tagNum,jdbcType=INTEGER},
+            </if>
+            <if test="hostunitArea != null" >
+                hostunit_area = #{hostunitArea,jdbcType=VARCHAR},
+            </if>
+            <if test="thirdpartyLinksNum != null" >
+                thirdparty_links_num = #{thirdpartyLinksNum,jdbcType=INTEGER},
+            </if>
+            <if test="importNum != null" >
+                import_num = #{importNum,jdbcType=INTEGER},
+            </if>
+            <if test="email != null" >
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null" >
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="sourceDb != null" >
+                source_db = #{sourceDb,jdbcType=VARCHAR},
+            </if>
+            <if test="cn != null" >
+                cn = #{cn,jdbcType=VARCHAR},
+            </if>
+            <if test="collectionNum != null" >
+                collection_num = #{collectionNum,jdbcType=INTEGER},
+            </if>
+            <if test="depName != null" >
+                dep_name = #{depName,jdbcType=VARCHAR},
+            </if>
+            <if test="downloadNum != null" >
+                download_num = #{downloadNum,jdbcType=VARCHAR},
+            </if>
+            <if test="firstPublish != null" >
+                first_publish = #{firstPublish,jdbcType=VARCHAR},
+            </if>
+            <if test="affectoi != null" >
+                affectoi = #{affectoi,jdbcType=DOUBLE},
+            </if>
+            <if test="subarea != null" >
+                subarea = #{subarea,jdbcType=VARCHAR},
+            </if>
+            <if test="articleNum != null" >
+                article_num = #{articleNum,jdbcType=INTEGER},
+            </if>
+            <if test="fulltextReadingNum != null" >
+                fulltext_reading_num = #{fulltextReadingNum,jdbcType=INTEGER},
+            </if>
+            <if test="noteNum != null" >
+                note_num = #{noteNum,jdbcType=INTEGER},
+            </if>
+            <if test="classCode != null" >
+                class_code = #{classCode,jdbcType=VARCHAR},
+            </if>
+            <if test="hasForeignKey != null" >
+                has_foreign_key = #{hasForeignKey,jdbcType=INTEGER},
+            </if>
+            <if test="mainColumn != null" >
+                main_column = #{mainColumn,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="solicitNotice != null" >
+                solicit_notice = #{solicitNotice,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="subscribeNotice != null" >
+                subscribe_notice = #{subscribeNotice,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="summary != null" >
+                summary = #{summary,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="op != null" >
+                op = #{op,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="committee != null" >
+                committee = #{committee,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="perioDesc != null" >
+                perio_desc = #{perioDesc,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="winPrize != null" >
+                win_prize = #{winPrize,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.boku.www.pojo.TbWanfangJournalWithBLOBs" >
+        update tb_wanfang_journal
+        set perio_title = #{perioTitle,jdbcType=VARCHAR},
+        former_name = #{formerName,jdbcType=VARCHAR},
+        pinyin_title = #{pinyinTitle,jdbcType=VARCHAR},
+        trans_title = #{transTitle,jdbcType=VARCHAR},
+        proprieter = #{proprieter,jdbcType=VARCHAR},
+        avg_perio_down = #{avgPerioDown,jdbcType=DOUBLE},
+        keywords = #{keywords,jdbcType=VARCHAR},
+        perio_id = #{perioId,jdbcType=VARCHAR},
+        language = #{language,jdbcType=VARCHAR},
+        major_editor = #{majorEditor,jdbcType=VARCHAR},
+        class_type = #{classType,jdbcType=VARCHAR},
+        start_year02 = #{startYear02,jdbcType=BIGINT},
+        perio_format = #{perioFormat,jdbcType=VARCHAR},
+        issue_postcode = #{issuePostcode,jdbcType=VARCHAR},
+        fax = #{fax,jdbcType=VARCHAR},
+        share_num = #{shareNum,jdbcType=INTEGER},
+        classcode_level = #{classcodeLevel,jdbcType=VARCHAR},
+        publish_cycle = #{publishCycle,jdbcType=VARCHAR},
+        avg_article_down = #{avgArticleDown,jdbcType=VARCHAR},
+        hostunit_name = #{hostunitName,jdbcType=VARCHAR},
+        director = #{director,jdbcType=VARCHAR},
+        postcode = #{postcode,jdbcType=VARCHAR},
+        telephone = #{telephone,jdbcType=VARCHAR},
+        cite_num = #{citeNum,jdbcType=INTEGER},
+        country_code = #{countryCode,jdbcType=VARCHAR},
+        issn = #{issn,jdbcType=VARCHAR},
+        data_state = #{dataState,jdbcType=VARCHAR},
+        ef_name = #{efName,jdbcType=VARCHAR},
+        release_cycle = #{releaseCycle,jdbcType=VARCHAR},
+        end_issue = #{endIssue,jdbcType=VARCHAR},
+        start_year = #{startYear,jdbcType=VARCHAR},
+        end_year = #{endYear,jdbcType=BIGINT},
+        core_perio = #{corePerio,jdbcType=VARCHAR},
+        tag_num = #{tagNum,jdbcType=INTEGER},
+        hostunit_area = #{hostunitArea,jdbcType=VARCHAR},
+        thirdparty_links_num = #{thirdpartyLinksNum,jdbcType=INTEGER},
+        import_num = #{importNum,jdbcType=INTEGER},
+        email = #{email,jdbcType=VARCHAR},
+        address = #{address,jdbcType=VARCHAR},
+        source_db = #{sourceDb,jdbcType=VARCHAR},
+        cn = #{cn,jdbcType=VARCHAR},
+        collection_num = #{collectionNum,jdbcType=INTEGER},
+        dep_name = #{depName,jdbcType=VARCHAR},
+        download_num = #{downloadNum,jdbcType=VARCHAR},
+        first_publish = #{firstPublish,jdbcType=VARCHAR},
+        affectoi = #{affectoi,jdbcType=DOUBLE},
+        subarea = #{subarea,jdbcType=VARCHAR},
+        article_num = #{articleNum,jdbcType=INTEGER},
+        fulltext_reading_num = #{fulltextReadingNum,jdbcType=INTEGER},
+        note_num = #{noteNum,jdbcType=INTEGER},
+        class_code = #{classCode,jdbcType=VARCHAR},
+        has_foreign_key = #{hasForeignKey,jdbcType=INTEGER},
+        main_column = #{mainColumn,jdbcType=LONGVARCHAR},
+        solicit_notice = #{solicitNotice,jdbcType=LONGVARCHAR},
+        subscribe_notice = #{subscribeNotice,jdbcType=LONGVARCHAR},
+        summary = #{summary,jdbcType=LONGVARCHAR},
+        op = #{op,jdbcType=LONGVARCHAR},
+        committee = #{committee,jdbcType=LONGVARCHAR},
+        perio_desc = #{perioDesc,jdbcType=LONGVARCHAR},
+        win_prize = #{winPrize,jdbcType=LONGVARCHAR}
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.boku.www.pojo.TbWanfangJournal" >
+        update tb_wanfang_journal
+        set perio_title = #{perioTitle,jdbcType=VARCHAR},
+        former_name = #{formerName,jdbcType=VARCHAR},
+        pinyin_title = #{pinyinTitle,jdbcType=VARCHAR},
+        trans_title = #{transTitle,jdbcType=VARCHAR},
+        proprieter = #{proprieter,jdbcType=VARCHAR},
+        avg_perio_down = #{avgPerioDown,jdbcType=DOUBLE},
+        keywords = #{keywords,jdbcType=VARCHAR},
+        perio_id = #{perioId,jdbcType=VARCHAR},
+        language = #{language,jdbcType=VARCHAR},
+        major_editor = #{majorEditor,jdbcType=VARCHAR},
+        class_type = #{classType,jdbcType=VARCHAR},
+        start_year02 = #{startYear02,jdbcType=BIGINT},
+        perio_format = #{perioFormat,jdbcType=VARCHAR},
+        issue_postcode = #{issuePostcode,jdbcType=VARCHAR},
+        fax = #{fax,jdbcType=VARCHAR},
+        share_num = #{shareNum,jdbcType=INTEGER},
+        classcode_level = #{classcodeLevel,jdbcType=VARCHAR},
+        publish_cycle = #{publishCycle,jdbcType=VARCHAR},
+        avg_article_down = #{avgArticleDown,jdbcType=VARCHAR},
+        hostunit_name = #{hostunitName,jdbcType=VARCHAR},
+        director = #{director,jdbcType=VARCHAR},
+        postcode = #{postcode,jdbcType=VARCHAR},
+        telephone = #{telephone,jdbcType=VARCHAR},
+        cite_num = #{citeNum,jdbcType=INTEGER},
+        country_code = #{countryCode,jdbcType=VARCHAR},
+        issn = #{issn,jdbcType=VARCHAR},
+        data_state = #{dataState,jdbcType=VARCHAR},
+        ef_name = #{efName,jdbcType=VARCHAR},
+        release_cycle = #{releaseCycle,jdbcType=VARCHAR},
+        end_issue = #{endIssue,jdbcType=VARCHAR},
+        start_year = #{startYear,jdbcType=VARCHAR},
+        end_year = #{endYear,jdbcType=BIGINT},
+        core_perio = #{corePerio,jdbcType=VARCHAR},
+        tag_num = #{tagNum,jdbcType=INTEGER},
+        hostunit_area = #{hostunitArea,jdbcType=VARCHAR},
+        thirdparty_links_num = #{thirdpartyLinksNum,jdbcType=INTEGER},
+        import_num = #{importNum,jdbcType=INTEGER},
+        email = #{email,jdbcType=VARCHAR},
+        address = #{address,jdbcType=VARCHAR},
+        source_db = #{sourceDb,jdbcType=VARCHAR},
+        cn = #{cn,jdbcType=VARCHAR},
+        collection_num = #{collectionNum,jdbcType=INTEGER},
+        dep_name = #{depName,jdbcType=VARCHAR},
+        download_num = #{downloadNum,jdbcType=VARCHAR},
+        first_publish = #{firstPublish,jdbcType=VARCHAR},
+        affectoi = #{affectoi,jdbcType=DOUBLE},
+        subarea = #{subarea,jdbcType=VARCHAR},
+        article_num = #{articleNum,jdbcType=INTEGER},
+        fulltext_reading_num = #{fulltextReadingNum,jdbcType=INTEGER},
+        note_num = #{noteNum,jdbcType=INTEGER},
+        class_code = #{classCode,jdbcType=VARCHAR},
+        has_foreign_key = #{hasForeignKey,jdbcType=INTEGER}
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insertBatch" parameterType="list" >
+        INSERT INTO tb_wanfang_journal (id, perio_title, former_name,
+        pinyin_title, trans_title, proprieter,
+        avg_perio_down, keywords, perio_id,
+        language, major_editor, class_type,
+        start_year02, perio_format, issue_postcode,
+        fax, share_num, classcode_level,
+        publish_cycle, avg_article_down, hostunit_name,
+        director, postcode, main_column,
+        telephone, cite_num, solicit_notice,
+        country_code, issn, data_state,
+        ef_name, release_cycle, end_issue,
+        start_year, end_year, core_perio,
+        tag_num, subscribe_notice, hostunit_area,
+        thirdparty_links_num, import_num, email,
+        address, committee, source_db,
+        cn, collection_num, dep_name,
+        download_num, first_publish, affectoi,subarea,
+        article_num, fulltext_reading_num, note_num,
+        win_prize, class_code, summary,
+        op, perio_desc)
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+            (#{item.id,jdbcType=VARCHAR}, #{item.perioTitle,jdbcType=VARCHAR}, #{item.formerName,jdbcType=VARCHAR},
+            #{item.pinyinTitle,jdbcType=VARCHAR}, #{item.transTitle,jdbcType=VARCHAR}, #{item.proprieter,jdbcType=VARCHAR},
+            #{item.avgPerioDown,jdbcType=DOUBLE}, #{item.keywords,jdbcType=VARCHAR}, #{item.perioId,jdbcType=VARCHAR},
+            #{item.language,jdbcType=VARCHAR}, #{item.majorEditor,jdbcType=VARCHAR}, #{item.classType,jdbcType=VARCHAR},
+            #{item.startYear02,jdbcType=BIGINT}, #{item.perioFormat,jdbcType=VARCHAR}, #{item.issuePostcode,jdbcType=VARCHAR},
+            #{item.fax,jdbcType=VARCHAR}, #{item.shareNum,jdbcType=INTEGER}, #{item.classcodeLevel,jdbcType=VARCHAR},
+            #{item.publishCycle,jdbcType=VARCHAR}, #{item.avgArticleDown,jdbcType=VARCHAR}, #{item.hostunitName,jdbcType=VARCHAR},
+            #{item.director,jdbcType=VARCHAR}, #{item.postcode,jdbcType=VARCHAR}, #{item.mainColumn,jdbcType=VARCHAR},
+            #{item.telephone,jdbcType=VARCHAR}, #{item.citeNum,jdbcType=INTEGER}, #{item.solicitNotice,jdbcType=VARCHAR},
+            #{item.countryCode,jdbcType=VARCHAR}, #{item.issn,jdbcType=VARCHAR}, #{item.dataState,jdbcType=VARCHAR},
+            #{item.efName,jdbcType=VARCHAR}, #{item.releaseCycle,jdbcType=VARCHAR}, #{item.endIssue,jdbcType=VARCHAR},
+            #{item.startYear,jdbcType=VARCHAR}, #{item.endYear,jdbcType=BIGINT}, #{item.corePerio,jdbcType=VARCHAR},
+            #{item.tagNum,jdbcType=INTEGER}, #{item.subscribeNotice,jdbcType=VARCHAR}, #{item.hostunitArea,jdbcType=VARCHAR},
+            #{item.thirdpartyLinksNum,jdbcType=INTEGER}, #{item.importNum,jdbcType=INTEGER}, #{item.email,jdbcType=VARCHAR},
+            #{item.address,jdbcType=VARCHAR}, #{item.committee,jdbcType=VARCHAR}, #{item.sourceDb,jdbcType=VARCHAR},
+            #{item.cn,jdbcType=VARCHAR}, #{item.collectionNum,jdbcType=INTEGER}, #{item.depName,jdbcType=VARCHAR},
+            #{item.downloadNum,jdbcType=VARCHAR}, #{item.firstPublish,jdbcType=VARCHAR}, #{item.affectoi,jdbcType=DOUBLE},
+            #{item.subarea,jdbcType=VARCHAR},
+            #{item.articleNum,jdbcType=INTEGER}, #{item.fulltextReadingNum,jdbcType=INTEGER}, #{item.noteNum,jdbcType=INTEGER},
+            #{item.winPrize,jdbcType=VARCHAR}, #{item.classCode,jdbcType=VARCHAR}, #{item.summary,jdbcType=LONGVARCHAR},
+            #{item.op,jdbcType=LONGVARCHAR}, #{item.perioDesc,jdbcType=LONGVARCHAR})
+        </foreach>
+    </insert>
+</mapper>

@@ -42,4 +42,8 @@
         values (#{uid,jdbcType=INTEGER}, #{rid,jdbcType=INTEGER})
     </insert>
 
+    <delete id="deleteByUid" parameterType="integer">
+        DELETE FROM u_user_role WHERE uid = #{uid}
+    </delete>
+
 </mapper>

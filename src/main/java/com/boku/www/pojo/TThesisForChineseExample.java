@@ -1143,6 +1143,286 @@ public class TThesisForChineseExample {
 			addCriterion("confirm_status not between", value1, value2, "confirmStatus");
 			return (Criteria) this;
 		}
+
+		public Criteria andKeywordsIsNull() {
+			addCriterion("keywords is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andKeywordsIsNotNull() {
+			addCriterion("keywords is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andKeywordsEqualTo(String value) {
+			addCriterion("keywords =", value, "keywords");
+			return (Criteria) this;
+		}
+
+		public Criteria andKeywordsNotEqualTo(String value) {
+			addCriterion("keywords <>", value, "keywords");
+			return (Criteria) this;
+		}
+
+		public Criteria andKeywordsGreaterThan(String value) {
+			addCriterion("keywords >", value, "keywords");
+			return (Criteria) this;
+		}
+
+		public Criteria andKeywordsGreaterThanOrEqualTo(String value) {
+			addCriterion("keywords >=", value, "keywords");
+			return (Criteria) this;
+		}
+
+		public Criteria andKeywordsLessThan(String value) {
+			addCriterion("keywords <", value, "keywords");
+			return (Criteria) this;
+		}
+
+		public Criteria andKeywordsLessThanOrEqualTo(String value) {
+			addCriterion("keywords <=", value, "keywords");
+			return (Criteria) this;
+		}
+
+		public Criteria andKeywordsLike(String value) {
+			addCriterion("keywords like", value, "keywords");
+			return (Criteria) this;
+		}
+
+		public Criteria andKeywordsNotLike(String value) {
+			addCriterion("keywords not like", value, "keywords");
+			return (Criteria) this;
+		}
+
+		public Criteria andKeywordsIn(List<String> values) {
+			addCriterion("keywords in", values, "keywords");
+			return (Criteria) this;
+		}
+
+		public Criteria andKeywordsNotIn(List<String> values) {
+			addCriterion("keywords not in", values, "keywords");
+			return (Criteria) this;
+		}
+
+		public Criteria andKeywordsBetween(String value1, String value2) {
+			addCriterion("keywords between", value1, value2, "keywords");
+			return (Criteria) this;
+		}
+
+		public Criteria andKeywordsNotBetween(String value1, String value2) {
+			addCriterion("keywords not between", value1, value2, "keywords");
+			return (Criteria) this;
+		}
+
+		public Criteria andSubjectIsNull() {
+			addCriterion("subject is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andSubjectIsNotNull() {
+			addCriterion("subject is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andSubjectEqualTo(String value) {
+			addCriterion("subject =", value, "subject");
+			return (Criteria) this;
+		}
+
+		public Criteria andSubjectNotEqualTo(String value) {
+			addCriterion("subject <>", value, "subject");
+			return (Criteria) this;
+		}
+
+		public Criteria andSubjectGreaterThan(String value) {
+			addCriterion("subject >", value, "subject");
+			return (Criteria) this;
+		}
+
+		public Criteria andSubjectGreaterThanOrEqualTo(String value) {
+			addCriterion("subject >=", value, "subject");
+			return (Criteria) this;
+		}
+
+		public Criteria andSubjectLessThan(String value) {
+			addCriterion("subject <", value, "subject");
+			return (Criteria) this;
+		}
+
+		public Criteria andSubjectLessThanOrEqualTo(String value) {
+			addCriterion("subject <=", value, "subject");
+			return (Criteria) this;
+		}
+
+		public Criteria andSubjectLike(String value) {
+			addCriterion("subject like", value, "subject");
+			return (Criteria) this;
+		}
+
+		public Criteria andSubjectNotLike(String value) {
+			addCriterion("subject not like", value, "subject");
+			return (Criteria) this;
+		}
+
+		public Criteria andSubjectIn(List<String> values) {
+			addCriterion("subject in", values, "subject");
+			return (Criteria) this;
+		}
+
+		public Criteria andSubjectNotIn(List<String> values) {
+			addCriterion("subject not in", values, "subject");
+			return (Criteria) this;
+		}
+
+		public Criteria andSubjectBetween(String value1, String value2) {
+			addCriterion("subject between", value1, value2, "subject");
+			return (Criteria) this;
+		}
+
+		public Criteria andSubjectNotBetween(String value1, String value2) {
+			addCriterion("subject not between", value1, value2, "subject");
+			return (Criteria) this;
+		}
+
+		public Criteria andCorePerioIsNull() {
+			addCriterion("core_perio is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andCorePerioIsNotNull() {
+			addCriterion("core_perio is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andCorePerioEqualTo(String value) {
+			addCriterion("core_perio =", value, "corePerio");
+			return (Criteria) this;
+		}
+
+		public Criteria andCorePerioNotEqualTo(String value) {
+			addCriterion("core_perio <>", value, "corePerio");
+			return (Criteria) this;
+		}
+
+		public Criteria andCorePerioGreaterThan(String value) {
+			addCriterion("core_perio >", value, "corePerio");
+			return (Criteria) this;
+		}
+
+		public Criteria andCorePerioGreaterThanOrEqualTo(String value) {
+			addCriterion("core_perio >=", value, "corePerio");
+			return (Criteria) this;
+		}
+
+		public Criteria andCorePerioLessThan(String value) {
+			addCriterion("core_perio <", value, "corePerio");
+			return (Criteria) this;
+		}
+
+		public Criteria andCorePerioLessThanOrEqualTo(String value) {
+			addCriterion("core_perio <=", value, "corePerio");
+			return (Criteria) this;
+		}
+
+		public Criteria andCorePerioLike(String value) {
+			addCriterion("core_perio like", value, "corePerio");
+			return (Criteria) this;
+		}
+
+		public Criteria andCorePerioNotLike(String value) {
+			addCriterion("core_perio not like", value, "corePerio");
+			return (Criteria) this;
+		}
+
+		public Criteria andCorePerioIn(List<String> values) {
+			addCriterion("core_perio in", values, "corePerio");
+			return (Criteria) this;
+		}
+
+		public Criteria andCorePerioNotIn(List<String> values) {
+			addCriterion("core_perio not in", values, "corePerio");
+			return (Criteria) this;
+		}
+
+		public Criteria andCorePerioBetween(String value1, String value2) {
+			addCriterion("core_perio between", value1, value2, "corePerio");
+			return (Criteria) this;
+		}
+
+		public Criteria andCorePerioNotBetween(String value1, String value2) {
+			addCriterion("core_perio not between", value1, value2, "corePerio");
+			return (Criteria) this;
+		}
+
+		public Criteria andFirstAuthorIsNull() {
+			addCriterion("first_author is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andFirstAuthorIsNotNull() {
+			addCriterion("first_author is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andFirstAuthorEqualTo(String value) {
+			addCriterion("first_author =", value, "firstAuthor");
+			return (Criteria) this;
+		}
+
+		public Criteria andFirstAuthorNotEqualTo(String value) {
+			addCriterion("first_author <>", value, "firstAuthor");
+			return (Criteria) this;
+		}
+
+		public Criteria andFirstAuthorGreaterThan(String value) {
+			addCriterion("first_author >", value, "firstAuthor");
+			return (Criteria) this;
+		}
+
+		public Criteria andFirstAuthorGreaterThanOrEqualTo(String value) {
+			addCriterion("first_author >=", value, "firstAuthor");
+			return (Criteria) this;
+		}
+
+		public Criteria andFirstAuthorLessThan(String value) {
+			addCriterion("first_author <", value, "firstAuthor");
+			return (Criteria) this;
+		}
+
+		public Criteria andFirstAuthorLessThanOrEqualTo(String value) {
+			addCriterion("first_author <=", value, "firstAuthor");
+			return (Criteria) this;
+		}
+
+		public Criteria andFirstAuthorLike(String value) {
+			addCriterion("first_author like", value, "firstAuthor");
+			return (Criteria) this;
+		}
+
+		public Criteria andFirstAuthorNotLike(String value) {
+			addCriterion("first_author not like", value, "firstAuthor");
+			return (Criteria) this;
+		}
+
+		public Criteria andFirstAuthorIn(List<String> values) {
+			addCriterion("first_author in", values, "firstAuthor");
+			return (Criteria) this;
+		}
+
+		public Criteria andFirstAuthorNotIn(List<String> values) {
+			addCriterion("first_author not in", values, "firstAuthor");
+			return (Criteria) this;
+		}
+
+		public Criteria andFirstAuthorBetween(String value1, String value2) {
+			addCriterion("first_author between", value1, value2, "firstAuthor");
+			return (Criteria) this;
+		}
+
+		public Criteria andFirstAuthorNotBetween(String value1, String value2) {
+			addCriterion("first_author not between", value1, value2, "firstAuthor");
+			return (Criteria) this;
+		}
 	}
 
 	public static class Criteria extends GeneratedCriteria {

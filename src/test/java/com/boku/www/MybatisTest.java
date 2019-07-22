@@ -289,6 +289,55 @@ public class MybatisTest {
 		}
 
 	}
+	@Test
+	public void test13() throws Exception {
+		String filePath = "E:\\healthybigdata\\2019年5月20日飞蝶给的数据\\2004-2018职称系统信息（删减版+）\\作者单位.xlsx";
+		File file = new File(filePath);
+		//截取字符串名称
+		String fileName = filePath.substring(filePath.lastIndexOf("\\")+1);
+		System.out.println(fileName);
+		String message = excelImportAndBuildService.repeatUserCompany(file, fileName);
+		System.out.println(message);
+	}
+	@Test
+	public void addPersonUser(){
+		try {
+			userService.addPersonUser();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	@Test
+	public void countTheNumberOfThesisForChineseInEachCompany(){
+		try {
+			thesisForChineseService.selectBeforeTwentieth();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	@Test
+	public void updateThiesis(){
+		try {
+
+			String filePath = "E:\\healthybigdata\\recordHashMap2File.txt";
+			File file = new File(filePath);
+			//截取字符串名称
+			//String fileName = filePath.substring(filePath.lastIndexOf("\\")+1);
+			//System.out.println(fileName);
+			thesisForChineseService.updateThiesis(file, filePath);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	@Test
+	public void cleanRepateArea(){
+		try {
+
+			thesisForChineseService.cleanRepateArea();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	/*@Test
 	public void test9() throws Exception {
 		String filePath = "E:\\专利数据（张老师）.xlsx";
@@ -322,4 +371,45 @@ public class MybatisTest {
 	public void insertCompanyAndArea() throws Exception {
 		projectDataService.insertCompanyAndArea();
 	}
+
+	@Test
+	public void getData() throws Exception {
+		thesisForEnglishService.getThesisForEnglishFromSolr();
+	}
+	@Test
+	public void insertAuthorNetwork() {
+		try {
+			thesisForChineseService.insertAuthorNetwork();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	@Test
+	public void selectAuthorNetwork() {
+		try {
+			long l = System.currentTimeMillis();
+			thesisForChineseService.selectAuthorNetwork();
+			long n = System.currentTimeMillis();
+			System.out.println(n-l);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	@Test
+	public void insertCompanyNetwork() {
+		try {
+			thesisForChineseService.insertCompanyNetwork();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	@Test
+	public void test1() {
+		System.out.println(1);
+	}@Test
+	public void cleanJcr() {
+		thesisForEnglishService.cleanJcr();
+		System.out.println(1);
+	}
+
 }

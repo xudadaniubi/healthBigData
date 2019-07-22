@@ -1,0 +1,651 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.boku.www.mapper.TbCnkiJournalMapper" >
+    <resultMap id="BaseResultMap" type="com.boku.www.pojo.TbCnkiJournal" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="journal_id" property="journalId" jdbcType="VARCHAR" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="tTitle" property="ttitle" jdbcType="VARCHAR" />
+        <result column="host_unit" property="hostUnit" jdbcType="VARCHAR" />
+        <result column="ISSN" property="issn" jdbcType="VARCHAR" />
+        <result column="publication_cycle" property="publicationCycle" jdbcType="VARCHAR" />
+        <result column="source_database" property="sourceDatabase" jdbcType="VARCHAR" />
+        <result column="CN" property="cn" jdbcType="VARCHAR" />
+        <result column="place_of_publication" property="placeOfPublication" jdbcType="VARCHAR" />
+        <result column="language" property="language" jdbcType="VARCHAR" />
+        <result column="book_size" property="bookSize" jdbcType="VARCHAR" />
+        <result column="post_issue_num" property="postIssueNum" jdbcType="VARCHAR" />
+        <result column="time" property="time" jdbcType="VARCHAR" />
+        <result column="CDTitle" property="cdtitle" jdbcType="VARCHAR" />
+        <result column="special_name" property="specialName" jdbcType="VARCHAR" />
+        <result column="literature_published_num" property="literaturePublishedNum" jdbcType="VARCHAR" />
+        <result column="total_downloads" property="totalDownloads" jdbcType="VARCHAR" />
+        <result column="total_citations" property="totalCitations" jdbcType="VARCHAR" />
+        <result column="current_state" property="currentState" jdbcType="VARCHAR" />
+        <result column="combined_impact_factor" property="combinedImpactFactor" jdbcType="VARCHAR" />
+        <result column="compound_impact_factor" property="compoundImpactFactor" jdbcType="VARCHAR" />
+        <result column="special_name_num" property="specialNameNum" jdbcType="VARCHAR" />
+        <result column="core_perio" property="corePerio" jdbcType="VARCHAR" />
+        <result column="subarea" property="subarea" jdbcType="VARCHAR" />
+        <result column="has_foreign_key" property="hasForeignKey" jdbcType="INTEGER" />
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.boku.www.pojo.TbCnkiJournal" extends="BaseResultMap" >
+        <result column="former_title" property="formerTitle" jdbcType="LONGVARCHAR" />
+    </resultMap>
+    <sql id="Example_Where_Clause" >
+        <where >
+            <foreach collection="oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause" >
+        <where >
+            <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List" >
+        id, journal_id, title, tTitle, host_unit, ISSN, publication_cycle, source_database,
+        CN, place_of_publication, language, book_size, post_issue_num, time, CDTitle, special_name,
+        literature_published_num, total_downloads, total_citations, current_state, combined_impact_factor,
+        compound_impact_factor, special_name_num, core_perio, subarea, has_foreign_key
+    </sql>
+    <sql id="Blob_Column_List" >
+        former_title
+    </sql>
+    <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.boku.www.pojo.TbCnkiJournalExample" >
+        select
+        <if test="distinct" >
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from tb_cnki_journal
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null" >
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.boku.www.pojo.TbCnkiJournalExample" >
+        select
+        <if test="distinct" >
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        from tb_cnki_journal
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null" >
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from tb_cnki_journal
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from tb_cnki_journal
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.boku.www.pojo.TbCnkiJournalExample" >
+        delete from tb_cnki_journal
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.boku.www.pojo.TbCnkiJournal" >
+        insert into tb_cnki_journal (id, journal_id, title,
+        tTitle, host_unit, ISSN,
+        publication_cycle, source_database, CN,
+        place_of_publication, language, book_size,
+        post_issue_num, time, CDTitle,
+        special_name, literature_published_num, total_downloads,
+        total_citations, current_state, combined_impact_factor,
+        compound_impact_factor, special_name_num, core_perio,
+        subarea, has_foreign_key, former_title
+        )
+        values (#{id,jdbcType=INTEGER}, #{journalId,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
+        #{ttitle,jdbcType=VARCHAR}, #{hostUnit,jdbcType=VARCHAR}, #{issn,jdbcType=VARCHAR},
+        #{publicationCycle,jdbcType=VARCHAR}, #{sourceDatabase,jdbcType=VARCHAR}, #{cn,jdbcType=VARCHAR},
+        #{placeOfPublication,jdbcType=VARCHAR}, #{language,jdbcType=VARCHAR}, #{bookSize,jdbcType=VARCHAR},
+        #{postIssueNum,jdbcType=VARCHAR}, #{time,jdbcType=VARCHAR}, #{cdtitle,jdbcType=VARCHAR},
+        #{specialName,jdbcType=VARCHAR}, #{literaturePublishedNum,jdbcType=VARCHAR}, #{totalDownloads,jdbcType=VARCHAR},
+        #{totalCitations,jdbcType=VARCHAR}, #{currentState,jdbcType=VARCHAR}, #{combinedImpactFactor,jdbcType=VARCHAR},
+        #{compoundImpactFactor,jdbcType=VARCHAR}, #{specialNameNum,jdbcType=VARCHAR}, #{corePerio,jdbcType=VARCHAR},
+        #{subarea,jdbcType=VARCHAR}, #{hasForeignKey,jdbcType=INTEGER}, #{formerTitle,jdbcType=LONGVARCHAR}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.boku.www.pojo.TbCnkiJournal" >
+        insert into tb_cnki_journal
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="journalId != null" >
+                journal_id,
+            </if>
+            <if test="title != null" >
+                title,
+            </if>
+            <if test="ttitle != null" >
+                tTitle,
+            </if>
+            <if test="hostUnit != null" >
+                host_unit,
+            </if>
+            <if test="issn != null" >
+                ISSN,
+            </if>
+            <if test="publicationCycle != null" >
+                publication_cycle,
+            </if>
+            <if test="sourceDatabase != null" >
+                source_database,
+            </if>
+            <if test="cn != null" >
+                CN,
+            </if>
+            <if test="placeOfPublication != null" >
+                place_of_publication,
+            </if>
+            <if test="language != null" >
+                language,
+            </if>
+            <if test="bookSize != null" >
+                book_size,
+            </if>
+            <if test="postIssueNum != null" >
+                post_issue_num,
+            </if>
+            <if test="time != null" >
+                time,
+            </if>
+            <if test="cdtitle != null" >
+                CDTitle,
+            </if>
+            <if test="specialName != null" >
+                special_name,
+            </if>
+            <if test="literaturePublishedNum != null" >
+                literature_published_num,
+            </if>
+            <if test="totalDownloads != null" >
+                total_downloads,
+            </if>
+            <if test="totalCitations != null" >
+                total_citations,
+            </if>
+            <if test="currentState != null" >
+                current_state,
+            </if>
+            <if test="combinedImpactFactor != null" >
+                combined_impact_factor,
+            </if>
+            <if test="compoundImpactFactor != null" >
+                compound_impact_factor,
+            </if>
+            <if test="specialNameNum != null" >
+                special_name_num,
+            </if>
+            <if test="corePerio != null" >
+                core_perio,
+            </if>
+            <if test="subarea != null" >
+                subarea,
+            </if>
+            <if test="hasForeignKey != null" >
+                has_foreign_key,
+            </if>
+            <if test="formerTitle != null" >
+                former_title,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="journalId != null" >
+                #{journalId,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null" >
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="ttitle != null" >
+                #{ttitle,jdbcType=VARCHAR},
+            </if>
+            <if test="hostUnit != null" >
+                #{hostUnit,jdbcType=VARCHAR},
+            </if>
+            <if test="issn != null" >
+                #{issn,jdbcType=VARCHAR},
+            </if>
+            <if test="publicationCycle != null" >
+                #{publicationCycle,jdbcType=VARCHAR},
+            </if>
+            <if test="sourceDatabase != null" >
+                #{sourceDatabase,jdbcType=VARCHAR},
+            </if>
+            <if test="cn != null" >
+                #{cn,jdbcType=VARCHAR},
+            </if>
+            <if test="placeOfPublication != null" >
+                #{placeOfPublication,jdbcType=VARCHAR},
+            </if>
+            <if test="language != null" >
+                #{language,jdbcType=VARCHAR},
+            </if>
+            <if test="bookSize != null" >
+                #{bookSize,jdbcType=VARCHAR},
+            </if>
+            <if test="postIssueNum != null" >
+                #{postIssueNum,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null" >
+                #{time,jdbcType=VARCHAR},
+            </if>
+            <if test="cdtitle != null" >
+                #{cdtitle,jdbcType=VARCHAR},
+            </if>
+            <if test="specialName != null" >
+                #{specialName,jdbcType=VARCHAR},
+            </if>
+            <if test="literaturePublishedNum != null" >
+                #{literaturePublishedNum,jdbcType=VARCHAR},
+            </if>
+            <if test="totalDownloads != null" >
+                #{totalDownloads,jdbcType=VARCHAR},
+            </if>
+            <if test="totalCitations != null" >
+                #{totalCitations,jdbcType=VARCHAR},
+            </if>
+            <if test="currentState != null" >
+                #{currentState,jdbcType=VARCHAR},
+            </if>
+            <if test="combinedImpactFactor != null" >
+                #{combinedImpactFactor,jdbcType=VARCHAR},
+            </if>
+            <if test="compoundImpactFactor != null" >
+                #{compoundImpactFactor,jdbcType=VARCHAR},
+            </if>
+            <if test="specialNameNum != null" >
+                #{specialNameNum,jdbcType=VARCHAR},
+            </if>
+            <if test="corePerio != null" >
+                #{corePerio,jdbcType=VARCHAR},
+            </if>
+            <if test="subarea != null" >
+                #{subarea,jdbcType=VARCHAR},
+            </if>
+            <if test="hasForeignKey != null" >
+                #{hasForeignKey,jdbcType=INTEGER},
+            </if>
+            <if test="formerTitle != null" >
+                #{formerTitle,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.boku.www.pojo.TbCnkiJournalExample" resultType="java.lang.Integer" >
+        select count(*) from tb_cnki_journal
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map" >
+        update tb_cnki_journal
+        <set >
+            <if test="record.id != null" >
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.journalId != null" >
+                journal_id = #{record.journalId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.title != null" >
+                title = #{record.title,jdbcType=VARCHAR},
+            </if>
+            <if test="record.ttitle != null" >
+                tTitle = #{record.ttitle,jdbcType=VARCHAR},
+            </if>
+            <if test="record.hostUnit != null" >
+                host_unit = #{record.hostUnit,jdbcType=VARCHAR},
+            </if>
+            <if test="record.issn != null" >
+                ISSN = #{record.issn,jdbcType=VARCHAR},
+            </if>
+            <if test="record.publicationCycle != null" >
+                publication_cycle = #{record.publicationCycle,jdbcType=VARCHAR},
+            </if>
+            <if test="record.sourceDatabase != null" >
+                source_database = #{record.sourceDatabase,jdbcType=VARCHAR},
+            </if>
+            <if test="record.cn != null" >
+                CN = #{record.cn,jdbcType=VARCHAR},
+            </if>
+            <if test="record.placeOfPublication != null" >
+                place_of_publication = #{record.placeOfPublication,jdbcType=VARCHAR},
+            </if>
+            <if test="record.language != null" >
+                language = #{record.language,jdbcType=VARCHAR},
+            </if>
+            <if test="record.bookSize != null" >
+                book_size = #{record.bookSize,jdbcType=VARCHAR},
+            </if>
+            <if test="record.postIssueNum != null" >
+                post_issue_num = #{record.postIssueNum,jdbcType=VARCHAR},
+            </if>
+            <if test="record.time != null" >
+                time = #{record.time,jdbcType=VARCHAR},
+            </if>
+            <if test="record.cdtitle != null" >
+                CDTitle = #{record.cdtitle,jdbcType=VARCHAR},
+            </if>
+            <if test="record.specialName != null" >
+                special_name = #{record.specialName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.literaturePublishedNum != null" >
+                literature_published_num = #{record.literaturePublishedNum,jdbcType=VARCHAR},
+            </if>
+            <if test="record.totalDownloads != null" >
+                total_downloads = #{record.totalDownloads,jdbcType=VARCHAR},
+            </if>
+            <if test="record.totalCitations != null" >
+                total_citations = #{record.totalCitations,jdbcType=VARCHAR},
+            </if>
+            <if test="record.currentState != null" >
+                current_state = #{record.currentState,jdbcType=VARCHAR},
+            </if>
+            <if test="record.combinedImpactFactor != null" >
+                combined_impact_factor = #{record.combinedImpactFactor,jdbcType=VARCHAR},
+            </if>
+            <if test="record.compoundImpactFactor != null" >
+                compound_impact_factor = #{record.compoundImpactFactor,jdbcType=VARCHAR},
+            </if>
+            <if test="record.specialNameNum != null" >
+                special_name_num = #{record.specialNameNum,jdbcType=VARCHAR},
+            </if>
+            <if test="record.corePerio != null" >
+                core_perio = #{record.corePerio,jdbcType=VARCHAR},
+            </if>
+            <if test="record.subarea != null" >
+                subarea = #{record.subarea,jdbcType=VARCHAR},
+            </if>
+            <if test="record.hasForeignKey != null" >
+                has_foreign_key = #{record.hasForeignKey,jdbcType=INTEGER},
+            </if>
+            <if test="record.formerTitle != null" >
+                former_title = #{record.formerTitle,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByExampleWithBLOBs" parameterType="map" >
+        update tb_cnki_journal
+        set id = #{record.id,jdbcType=INTEGER},
+        journal_id = #{record.journalId,jdbcType=VARCHAR},
+        title = #{record.title,jdbcType=VARCHAR},
+        tTitle = #{record.ttitle,jdbcType=VARCHAR},
+        host_unit = #{record.hostUnit,jdbcType=VARCHAR},
+        ISSN = #{record.issn,jdbcType=VARCHAR},
+        publication_cycle = #{record.publicationCycle,jdbcType=VARCHAR},
+        source_database = #{record.sourceDatabase,jdbcType=VARCHAR},
+        CN = #{record.cn,jdbcType=VARCHAR},
+        place_of_publication = #{record.placeOfPublication,jdbcType=VARCHAR},
+        language = #{record.language,jdbcType=VARCHAR},
+        book_size = #{record.bookSize,jdbcType=VARCHAR},
+        post_issue_num = #{record.postIssueNum,jdbcType=VARCHAR},
+        time = #{record.time,jdbcType=VARCHAR},
+        CDTitle = #{record.cdtitle,jdbcType=VARCHAR},
+        special_name = #{record.specialName,jdbcType=VARCHAR},
+        literature_published_num = #{record.literaturePublishedNum,jdbcType=VARCHAR},
+        total_downloads = #{record.totalDownloads,jdbcType=VARCHAR},
+        total_citations = #{record.totalCitations,jdbcType=VARCHAR},
+        current_state = #{record.currentState,jdbcType=VARCHAR},
+        combined_impact_factor = #{record.combinedImpactFactor,jdbcType=VARCHAR},
+        compound_impact_factor = #{record.compoundImpactFactor,jdbcType=VARCHAR},
+        special_name_num = #{record.specialNameNum,jdbcType=VARCHAR},
+        core_perio = #{record.corePerio,jdbcType=VARCHAR},
+        subarea = #{record.subarea,jdbcType=VARCHAR},
+        has_foreign_key = #{record.hasForeignKey,jdbcType=INTEGER},
+        former_title = #{record.formerTitle,jdbcType=LONGVARCHAR}
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map" >
+        update tb_cnki_journal
+        set id = #{record.id,jdbcType=INTEGER},
+        journal_id = #{record.journalId,jdbcType=VARCHAR},
+        title = #{record.title,jdbcType=VARCHAR},
+        tTitle = #{record.ttitle,jdbcType=VARCHAR},
+        host_unit = #{record.hostUnit,jdbcType=VARCHAR},
+        ISSN = #{record.issn,jdbcType=VARCHAR},
+        publication_cycle = #{record.publicationCycle,jdbcType=VARCHAR},
+        source_database = #{record.sourceDatabase,jdbcType=VARCHAR},
+        CN = #{record.cn,jdbcType=VARCHAR},
+        place_of_publication = #{record.placeOfPublication,jdbcType=VARCHAR},
+        language = #{record.language,jdbcType=VARCHAR},
+        book_size = #{record.bookSize,jdbcType=VARCHAR},
+        post_issue_num = #{record.postIssueNum,jdbcType=VARCHAR},
+        time = #{record.time,jdbcType=VARCHAR},
+        CDTitle = #{record.cdtitle,jdbcType=VARCHAR},
+        special_name = #{record.specialName,jdbcType=VARCHAR},
+        literature_published_num = #{record.literaturePublishedNum,jdbcType=VARCHAR},
+        total_downloads = #{record.totalDownloads,jdbcType=VARCHAR},
+        total_citations = #{record.totalCitations,jdbcType=VARCHAR},
+        current_state = #{record.currentState,jdbcType=VARCHAR},
+        combined_impact_factor = #{record.combinedImpactFactor,jdbcType=VARCHAR},
+        compound_impact_factor = #{record.compoundImpactFactor,jdbcType=VARCHAR},
+        special_name_num = #{record.specialNameNum,jdbcType=VARCHAR},
+        core_perio = #{record.corePerio,jdbcType=VARCHAR},
+        subarea = #{record.subarea,jdbcType=VARCHAR},
+        has_foreign_key = #{record.hasForeignKey,jdbcType=INTEGER}
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.boku.www.pojo.TbCnkiJournal" >
+        update tb_cnki_journal
+        <set >
+            <if test="journalId != null" >
+                journal_id = #{journalId,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null" >
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="ttitle != null" >
+                tTitle = #{ttitle,jdbcType=VARCHAR},
+            </if>
+            <if test="hostUnit != null" >
+                host_unit = #{hostUnit,jdbcType=VARCHAR},
+            </if>
+            <if test="issn != null" >
+                ISSN = #{issn,jdbcType=VARCHAR},
+            </if>
+            <if test="publicationCycle != null" >
+                publication_cycle = #{publicationCycle,jdbcType=VARCHAR},
+            </if>
+            <if test="sourceDatabase != null" >
+                source_database = #{sourceDatabase,jdbcType=VARCHAR},
+            </if>
+            <if test="cn != null" >
+                CN = #{cn,jdbcType=VARCHAR},
+            </if>
+            <if test="placeOfPublication != null" >
+                place_of_publication = #{placeOfPublication,jdbcType=VARCHAR},
+            </if>
+            <if test="language != null" >
+                language = #{language,jdbcType=VARCHAR},
+            </if>
+            <if test="bookSize != null" >
+                book_size = #{bookSize,jdbcType=VARCHAR},
+            </if>
+            <if test="postIssueNum != null" >
+                post_issue_num = #{postIssueNum,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null" >
+                time = #{time,jdbcType=VARCHAR},
+            </if>
+            <if test="cdtitle != null" >
+                CDTitle = #{cdtitle,jdbcType=VARCHAR},
+            </if>
+            <if test="specialName != null" >
+                special_name = #{specialName,jdbcType=VARCHAR},
+            </if>
+            <if test="literaturePublishedNum != null" >
+                literature_published_num = #{literaturePublishedNum,jdbcType=VARCHAR},
+            </if>
+            <if test="totalDownloads != null" >
+                total_downloads = #{totalDownloads,jdbcType=VARCHAR},
+            </if>
+            <if test="totalCitations != null" >
+                total_citations = #{totalCitations,jdbcType=VARCHAR},
+            </if>
+            <if test="currentState != null" >
+                current_state = #{currentState,jdbcType=VARCHAR},
+            </if>
+            <if test="combinedImpactFactor != null" >
+                combined_impact_factor = #{combinedImpactFactor,jdbcType=VARCHAR},
+            </if>
+            <if test="compoundImpactFactor != null" >
+                compound_impact_factor = #{compoundImpactFactor,jdbcType=VARCHAR},
+            </if>
+            <if test="specialNameNum != null" >
+                special_name_num = #{specialNameNum,jdbcType=VARCHAR},
+            </if>
+            <if test="corePerio != null" >
+                core_perio = #{corePerio,jdbcType=VARCHAR},
+            </if>
+            <if test="subarea != null" >
+                subarea = #{subarea,jdbcType=VARCHAR},
+            </if>
+            <if test="hasForeignKey != null" >
+                has_foreign_key = #{hasForeignKey,jdbcType=INTEGER},
+            </if>
+            <if test="formerTitle != null" >
+                former_title = #{formerTitle,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.boku.www.pojo.TbCnkiJournal" >
+        update tb_cnki_journal
+        set journal_id = #{journalId,jdbcType=VARCHAR},
+        title = #{title,jdbcType=VARCHAR},
+        tTitle = #{ttitle,jdbcType=VARCHAR},
+        host_unit = #{hostUnit,jdbcType=VARCHAR},
+        ISSN = #{issn,jdbcType=VARCHAR},
+        publication_cycle = #{publicationCycle,jdbcType=VARCHAR},
+        source_database = #{sourceDatabase,jdbcType=VARCHAR},
+        CN = #{cn,jdbcType=VARCHAR},
+        place_of_publication = #{placeOfPublication,jdbcType=VARCHAR},
+        language = #{language,jdbcType=VARCHAR},
+        book_size = #{bookSize,jdbcType=VARCHAR},
+        post_issue_num = #{postIssueNum,jdbcType=VARCHAR},
+        time = #{time,jdbcType=VARCHAR},
+        CDTitle = #{cdtitle,jdbcType=VARCHAR},
+        special_name = #{specialName,jdbcType=VARCHAR},
+        literature_published_num = #{literaturePublishedNum,jdbcType=VARCHAR},
+        total_downloads = #{totalDownloads,jdbcType=VARCHAR},
+        total_citations = #{totalCitations,jdbcType=VARCHAR},
+        current_state = #{currentState,jdbcType=VARCHAR},
+        combined_impact_factor = #{combinedImpactFactor,jdbcType=VARCHAR},
+        compound_impact_factor = #{compoundImpactFactor,jdbcType=VARCHAR},
+        special_name_num = #{specialNameNum,jdbcType=VARCHAR},
+        core_perio = #{corePerio,jdbcType=VARCHAR},
+        subarea = #{subarea,jdbcType=VARCHAR},
+        has_foreign_key = #{hasForeignKey,jdbcType=INTEGER},
+        former_title = #{formerTitle,jdbcType=LONGVARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.boku.www.pojo.TbCnkiJournal" >
+        update tb_cnki_journal
+        set journal_id = #{journalId,jdbcType=VARCHAR},
+        title = #{title,jdbcType=VARCHAR},
+        tTitle = #{ttitle,jdbcType=VARCHAR},
+        host_unit = #{hostUnit,jdbcType=VARCHAR},
+        ISSN = #{issn,jdbcType=VARCHAR},
+        publication_cycle = #{publicationCycle,jdbcType=VARCHAR},
+        source_database = #{sourceDatabase,jdbcType=VARCHAR},
+        CN = #{cn,jdbcType=VARCHAR},
+        place_of_publication = #{placeOfPublication,jdbcType=VARCHAR},
+        language = #{language,jdbcType=VARCHAR},
+        book_size = #{bookSize,jdbcType=VARCHAR},
+        post_issue_num = #{postIssueNum,jdbcType=VARCHAR},
+        time = #{time,jdbcType=VARCHAR},
+        CDTitle = #{cdtitle,jdbcType=VARCHAR},
+        special_name = #{specialName,jdbcType=VARCHAR},
+        literature_published_num = #{literaturePublishedNum,jdbcType=VARCHAR},
+        total_downloads = #{totalDownloads,jdbcType=VARCHAR},
+        total_citations = #{totalCitations,jdbcType=VARCHAR},
+        current_state = #{currentState,jdbcType=VARCHAR},
+        combined_impact_factor = #{combinedImpactFactor,jdbcType=VARCHAR},
+        compound_impact_factor = #{compoundImpactFactor,jdbcType=VARCHAR},
+        special_name_num = #{specialNameNum,jdbcType=VARCHAR},
+        core_perio = #{corePerio,jdbcType=VARCHAR},
+        subarea = #{subarea,jdbcType=VARCHAR},
+        has_foreign_key = #{hasForeignKey,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectTbJournal" parameterType="string" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        AND
+        <include refid="Blob_Column_List" />
+        FROM  tb_cnki_journal WHERE journal_id = #{journalId,jdbcType=INTEGER}
+    </select>
+</mapper>

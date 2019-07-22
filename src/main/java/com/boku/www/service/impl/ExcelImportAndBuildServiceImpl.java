@@ -267,6 +267,13 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 		importUser(sheet);
 		return message;
 	}
+	@Override
+	public String repeatUserCompany(File file, String fileName) throws Exception {
+		String message = "Import success";
+		Sheet sheet =ParseExcelUtils.parseExcel(file, fileName);
+		repeatUserCompany(sheet);
+		return message;
+	}
 	/**
 	 * 解析(读取)Excel内容(TProjectData)
 	 * @param sheet
@@ -1272,4 +1279,52 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 		}
 	}
 
+	/**
+	 * 省卫计委提供的27个表格数据插入数据库后，将不同的单位进行清理，现在将有用的单位替换到数据库中
+	 */
+	public void repeatUserCompany (Sheet sheet) throws Exception {
+		int rowCount = sheet.getPhysicalNumberOfRows();//总行数
+		if (rowCount > 1) {
+			Row titleRow = sheet.getRow(0);//标题行
+			for (int i = 1; i < rowCount; i++) {//遍历行，略过标题行，从第二行开始
+				Row row = sheet.getRow(i);
+				//跳过空行
+				if(i>=1){
+					if(row==null){continue;}
+					else if(StringUtils.isEmpty(getValue(row.getCell(0)))&&StringUtils.isEmpty(getValue(row.getCell(1)))){
+						continue;
+					}
+				}
+				String oldCompany = "";
+				String newCompany = "";
+				if (titleRow.getCell(0).getStringCellValue().indexOf("被替换的原单位") >= 0) {
+					if (row.getCell(0) != null && row.getCell(0).getCellType() == row.getCell(0).CELL_TYPE_STRING) {
+						oldCompany = row.getCell(0).getStringCellValue().trim();
+					}else if(row.getCell(0) != null && row.getCell(0).getCellType() == row.getCell(0).CELL_TYPE_NUMERIC){
+						row.getCell(0).setCellType(Cell.CELL_TYPE_STRING);
+						oldCompany = row.getCell(0).getStringCellValue().trim();
+					}
+				}
+
+				if (titleRow.getCell(1).getStringCellValue().indexOf("省卫计委明下单位") >= 0) {
+					if (row.getCell(1) != null && row.getCell(1).getCellType() == row.getCell(1).CELL_TYPE_STRING) {
+						newCompany = row.getCell(1).getStringCellValue().trim();
+					}
+				}
+
+
+				if(org.apache.commons.lang3.StringUtils.isNotBlank(oldCompany)){
+					TUserForPersonageExample example = new TUserForPersonageExample();
+					example.createCriteria().andCompanyEqualTo(oldCompany);
+					List<TUserForPersonage> userForPersonages = userForPersonageMapper.selectByExample(example);
+					if(userForPersonages!=null && userForPersonages.size()>0){
+						for (TUserForPersonage userForPersonage : userForPersonages){
+							userForPersonage.setCompany(newCompany);
+							userForPersonageMapper.updateByPrimaryKey(userForPersonage);
+						}
+					}
+				}
+			}
+		}
+	}
 }

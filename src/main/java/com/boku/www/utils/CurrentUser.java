@@ -10,9 +10,14 @@
  */
 package com.boku.www.utils;
 
+import com.boku.www.mapper.system.URoleDao;
+import com.boku.www.pojo.system.URole;
 import com.boku.www.pojo.system.UUser;
+import com.boku.www.pojo.system.UUserExample;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+
+import java.util.List;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -29,5 +34,16 @@ public class CurrentUser {
 		UUser currentUser = (UUser)subject.getPrincipal();
 		return currentUser;
 	}
-
+	public static URole returnRole(URoleDao roleDao){
+		UUser currentUser = CurrentUser.returnCurrentUser();
+		//查询当前用户的角色是否为单位管理员
+		List<URole> roleList = roleDao.findRoleByUid(currentUser.getId());
+		if(roleList!=null && roleList.size()>0){
+			//一个账号只有一个角色
+			URole role = roleList.get(0);
+			return role;
+		}else {
+			return null;
+		}
+	}
 }

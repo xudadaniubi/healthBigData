@@ -1,430 +1,443 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.boku.www.mapper.TThesisForEnglishMapper" >
-  <resultMap id="BaseResultMap" type="com.boku.www.pojo.TThesisForEnglish" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="title" property="title" jdbcType="VARCHAR" />
-    <result column="author" property="author" jdbcType="VARCHAR" />
-    <result column="DOI" property="doi" jdbcType="VARCHAR" />
-    <result column="journal_name" property="journalName" jdbcType="VARCHAR" />
-    <result column="ISSN" property="issn" jdbcType="VARCHAR" />
-    <result column="year" property="year" jdbcType="VARCHAR" />
-    <result column="roll" property="roll" jdbcType="VARCHAR" />
-    <result column="journal" property="journal" jdbcType="VARCHAR" />
-    <result column="page" property="page" jdbcType="VARCHAR" />
-    <result column="author_company" property="authorCompany" jdbcType="VARCHAR" />
-    <result column="area" property="area" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="VARCHAR" />
-    <result column="confirm_status" property="confirmStatus" jdbcType="VARCHAR" />
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.boku.www.pojo.TThesisForEnglish" extends="BaseResultMap" >
-    <result column="authors_address" property="authorsAddress" jdbcType="LONGVARCHAR" />
-    <result column="abstracts" property="abstracts" jdbcType="LONGVARCHAR" />
-  </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
+    <resultMap id="BaseResultMap" type="com.boku.www.pojo.TThesisForEnglish" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="author" property="author" jdbcType="VARCHAR" />
+        <result column="DOI" property="doi" jdbcType="VARCHAR" />
+        <result column="journal_name" property="journalName" jdbcType="VARCHAR" />
+        <result column="ISSN" property="issn" jdbcType="VARCHAR" />
+        <result column="year" property="year" jdbcType="VARCHAR" />
+        <result column="roll" property="roll" jdbcType="VARCHAR" />
+        <result column="journal" property="journal" jdbcType="VARCHAR" />
+        <result column="page" property="page" jdbcType="VARCHAR" />
+        <result column="author_company" property="authorCompany" jdbcType="VARCHAR" />
+        <result column="author_company_id" property="authorCompanyId" jdbcType="VARCHAR" />
+        <result column="area" property="area" jdbcType="VARCHAR" />
+        <result column="authors_address" property="authorsAddress" jdbcType="VARCHAR" />
+        <result column="abstracts" property="abstracts" jdbcType="VARCHAR" />
+        <result column="keywords" property="keywords" jdbcType="VARCHAR" />
+        <result column="jcr_partition" property="jcrPartition" jdbcType="VARCHAR" />
+        <result column="impact_factor" property="impactFactor" jdbcType="VARCHAR" />
+        <result column="subject" property="subject" jdbcType="VARCHAR" />
+        <result column="confirm_status" property="confirmStatus" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Example_Where_Clause" >
+        <where >
+            <foreach collection="oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
             </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause" >
+        <where >
+            <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
             </foreach>
-          </trim>
+        </where>
+    </sql>
+    <sql id="Base_Column_List" >
+        id, title, author, DOI, journal_name, ISSN, year, roll, journal, page, author_company,
+        author_company_id, area, authors_address, abstracts, keywords, jcr_partition, impact_factor,
+        subject, confirm_status, status
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.boku.www.pojo.TThesisForEnglishExample" >
+        select
+        <if test="distinct" >
+            distinct
         </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List" >
-    id, title, author, DOI, journal_name, ISSN, year, roll, journal, page, author_company, 
-    area, status, confirm_status
-  </sql>
-  <sql id="Blob_Column_List" >
-    authors_address, abstracts
-  </sql>
-  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.boku.www.pojo.TThesisForEnglishExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from t_thesis_for_english
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.boku.www.pojo.TThesisForEnglishExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from t_thesis_for_english
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from t_thesis_for_english
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from t_thesis_for_english
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.boku.www.pojo.TThesisForEnglishExample" >
-    delete from t_thesis_for_english
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.boku.www.pojo.TThesisForEnglish" >
-    insert into t_thesis_for_english (id, title, author, 
-      DOI, journal_name, ISSN, 
-      year, roll, journal, 
-      page, author_company, area, 
-      status, confirm_status, authors_address, 
-      abstracts)
-    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, 
-      #{doi,jdbcType=VARCHAR}, #{journalName,jdbcType=VARCHAR}, #{issn,jdbcType=VARCHAR}, 
-      #{year,jdbcType=VARCHAR}, #{roll,jdbcType=VARCHAR}, #{journal,jdbcType=VARCHAR}, 
-      #{page,jdbcType=VARCHAR}, #{authorCompany,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, 
-      #{status,jdbcType=VARCHAR}, #{confirmStatus,jdbcType=VARCHAR}, #{authorsAddress,jdbcType=LONGVARCHAR}, 
-      #{abstracts,jdbcType=LONGVARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.boku.www.pojo.TThesisForEnglish" >
-    insert into t_thesis_for_english
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="title != null" >
-        title,
-      </if>
-      <if test="author != null" >
-        author,
-      </if>
-      <if test="doi != null" >
-        DOI,
-      </if>
-      <if test="journalName != null" >
-        journal_name,
-      </if>
-      <if test="issn != null" >
-        ISSN,
-      </if>
-      <if test="year != null" >
-        year,
-      </if>
-      <if test="roll != null" >
-        roll,
-      </if>
-      <if test="journal != null" >
-        journal,
-      </if>
-      <if test="page != null" >
-        page,
-      </if>
-      <if test="authorCompany != null" >
-        author_company,
-      </if>
-      <if test="area != null" >
-        area,
-      </if>
-      <if test="status != null" >
-        status,
-      </if>
-      <if test="confirmStatus != null" >
-        confirm_status,
-      </if>
-      <if test="authorsAddress != null" >
-        authors_address,
-      </if>
-      <if test="abstracts != null" >
-        abstracts,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="title != null" >
-        #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="author != null" >
-        #{author,jdbcType=VARCHAR},
-      </if>
-      <if test="doi != null" >
-        #{doi,jdbcType=VARCHAR},
-      </if>
-      <if test="journalName != null" >
-        #{journalName,jdbcType=VARCHAR},
-      </if>
-      <if test="issn != null" >
-        #{issn,jdbcType=VARCHAR},
-      </if>
-      <if test="year != null" >
-        #{year,jdbcType=VARCHAR},
-      </if>
-      <if test="roll != null" >
-        #{roll,jdbcType=VARCHAR},
-      </if>
-      <if test="journal != null" >
-        #{journal,jdbcType=VARCHAR},
-      </if>
-      <if test="page != null" >
-        #{page,jdbcType=VARCHAR},
-      </if>
-      <if test="authorCompany != null" >
-        #{authorCompany,jdbcType=VARCHAR},
-      </if>
-      <if test="area != null" >
-        #{area,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=VARCHAR},
-      </if>
-      <if test="confirmStatus != null" >
-        #{confirmStatus,jdbcType=VARCHAR},
-      </if>
-      <if test="authorsAddress != null" >
-        #{authorsAddress,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="abstracts != null" >
-        #{abstracts,jdbcType=LONGVARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.boku.www.pojo.TThesisForEnglishExample" resultType="java.lang.Integer" >
-    select count(*) from t_thesis_for_english
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map" >
-    update t_thesis_for_english
-    <set >
-      <if test="record.id != null" >
-        id = #{record.id,jdbcType=INTEGER},
-      </if>
-      <if test="record.title != null" >
+        <include refid="Base_Column_List" />
+        from t_thesis_for_english
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null" >
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from t_thesis_for_english
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from t_thesis_for_english
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.boku.www.pojo.TThesisForEnglishExample" >
+        delete from t_thesis_for_english
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.boku.www.pojo.TThesisForEnglish" >
+        insert into t_thesis_for_english (id, title, author,
+        DOI, journal_name, ISSN,
+        year, roll, journal,
+        page, author_company, author_company_id,
+        area, authors_address, abstracts,
+        keywords, jcr_partition, impact_factor,
+        subject, confirm_status, status
+        )
+        values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR},
+        #{doi,jdbcType=VARCHAR}, #{journalName,jdbcType=VARCHAR}, #{issn,jdbcType=VARCHAR},
+        #{year,jdbcType=VARCHAR}, #{roll,jdbcType=VARCHAR}, #{journal,jdbcType=VARCHAR},
+        #{page,jdbcType=VARCHAR}, #{authorCompany,jdbcType=VARCHAR}, #{authorCompanyId,jdbcType=VARCHAR},
+        #{area,jdbcType=VARCHAR}, #{authorsAddress,jdbcType=VARCHAR}, #{abstracts,jdbcType=VARCHAR},
+        #{keywords,jdbcType=VARCHAR}, #{jcrPartition,jdbcType=VARCHAR}, #{impactFactor,jdbcType=VARCHAR},
+        #{subject,jdbcType=VARCHAR}, #{confirmStatus,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.boku.www.pojo.TThesisForEnglish" >
+        insert into t_thesis_for_english
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="title != null" >
+                title,
+            </if>
+            <if test="author != null" >
+                author,
+            </if>
+            <if test="doi != null" >
+                DOI,
+            </if>
+            <if test="journalName != null" >
+                journal_name,
+            </if>
+            <if test="issn != null" >
+                ISSN,
+            </if>
+            <if test="year != null" >
+                year,
+            </if>
+            <if test="roll != null" >
+                roll,
+            </if>
+            <if test="journal != null" >
+                journal,
+            </if>
+            <if test="page != null" >
+                page,
+            </if>
+            <if test="authorCompany != null" >
+                author_company,
+            </if>
+            <if test="authorCompanyId != null" >
+                author_company_id,
+            </if>
+            <if test="area != null" >
+                area,
+            </if>
+            <if test="authorsAddress != null" >
+                authors_address,
+            </if>
+            <if test="abstracts != null" >
+                abstracts,
+            </if>
+            <if test="keywords != null" >
+                keywords,
+            </if>
+            <if test="jcrPartition != null" >
+                jcr_partition,
+            </if>
+            <if test="impactFactor != null" >
+                impact_factor,
+            </if>
+            <if test="subject != null" >
+                subject,
+            </if>
+            <if test="confirmStatus != null" >
+                confirm_status,
+            </if>
+            <if test="status != null" >
+                status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="title != null" >
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="author != null" >
+                #{author,jdbcType=VARCHAR},
+            </if>
+            <if test="doi != null" >
+                #{doi,jdbcType=VARCHAR},
+            </if>
+            <if test="journalName != null" >
+                #{journalName,jdbcType=VARCHAR},
+            </if>
+            <if test="issn != null" >
+                #{issn,jdbcType=VARCHAR},
+            </if>
+            <if test="year != null" >
+                #{year,jdbcType=VARCHAR},
+            </if>
+            <if test="roll != null" >
+                #{roll,jdbcType=VARCHAR},
+            </if>
+            <if test="journal != null" >
+                #{journal,jdbcType=VARCHAR},
+            </if>
+            <if test="page != null" >
+                #{page,jdbcType=VARCHAR},
+            </if>
+            <if test="authorCompany != null" >
+                #{authorCompany,jdbcType=VARCHAR},
+            </if>
+            <if test="authorCompanyId != null" >
+                #{authorCompanyId,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null" >
+                #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="authorsAddress != null" >
+                #{authorsAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="abstracts != null" >
+                #{abstracts,jdbcType=VARCHAR},
+            </if>
+            <if test="keywords != null" >
+                #{keywords,jdbcType=VARCHAR},
+            </if>
+            <if test="jcrPartition != null" >
+                #{jcrPartition,jdbcType=VARCHAR},
+            </if>
+            <if test="impactFactor != null" >
+                #{impactFactor,jdbcType=VARCHAR},
+            </if>
+            <if test="subject != null" >
+                #{subject,jdbcType=VARCHAR},
+            </if>
+            <if test="confirmStatus != null" >
+                #{confirmStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.boku.www.pojo.TThesisForEnglishExample" resultType="java.lang.Integer" >
+        select count(*) from t_thesis_for_english
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map" >
+        update t_thesis_for_english
+        <set >
+            <if test="record.id != null" >
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.title != null" >
+                title = #{record.title,jdbcType=VARCHAR},
+            </if>
+            <if test="record.author != null" >
+                author = #{record.author,jdbcType=VARCHAR},
+            </if>
+            <if test="record.doi != null" >
+                DOI = #{record.doi,jdbcType=VARCHAR},
+            </if>
+            <if test="record.journalName != null" >
+                journal_name = #{record.journalName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.issn != null" >
+                ISSN = #{record.issn,jdbcType=VARCHAR},
+            </if>
+            <if test="record.year != null" >
+                year = #{record.year,jdbcType=VARCHAR},
+            </if>
+            <if test="record.roll != null" >
+                roll = #{record.roll,jdbcType=VARCHAR},
+            </if>
+            <if test="record.journal != null" >
+                journal = #{record.journal,jdbcType=VARCHAR},
+            </if>
+            <if test="record.page != null" >
+                page = #{record.page,jdbcType=VARCHAR},
+            </if>
+            <if test="record.authorCompany != null" >
+                author_company = #{record.authorCompany,jdbcType=VARCHAR},
+            </if>
+            <if test="record.authorCompanyId != null" >
+                author_company_id = #{record.authorCompanyId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.area != null" >
+                area = #{record.area,jdbcType=VARCHAR},
+            </if>
+            <if test="record.authorsAddress != null" >
+                authors_address = #{record.authorsAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="record.abstracts != null" >
+                abstracts = #{record.abstracts,jdbcType=VARCHAR},
+            </if>
+            <if test="record.keywords != null" >
+                keywords = #{record.keywords,jdbcType=VARCHAR},
+            </if>
+            <if test="record.jcrPartition != null" >
+                jcr_partition = #{record.jcrPartition,jdbcType=VARCHAR},
+            </if>
+            <if test="record.impactFactor != null" >
+                impact_factor = #{record.impactFactor,jdbcType=VARCHAR},
+            </if>
+            <if test="record.subject != null" >
+                subject = #{record.subject,jdbcType=VARCHAR},
+            </if>
+            <if test="record.confirmStatus != null" >
+                confirm_status = #{record.confirmStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="record.status != null" >
+                status = #{record.status,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map" >
+        update t_thesis_for_english
+        set id = #{record.id,jdbcType=INTEGER},
         title = #{record.title,jdbcType=VARCHAR},
-      </if>
-      <if test="record.author != null" >
         author = #{record.author,jdbcType=VARCHAR},
-      </if>
-      <if test="record.doi != null" >
         DOI = #{record.doi,jdbcType=VARCHAR},
-      </if>
-      <if test="record.journalName != null" >
         journal_name = #{record.journalName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.issn != null" >
         ISSN = #{record.issn,jdbcType=VARCHAR},
-      </if>
-      <if test="record.year != null" >
         year = #{record.year,jdbcType=VARCHAR},
-      </if>
-      <if test="record.roll != null" >
         roll = #{record.roll,jdbcType=VARCHAR},
-      </if>
-      <if test="record.journal != null" >
         journal = #{record.journal,jdbcType=VARCHAR},
-      </if>
-      <if test="record.page != null" >
         page = #{record.page,jdbcType=VARCHAR},
-      </if>
-      <if test="record.authorCompany != null" >
         author_company = #{record.authorCompany,jdbcType=VARCHAR},
-      </if>
-      <if test="record.area != null" >
+        author_company_id = #{record.authorCompanyId,jdbcType=VARCHAR},
         area = #{record.area,jdbcType=VARCHAR},
-      </if>
-      <if test="record.status != null" >
-        status = #{record.status,jdbcType=VARCHAR},
-      </if>
-      <if test="record.confirmStatus != null" >
+        authors_address = #{record.authorsAddress,jdbcType=VARCHAR},
+        abstracts = #{record.abstracts,jdbcType=VARCHAR},
+        keywords = #{record.keywords,jdbcType=VARCHAR},
+        jcr_partition = #{record.jcrPartition,jdbcType=VARCHAR},
+        impact_factor = #{record.impactFactor,jdbcType=VARCHAR},
+        subject = #{record.subject,jdbcType=VARCHAR},
         confirm_status = #{record.confirmStatus,jdbcType=VARCHAR},
-      </if>
-      <if test="record.authorsAddress != null" >
-        authors_address = #{record.authorsAddress,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="record.abstracts != null" >
-        abstracts = #{record.abstracts,jdbcType=LONGVARCHAR},
-      </if>
-    </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map" >
-    update t_thesis_for_english
-    set id = #{record.id,jdbcType=INTEGER},
-      title = #{record.title,jdbcType=VARCHAR},
-      author = #{record.author,jdbcType=VARCHAR},
-      DOI = #{record.doi,jdbcType=VARCHAR},
-      journal_name = #{record.journalName,jdbcType=VARCHAR},
-      ISSN = #{record.issn,jdbcType=VARCHAR},
-      year = #{record.year,jdbcType=VARCHAR},
-      roll = #{record.roll,jdbcType=VARCHAR},
-      journal = #{record.journal,jdbcType=VARCHAR},
-      page = #{record.page,jdbcType=VARCHAR},
-      author_company = #{record.authorCompany,jdbcType=VARCHAR},
-      area = #{record.area,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=VARCHAR},
-      confirm_status = #{record.confirmStatus,jdbcType=VARCHAR},
-      authors_address = #{record.authorsAddress,jdbcType=LONGVARCHAR},
-      abstracts = #{record.abstracts,jdbcType=LONGVARCHAR}
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map" >
-    update t_thesis_for_english
-    set id = #{record.id,jdbcType=INTEGER},
-      title = #{record.title,jdbcType=VARCHAR},
-      author = #{record.author,jdbcType=VARCHAR},
-      DOI = #{record.doi,jdbcType=VARCHAR},
-      journal_name = #{record.journalName,jdbcType=VARCHAR},
-      ISSN = #{record.issn,jdbcType=VARCHAR},
-      year = #{record.year,jdbcType=VARCHAR},
-      roll = #{record.roll,jdbcType=VARCHAR},
-      journal = #{record.journal,jdbcType=VARCHAR},
-      page = #{record.page,jdbcType=VARCHAR},
-      author_company = #{record.authorCompany,jdbcType=VARCHAR},
-      area = #{record.area,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=VARCHAR},
-      confirm_status = #{record.confirmStatus,jdbcType=VARCHAR}
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.boku.www.pojo.TThesisForEnglish" >
-    update t_thesis_for_english
-    <set >
-      <if test="title != null" >
-        title = #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="author != null" >
-        author = #{author,jdbcType=VARCHAR},
-      </if>
-      <if test="doi != null" >
-        DOI = #{doi,jdbcType=VARCHAR},
-      </if>
-      <if test="journalName != null" >
-        journal_name = #{journalName,jdbcType=VARCHAR},
-      </if>
-      <if test="issn != null" >
-        ISSN = #{issn,jdbcType=VARCHAR},
-      </if>
-      <if test="year != null" >
-        year = #{year,jdbcType=VARCHAR},
-      </if>
-      <if test="roll != null" >
-        roll = #{roll,jdbcType=VARCHAR},
-      </if>
-      <if test="journal != null" >
-        journal = #{journal,jdbcType=VARCHAR},
-      </if>
-      <if test="page != null" >
-        page = #{page,jdbcType=VARCHAR},
-      </if>
-      <if test="authorCompany != null" >
-        author_company = #{authorCompany,jdbcType=VARCHAR},
-      </if>
-      <if test="area != null" >
-        area = #{area,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=VARCHAR},
-      </if>
-      <if test="confirmStatus != null" >
-        confirm_status = #{confirmStatus,jdbcType=VARCHAR},
-      </if>
-      <if test="authorsAddress != null" >
-        authors_address = #{authorsAddress,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="abstracts != null" >
-        abstracts = #{abstracts,jdbcType=LONGVARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.boku.www.pojo.TThesisForEnglish" >
-    update t_thesis_for_english
-    set title = #{title,jdbcType=VARCHAR},
-      author = #{author,jdbcType=VARCHAR},
-      DOI = #{doi,jdbcType=VARCHAR},
-      journal_name = #{journalName,jdbcType=VARCHAR},
-      ISSN = #{issn,jdbcType=VARCHAR},
-      year = #{year,jdbcType=VARCHAR},
-      roll = #{roll,jdbcType=VARCHAR},
-      journal = #{journal,jdbcType=VARCHAR},
-      page = #{page,jdbcType=VARCHAR},
-      author_company = #{authorCompany,jdbcType=VARCHAR},
-      area = #{area,jdbcType=VARCHAR},
-      status = #{status,jdbcType=VARCHAR},
-      confirm_status = #{confirmStatus,jdbcType=VARCHAR},
-      authors_address = #{authorsAddress,jdbcType=LONGVARCHAR},
-      abstracts = #{abstracts,jdbcType=LONGVARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+        status = #{record.status,jdbcType=VARCHAR}
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.boku.www.pojo.TThesisForEnglish" >
+        update t_thesis_for_english
+        <set >
+            <if test="title != null" >
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="author != null" >
+                author = #{author,jdbcType=VARCHAR},
+            </if>
+            <if test="doi != null" >
+                DOI = #{doi,jdbcType=VARCHAR},
+            </if>
+            <if test="journalName != null" >
+                journal_name = #{journalName,jdbcType=VARCHAR},
+            </if>
+            <if test="issn != null" >
+                ISSN = #{issn,jdbcType=VARCHAR},
+            </if>
+            <if test="year != null" >
+                year = #{year,jdbcType=VARCHAR},
+            </if>
+            <if test="roll != null" >
+                roll = #{roll,jdbcType=VARCHAR},
+            </if>
+            <if test="journal != null" >
+                journal = #{journal,jdbcType=VARCHAR},
+            </if>
+            <if test="page != null" >
+                page = #{page,jdbcType=VARCHAR},
+            </if>
+            <if test="authorCompany != null" >
+                author_company = #{authorCompany,jdbcType=VARCHAR},
+            </if>
+            <if test="authorCompanyId != null" >
+                author_company_id = #{authorCompanyId,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null" >
+                area = #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="authorsAddress != null" >
+                authors_address = #{authorsAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="abstracts != null" >
+                abstracts = #{abstracts,jdbcType=VARCHAR},
+            </if>
+            <if test="keywords != null" >
+                keywords = #{keywords,jdbcType=VARCHAR},
+            </if>
+            <if test="jcrPartition != null" >
+                jcr_partition = #{jcrPartition,jdbcType=VARCHAR},
+            </if>
+            <if test="impactFactor != null" >
+                impact_factor = #{impactFactor,jdbcType=VARCHAR},
+            </if>
+            <if test="subject != null" >
+                subject = #{subject,jdbcType=VARCHAR},
+            </if>
+            <if test="confirmStatus != null" >
+                confirm_status = #{confirmStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
     <update id="updateByPrimaryKey" parameterType="com.boku.www.pojo.TThesisForEnglish" >
         update t_thesis_for_english
         set title = #{title,jdbcType=VARCHAR},
@@ -437,9 +450,16 @@
         journal = #{journal,jdbcType=VARCHAR},
         page = #{page,jdbcType=VARCHAR},
         author_company = #{authorCompany,jdbcType=VARCHAR},
+        author_company_id = #{authorCompanyId,jdbcType=VARCHAR},
         area = #{area,jdbcType=VARCHAR},
-        status = #{status,jdbcType=VARCHAR},
-        confirm_status = #{confirmStatus,jdbcType=VARCHAR}
+        authors_address = #{authorsAddress,jdbcType=VARCHAR},
+        abstracts = #{abstracts,jdbcType=VARCHAR},
+        keywords = #{keywords,jdbcType=VARCHAR},
+        jcr_partition = #{jcrPartition,jdbcType=VARCHAR},
+        impact_factor = #{impactFactor,jdbcType=VARCHAR},
+        subject = #{subject,jdbcType=VARCHAR},
+        confirm_status = #{confirmStatus,jdbcType=VARCHAR},
+        status = #{status,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -447,13 +467,213 @@
         <result column="area" property="area" jdbcType="VARCHAR" />
         <result column="count" property="count" jdbcType="INTEGER" />
     </resultMap>
+
+    <resultMap id="BaseResultMapAbstractMysql" type="com.boku.www.pojo.AbstractMysql" >
+        <id column="abstract_id" property="abstractId" jdbcType="VARCHAR" />
+        <result column="journal_id" property="journalId" jdbcType="VARCHAR" />
+        <result column="journal_title_main" property="journalTitleMain" jdbcType="VARCHAR" />
+        <result column="pmid" property="pmid" jdbcType="VARCHAR" />
+        <result column="issn" property="issn" jdbcType="VARCHAR" />
+        <result column="volume" property="volume" jdbcType="VARCHAR" />
+        <result column="issue" property="issue" jdbcType="VARCHAR" />
+        <result column="medline_date" property="medlineDate" jdbcType="DATE" />
+        <result column="medline_TA" property="medlineTA" jdbcType="VARCHAR" />
+        <result column="medline_page" property="medlinePage" jdbcType="VARCHAR" />
+        <result column="elocation_id_DOI" property="elocationIdDOI" jdbcType="VARCHAR" />
+        <result column="language" property="language" jdbcType="VARCHAR" />
+        <result column="country" property="country" jdbcType="VARCHAR" />
+        <result column="nlm_unique_ID" property="nlmUniqueID" jdbcType="VARCHAR" />
+        <result column="ISO_abbreviation" property="isoAbbreviation" jdbcType="VARCHAR" />
+        <result column="had_free_full_text" property="hadFreeFullText" jdbcType="VARCHAR" />
+        <result column="had_full_text" property="hadFullText" jdbcType="VARCHAR" />
+        <result column="article_title" property="articleTitle" jdbcType="LONGVARCHAR" />
+        <result column="abstract_text" property="abstractText" jdbcType="LONGVARCHAR" />
+        <result column="translateTest" property="translateTest" jdbcType="LONGVARCHAR" />
+        <result column="abstract_authors" property="abstractAuthors" jdbcType="LONGVARCHAR" />
+        <result column="publication_types" property="publicationTypes" jdbcType="LONGVARCHAR" />
+        <result column="mesh_heads_UI" property="meshHeadsUI" jdbcType="LONGVARCHAR" />
+        <result column="mesh_heads" property="meshHeads" jdbcType="LONGVARCHAR" />
+        <result column="qualifier" property="qualifier" jdbcType="LONGVARCHAR" />
+        <result column="key_words" property="keyWords" jdbcType="LONGVARCHAR" />
+        <result column="original_URL" property="originalURL" jdbcType="LONGVARCHAR" />
+        <result column="authors_str" property="authorsStr" jdbcType="LONGVARCHAR" />
+        <result column="affiliation_str" property="affiliationStr" jdbcType="LONGVARCHAR" />
+        <result column="journal_indexes" property="journalIndexes" jdbcType="LONGVARCHAR" />
+        <result column="tatistics_abstracts_blong_to_hospital_name" property="tatisticsAbstractsBlongToHospitalName" jdbcType="LONGVARCHAR" />
+    </resultMap>
+   <!-- <sql id="Base_Column_List_Abstract_Mysql" >
+        abstract_id, journal_id, journal_title_main, pmid, issn, volume, issue, medline_date,
+        medline_TA, medline_page, elocation_id_DOI, language, country, nlm_unique_ID, ISO_abbreviation,
+        had_free_full_text, had_full_text,
+        article_title, abstract_text, translateTest, abstract_authors, publication_types,
+        mesh_heads_UI, mesh_heads, qualifier, key_words, original_URL, authors_str, affiliation_str,
+        journal_indexes, tatistics_abstracts_blong_to_hospital_name
+    </sql>-->
     <!--统计各地区论文的数量-->
     <select id="countTheNumberOfThesisForEnglishInEachArea" resultMap="CountResultMap">
-        select  area ,count(*) AS 'count' from t_thesis_for_english group by area
+        SELECT city AS area,sum(thesis_for_english_num) AS count FROM t_area_and_company GROUP BY city;
     </select>
 
     <!--查询不同的单位-->
     <select id="selectDistinctOrganizer" resultType="string">
         SELECT DISTINCT author_company FROM t_thesis_for_english ;
+    </select>
+
+    <insert id="insertBatch" parameterType="list">
+        INSERT INTO t_thesis_for_english_from_solr (abstract_id, journal_id, journal_title_main,
+        pmid, issn, volume,
+        issue, medline_date, medline_TA,
+        article_title, medline_page, elocation_id_DOI,
+        abstract_authors, language, publication_types,
+        country, nlm_unique_ID, ISO_abbreviation,
+        mesh_heads_UI, mesh_heads, qualifier,
+        key_words, had_free_full_text, had_full_text,
+        original_URL, authors_str, affiliation_str,
+        journal_indexes, abstract_text, translateTest,
+        tatistics_abstracts_blong_to_hospital_name)
+        values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.abstractId,jdbcType=VARCHAR}, #{item.journalId,jdbcType=VARCHAR}, #{item.journalTitleMain,jdbcType=VARCHAR},
+            #{item.pmid,jdbcType=VARCHAR}, #{item.issn,jdbcType=VARCHAR}, #{item.volume,jdbcType=VARCHAR},
+            #{item.issue,jdbcType=VARCHAR}, #{item.medlineDate,jdbcType=DATE}, #{item.medlineTA,jdbcType=VARCHAR},
+            #{item.articleTitle,jdbcType=VARCHAR}, #{item.medlinePage,jdbcType=VARCHAR}, #{item.elocationIdDOI,jdbcType=VARCHAR},
+            #{item.abstractAuthors,jdbcType=VARCHAR}, #{item.language,jdbcType=VARCHAR}, #{item.publicationTypes,jdbcType=VARCHAR},
+            #{item.country,jdbcType=VARCHAR}, #{item.nlmUniqueID,jdbcType=VARCHAR}, #{item.isoAbbreviation,jdbcType=VARCHAR},
+            #{item.meshHeadsUI,jdbcType=VARCHAR}, #{item.meshHeads,jdbcType=VARCHAR}, #{item.qualifier,jdbcType=VARCHAR},
+            #{item.keyWords,jdbcType=VARCHAR}, #{item.hadFreeFullText,jdbcType=VARCHAR}, #{item.hadFullText,jdbcType=VARCHAR},
+            #{item.originalURL,jdbcType=VARCHAR}, #{item.authorsStr,jdbcType=VARCHAR}, #{item.affiliationStr,jdbcType=VARCHAR},
+            #{item.journalIndexes,jdbcType=VARCHAR}, #{item.abstractText,jdbcType=VARCHAR}, #{item.translateTest,jdbcType=VARCHAR},
+            #{item.tatisticsAbstractsBlongToHospitalName,jdbcType=VARCHAR})
+
+        </foreach>
+    </insert>
+
+    <insert id="insertOne" parameterType="com.boku.www.pojo.AbstractMysql">
+        INSERT INTO t_thesis_for_english_from_solr (abstract_id, journal_id, journal_title_main,
+        pmid, issn, volume,
+        issue, medline_date, medline_TA,
+        article_title, medline_page, elocation_id_DOI,
+        abstract_authors, language, publication_types,
+        country, nlm_unique_ID, ISO_abbreviation,
+        mesh_heads_UI, mesh_heads, qualifier,
+        key_words, had_free_full_text, had_full_text,
+        original_URL, authors_str, affiliation_str,
+        journal_indexes, abstract_text, translateTest,
+        tatistics_abstracts_blong_to_hospital_name)
+        values
+
+            (#{abstractId,jdbcType=VARCHAR}, #{journalId,jdbcType=VARCHAR}, #{journalTitleMain,jdbcType=VARCHAR},
+            #{pmid,jdbcType=VARCHAR}, #{issn,jdbcType=VARCHAR}, #{volume,jdbcType=VARCHAR},
+            #{issue,jdbcType=VARCHAR}, #{medlineDate,jdbcType=DATE}, #{medlineTA,jdbcType=VARCHAR},
+            #{articleTitle,jdbcType=VARCHAR}, #{medlinePage,jdbcType=VARCHAR}, #{elocationIdDOI,jdbcType=VARCHAR},
+            #{abstractAuthors,jdbcType=VARCHAR}, #{language,jdbcType=VARCHAR}, #{publicationTypes,jdbcType=VARCHAR},
+            #{country,jdbcType=VARCHAR}, #{nlmUniqueID,jdbcType=VARCHAR}, #{isoAbbreviation,jdbcType=VARCHAR},
+            #{meshHeadsUI,jdbcType=VARCHAR}, #{meshHeads,jdbcType=VARCHAR}, #{qualifier,jdbcType=VARCHAR},
+            #{keyWords,jdbcType=VARCHAR}, #{hadFreeFullText,jdbcType=VARCHAR}, #{hadFullText,jdbcType=VARCHAR},
+            #{originalURL,jdbcType=VARCHAR}, #{authorsStr,jdbcType=VARCHAR}, #{affiliationStr,jdbcType=VARCHAR},
+            #{journalIndexes,jdbcType=VARCHAR}, #{abstractText,jdbcType=VARCHAR}, #{translateTest,jdbcType=VARCHAR},
+            #{tatisticsAbstractsBlongToHospitalName,jdbcType=VARCHAR})
+    </insert>
+
+    <!--查询所有来自solr的外文文献数据-->
+    <select id="selectThesisForEnglishFromSolr" resultMap="BaseResultMapAbstractMysql">
+      SELECT * FROM t_thesis_for_english_from_solr
+    </select>
+    <!--根据条件查询外文期刊数据-->
+    <select id="selectIfByJournalId" resultType="string" parameterType="string">
+        SELECT all_IFs FROM  fd_journal WHERE journal_id = #{journalId}
+    </select>
+    <!--根据期刊id查询外文jcr分区-->
+    <select id="selectJcrByJournalId" resultType="string" parameterType="string">
+        SELECT jcr_partition FROM fd_partition_jcr WHERE journal_id = #{journalId}
+    </select>
+    <!--根据期刊id查询学科-->
+    <select id="selectSubjectByJournalId" resultType="string" parameterType="string">
+        SELECT classification_value FROM fd_classification WHERE journal_id = #{journalId}
+    </select>
+    <!--根据单位id查询所属地区-->
+    <select id="selectAreaByCompanyId" resultType="string" parameterType="string">
+        SELECT city FROM t_area_and_company WHERE company_id = #{companyId}
+    </select>
+    <!--查询英文论文中学科top20-->
+    <select id="selectSujectBeforeTwentieth" resultMap="CountResultMap">
+        SELECT subject AS  area,count(*) AS count  FROM t_thesis_for_english WHERE `subject` IS NOT NULL AND `subject` != '未知' GROUP BY subject ORDER BY count DESC LIMIT 0,20
+    </select>
+    <!--插入英文论文中学科top20-->
+    <insert id="insertSujectBeforeTwentieth" parameterType="com.boku.www.pojo.TCountTopSubject">
+         insert into t_count_top_subject (id, subject, top_num,
+            count, type)
+        values (#{id,jdbcType=INTEGER}, #{subject,jdbcType=VARCHAR}, #{topNum,jdbcType=INTEGER},
+            #{count,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR})
+    </insert>
+    <resultMap id="BaseResultMapTopSubject" type="com.boku.www.pojo.TCountTopSubject" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="subject" property="subject" jdbcType="VARCHAR" />
+        <result column="top_num" property="topNum" jdbcType="INTEGER" />
+        <result column="count" property="count" jdbcType="INTEGER" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+    </resultMap>
+    <!--查询英文论文中学科top20-->
+    <select id="selectSujectTopTwentieth" resultMap="BaseResultMapTopSubject" >
+        SELECT id, subject, top_num,count, type FROM t_count_top_subject WHERE type = '外文' ORDER BY count DESC  LIMIT 0,20
+    </select>
+    <resultMap id="BaseResultMapTopKeywords" type="com.boku.www.pojo.TCountTopKeywords" >
+        <result column="id" property="id" jdbcType="INTEGER" />
+        <result column="keywords" property="keywords" jdbcType="VARCHAR" />
+        <result column="count" property="count" jdbcType="INTEGER" />
+        <result column="top_num" property="topNum" jdbcType="INTEGER" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+    </resultMap>
+    <!--插入英文论文中关键字top20-->
+    <insert id="insertKeywordsBeforeTwentieth" parameterType="com.boku.www.pojo.TCountTopKeywords" >
+        insert into t_count_top_keywords (id, keywords, count,
+        top_num, type,area)
+        values (#{id,jdbcType=INTEGER}, #{keywords,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER},
+        #{topNum,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR})
+    </insert>
+    <!--查询英文论文中关键字top20-->
+    <select id="selectKeywordsBeforeTwentieth" resultMap="BaseResultMapTopKeywords">
+        SELECT id, keywords, top_num,count, type,area FROM t_count_top_keywords WHERE type = #{type} AND  area = #{area}ORDER BY count DESC  LIMIT 0,20
+    </select>
+    <!--根据单位id查询影响因子总和-->
+    <select id="selectIfByCompanyId" resultType="object">
+        SELECT sum(impact_factor) from t_thesis_for_english WHERE author_company_id LIKE #{companyId}
+    </select>
+    <resultMap id="BaseResultMapImpactFactor" type="com.boku.www.pojo.TCountTopIf" >
+        <result column="id" property="id" jdbcType="INTEGER" />
+        <result column="impact_factor_sum" property="impactFactorSum" jdbcType="VARCHAR" />
+        <result column="company" property="company" jdbcType="VARCHAR" />
+        <result column="subject" property="subject" jdbcType="VARCHAR" />
+        <result column="thesis_title" property="thesisTitle" jdbcType="VARCHAR" />
+        <result column="impact_factor" property="impactFactor" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+    </resultMap>
+    <!--插入统计的影响因子数据-->
+    <insert id="insertCountImpactFactor" parameterType="com.boku.www.pojo.TCountTopIf" >
+        insert into t_count_top_if (id, impact_factor_sum, company,
+        subject, thesis_title, impact_factor,
+        type)
+        values (#{id,jdbcType=INTEGER}, #{impactFactorSum,jdbcType=VARCHAR}, #{company,jdbcType=VARCHAR},
+        #{subject,jdbcType=VARCHAR}, #{thesisTitle,jdbcType=VARCHAR}, #{impactFactor,jdbcType=VARCHAR},
+        #{type,jdbcType=VARCHAR})
+    </insert>
+    <!--根据type查询统计影响因子的数据-->
+    <select id="selectCountImpactFactor" resultMap="BaseResultMapImpactFactor">
+        SELECT id, impact_factor_sum, company, subject, thesis_title, impact_factor, type FROM t_count_top_if WHERE type = #{type}
+    </select>
+    <!--查询学科影响因子总和top20-->
+    <select id="selectIfSubjectBeforeTwentieth" resultType="com.boku.www.utils.Count">
+        SELECT `subject` AS area,sum(impact_factor) as count from t_thesis_for_english WHERE `subject` IS NOT NULL AND `subject` != '未知'  GROUP BY `subject` ORDER BY count DESC LIMIT 0,20;
+    </select>
+    <resultMap id="BaseResultMapJcr" type="com.boku.www.pojo.TCountTopJcr" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="jcr" property="jcr" jdbcType="VARCHAR" />
+        <result column="area" property="area" jdbcType="VARCHAR" />
+        <result column="company" property="company" jdbcType="VARCHAR" />
+        <result column="count" property="count" jdbcType="INTEGER" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+    </resultMap>
+    <select id="selectJcrDistribution" resultMap="BaseResultMapJcr">
+        SELECT id, jcr, area, company, count, type FROM t_count_top_jcr WHERE type = #{type}
     </select>
 </mapper>

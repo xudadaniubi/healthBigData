@@ -14,6 +14,10 @@ public class TAreaAndCompany {
 
     private String companyId;
 
+	private Integer thesisForChineseNum;
+
+	private Integer thesisForEnglishNum;
+
     private String status;
 
     public Integer getId() {

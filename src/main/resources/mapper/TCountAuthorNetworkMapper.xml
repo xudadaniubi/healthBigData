@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.boku.www.mapper.TCountAuthorNetworkMapper" >
+  <resultMap id="BaseResultMap1" type="com.boku.www.pojo.TCountAuthorNetwork1" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="first_author" property="firstAuthor" jdbcType="VARCHAR" />
+    <result column="first_author_post_num" property="firstAuthorPostNum" jdbcType="INTEGER" />
+    <result column="cooperator" property="cooperator" jdbcType="VARCHAR" />
+    <result column="cooperation_num" property="cooperationNum" jdbcType="INTEGER" />
+  </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.boku.www.pojo.TCountAuthorNetwork2" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="cooperator_id" property="cooperatorId" jdbcType="INTEGER" />
+        <result column="author" property="author" jdbcType="VARCHAR" />
+        <result column="cooperator" property="cooperator" jdbcType="VARCHAR" />
+        <result column="cooperation_num" property="cooperationNum" jdbcType="INTEGER" />
+    </resultMap>
+
+  <sql id="Base_Column_List1" >
+    id, area, first_author, first_author_post_num, cooperator, cooperation_num
+  </sql>
+
+    <sql id="Base_Column_List2" >
+        id, cooperator_id, author, cooperator, cooperation_num
+    </sql>
+
+    <insert id="insert1" parameterType="com.boku.www.pojo.TCountAuthorNetwork1" >
+        insert into t_count_author_network1 (id, area, first_author,
+        first_author_post_num, cooperator, cooperation_num
+        )
+        values (#{id,jdbcType=INTEGER}, #{area,jdbcType=VARCHAR}, #{firstAuthor,jdbcType=VARCHAR},
+        #{firstAuthorPostNum,jdbcType=INTEGER}, #{cooperator,jdbcType=VARCHAR}, #{cooperationNum,jdbcType=INTEGER}
+        )
+    </insert>
+    <insert id="insert2" parameterType="com.boku.www.pojo.TCountAuthorNetwork2" >
+        insert into t_count_author_network2 (id, cooperator_id, author,
+        cooperator, cooperation_num)
+        values (#{id,jdbcType=INTEGER}, #{cooperatorId,jdbcType=INTEGER}, #{author,jdbcType=VARCHAR},
+        #{cooperator,jdbcType=VARCHAR}, #{cooperationNum,jdbcType=INTEGER})
+    </insert>
+
+    <select id="selectByArea" resultMap="BaseResultMap1">
+        SELECT <include refid="Base_Column_List1" />  FROM t_count_author_network1 WHERE area = #{area}
+    </select>
+
+    <select id="selectByForeignKey" resultMap="BaseResultMap2">
+         SELECT <include refid="Base_Column_List2" /> FROM t_count_author_network2 WHERE cooperator_id = #{id}
+    </select>
+</mapper>

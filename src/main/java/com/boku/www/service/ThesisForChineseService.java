@@ -1,10 +1,17 @@
 package com.boku.www.service;
 
+import com.boku.www.pojo.TAreaAndCompany;
+import com.boku.www.pojo.TCountTopKeywords;
+import com.boku.www.pojo.TCountTopSubject;
 import com.boku.www.pojo.TThesisForChinese;
 import com.boku.www.utils.Count;
+import com.boku.www.utils.CountAuthorNetwork;
+import com.boku.www.utils.CountCompanyNetwork;
 import com.boku.www.utils.PageResult;
 
+import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 服务层接口
@@ -80,4 +87,66 @@ public interface ThesisForChineseService {
 	public List<Count> countTheNumberOfThesisForChineseInEachArea();
 
 	public void addCommpanyId();
+	/**
+	 * 插入各单位中文文献的数量
+	 * 	做定时更新
+	 * 	当文献数据新增和删除时，相应的加减，详见add和delete方法
+	 */
+	public void insertCompanyChesisNum();
+	/**
+	 * 查询各单位中文文献的数量
+	 * 单位top20
+	 */
+	public List<TAreaAndCompany> selectBeforeTwentieth();
+	/**
+	 *查询各市单位文献量前20的
+	 */
+	public List<TAreaAndCompany> selectBeforeTwentiethInEachArea();
+	/**
+	 *插入关键词出现在前20的热词
+	 */
+	public void insertKeywordsBeforeTwentieth();
+	/**
+	 *查询关键词出现在前20的热词
+	 */
+	public List<TCountTopKeywords> selectKeywordsBeforeTwentieth();
+	/**
+	 * 插入各地级市关键词出现前20的
+	 */
+	public void insertKeywordsBeforeTwentiethInEachArea();
+	/**
+	 * 查询各地级市关键词出现前20的
+	 */
+	public Map<String,List<TCountTopKeywords>> selectKeywordsBeforeTwentiethInEachArea();
+	/**
+	 * 第一作者top20（如杭州市内单位排名）
+	 */
+	public Map<String,List>  selectFirstAuthorBeforeTwentiethInEachArea();
+	/**
+	 * 插入学科前20的数据
+	 */
+	public void insertSujectBeforeTwentieth();
+
+	/**
+	 * 学科前20
+	 * @return
+	 */
+	public List<TCountTopSubject>  selectSujectBeforeTwentieth();
+
+	public List<Count> selectSujectBeforeTwentiethInCorePerio();
+
+	public  List<Count> selectBeforeTwentiethInCorePerio();
+
+
+	public void insertAuthorNetwork();
+
+	public CountAuthorNetwork selectAuthorNetwork();
+
+	public void insertCompanyNetwork();
+
+	public CountCompanyNetwork selectCompanyNetwork();
+
+	public void updateThiesis(File file, String fileName) throws Exception;
+
+	public void  cleanRepateArea();
 }

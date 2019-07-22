@@ -5,6 +5,8 @@ import com.boku.www.pojo.system.URole;
 import com.boku.www.pojo.system.UUser;
 import com.boku.www.service.system.RoleService;
 import com.boku.www.service.system.UserService;
+import com.boku.www.utils.PageResult;
+import com.boku.www.utils.Result;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +62,9 @@ public class AdminController {
 					resultMap.put("status", 200);
 					resultMap.put("username", user.getUsername());
 					resultMap.put("message", "登录成功");
+					UUser uUser = (UUser)currentUser.getPrincipal();
+					uUser.setLastLoginTime(new Date());
+					userService.updateLastLoginTime(uUser);
                 } else {
 					logger.info("用户[" + user.getUsername() + "]登录认证失败,重新登陆");
 					token.clear();
@@ -70,31 +76,7 @@ public class AdminController {
         }
         return resultMap;
     }
-    
-    
-    /**
-     * ajax登录请求接口方式登陆
-     * @param username
-     * @param password
-     * @return
-     */
-    /*@RequestMapping(value="/ajaxLogin",method= RequestMethod.POST)
-    @ResponseBody
-    public Map<String,Object> submitLogin(String username, String password,Model model) {
-        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-        try {
 
-        	UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-            SecurityUtils.getSubject().login(token);
-            resultMap.put("status", 200);
-            resultMap.put("message", "登录成功");
-
-        } catch (Exception e) {
-            resultMap.put("status", 500);
-            resultMap.put("message", e.getMessage());
-        }
-        return resultMap;
-    }*/
 
     @Autowired
 	private RoleService roleService;
@@ -114,6 +96,94 @@ public class AdminController {
 			userService.addUnitId();
 		}catch (Exception e){
 			e.printStackTrace();
+		}
+	}
+
+	@RequestMapping("/user/addPersonUser")
+	public void addPersonUser(){
+		try {
+			userService.addPersonUser();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 分页条件查询用户
+	 * 	admin和省卫计委可以查询所有的用户
+	 * 	市卫生局查询本市的用户
+	 * 	单位查询本单位的用户
+	 * 	个人无此功能
+	 */
+	@RequestMapping("/user/search")
+	public PageResult search(@RequestBody UUser user ,int page, int rows){
+		try {
+			return userService.search(user, page, rows);
+		}catch (Exception e){
+			logger.info("查询用户失败");
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * 单位管理员增加用户,用户名是唯一的，数据库设置了唯一索引
+	 * 	//role代表添加用户的角色
+	 * 		2代表省级
+	 * 		3代表市级
+	 * 		4代表医院
+	 * 		5代表个人
+	 * 	user各个级别的用户，所添加的数据不同
+	 * 		添加医院的用户需要重新查询社会信用代码作为单位的唯一标识
+	 * 		添加个人的用户，需要查询单位表中的社会信用代码，补充进去
+	 * 	admin账号可以添加任何角色的用户
+	 * 	省级账号可以添加地市级、医院和个人用户
+	 * 	地市级账号可以添加医院和个人用户
+	 * 	医院账号可以添加个人用户
+	 */
+	@RequestMapping("/user/addUser")
+	public String addUser(@RequestBody UUser user,Integer role){
+		try {
+			return userService.addUser(user, role);
+		}catch (Exception e){
+			e.printStackTrace();
+			return "新增用户失败";
+		}
+	}
+	/**
+	 * 单位管理员修改用户
+	 *
+	 */
+	@RequestMapping("/user/update")
+	public String update(@RequestBody UUser user){
+		try {
+			return userService.update(user);
+		}catch (Exception e){
+			e.printStackTrace();
+			return "修改用户失败";
+		}
+	}
+	/**
+	 * 单位管理员删除用户
+	 */
+	@RequestMapping("/user/delete")
+	public Result delete(@RequestBody Integer[] ids){
+		try {
+			userService.delete(ids);
+			return new Result(true,"删除用户成功");
+		}catch (Exception e){
+			e.printStackTrace();
+			return new Result(false,"删除用户失败");
+		}
+	}
+	/**
+	 * 查询用户和角色
+	 */
+	@RequestMapping("/user/selectUserAndRole")
+	public UUser selectUserAndRole(){
+		try {
+			return userService.selectUserAndRole();
+		}catch (Exception e){
+			e.printStackTrace();
+			return null;
 		}
 	}
 }

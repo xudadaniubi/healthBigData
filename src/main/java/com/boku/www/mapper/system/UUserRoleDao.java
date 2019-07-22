@@ -14,4 +14,6 @@ public interface UUserRoleDao{
    //public void add(SysMessageTep	 obj);
 
 	public void insert(UUserRole userRole);
+
+	public void deleteByUid(Integer uid);
 }

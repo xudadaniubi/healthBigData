@@ -32,4 +32,14 @@ public interface TAreaAndCompanyMapper {
 
 	List<String> selectAllCompany();
 
+	List<String> selectAllCompanyId();
+
+	List<TAreaAndCompany> selectChineseBeforeX(int X);
+
+	List<TAreaAndCompany> selectEnglishBeforeX(int X);
+
+	List<TAreaAndCompany> selectChineseBeforeTwentiethInEachArea();
+
+	List<TAreaAndCompany> selectEnglishBeforeTwentiethInEachArea();
+
 }

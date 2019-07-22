@@ -7,6 +7,8 @@
         <result column="district" property="district" jdbcType="VARCHAR" />
         <result column="company" property="company" jdbcType="VARCHAR" />
         <result column="company_id" property="companyId" jdbcType="VARCHAR" />
+        <result column="thesis_for_chinese_num" property="thesisForChineseNum" jdbcType="INTEGER" />
+        <result column="thesis_for_english_num" property="thesisForEnglishNum" jdbcType="INTEGER" />
         <result column="status" property="status" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Example_Where_Clause" >
@@ -68,7 +70,8 @@
         </where>
     </sql>
     <sql id="Base_Column_List" >
-        id, city, district, company, company_id, status
+        id, city, district, company, company_id, thesis_for_chinese_num, thesis_for_english_num,
+        status
     </sql>
     <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.boku.www.pojo.TAreaAndCompanyExample" >
         select
@@ -102,11 +105,11 @@
     </delete>
     <insert id="insert" parameterType="com.boku.www.pojo.TAreaAndCompany" >
         insert into t_area_and_company (id, city, district,
-        company, company_id, status
-        )
+        company, company_id, thesis_for_chinese_num,
+        thesis_for_english_num, status)
         values (#{id,jdbcType=INTEGER}, #{city,jdbcType=VARCHAR}, #{district,jdbcType=VARCHAR},
-        #{company,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}
-        )
+        #{company,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, #{thesisForChineseNum,jdbcType=INTEGER},
+        #{thesisForEnglishNum,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.boku.www.pojo.TAreaAndCompany" >
         insert into t_area_and_company
@@ -125,6 +128,12 @@
             </if>
             <if test="companyId != null" >
                 company_id,
+            </if>
+            <if test="thesisForChineseNum != null" >
+                thesis_for_chinese_num,
+            </if>
+            <if test="thesisForEnglishNum != null" >
+                thesis_for_english_num,
             </if>
             <if test="status != null" >
                 status,
@@ -145,6 +154,12 @@
             </if>
             <if test="companyId != null" >
                 #{companyId,jdbcType=VARCHAR},
+            </if>
+            <if test="thesisForChineseNum != null" >
+                #{thesisForChineseNum,jdbcType=INTEGER},
+            </if>
+            <if test="thesisForEnglishNum != null" >
+                #{thesisForEnglishNum,jdbcType=INTEGER},
             </if>
             <if test="status != null" >
                 #{status,jdbcType=VARCHAR},
@@ -175,6 +190,12 @@
             <if test="record.companyId != null" >
                 company_id = #{record.companyId,jdbcType=VARCHAR},
             </if>
+            <if test="record.thesisForChineseNum != null" >
+                thesis_for_chinese_num = #{record.thesisForChineseNum,jdbcType=INTEGER},
+            </if>
+            <if test="record.thesisForEnglishNum != null" >
+                thesis_for_english_num = #{record.thesisForEnglishNum,jdbcType=INTEGER},
+            </if>
             <if test="record.status != null" >
                 status = #{record.status,jdbcType=VARCHAR},
             </if>
@@ -190,6 +211,8 @@
         district = #{record.district,jdbcType=VARCHAR},
         company = #{record.company,jdbcType=VARCHAR},
         company_id = #{record.companyId,jdbcType=VARCHAR},
+        thesis_for_chinese_num = #{record.thesisForChineseNum,jdbcType=INTEGER},
+        thesis_for_english_num = #{record.thesisForEnglishNum,jdbcType=INTEGER},
         status = #{record.status,jdbcType=VARCHAR}
         <if test="_parameter != null" >
             <include refid="Update_By_Example_Where_Clause" />
@@ -210,6 +233,12 @@
             <if test="companyId != null" >
                 company_id = #{companyId,jdbcType=VARCHAR},
             </if>
+            <if test="thesisForChineseNum != null" >
+                thesis_for_chinese_num = #{thesisForChineseNum,jdbcType=INTEGER},
+            </if>
+            <if test="thesisForEnglishNum != null" >
+                thesis_for_english_num = #{thesisForEnglishNum,jdbcType=INTEGER},
+            </if>
             <if test="status != null" >
                 status = #{status,jdbcType=VARCHAR},
             </if>
@@ -222,6 +251,8 @@
         district = #{district,jdbcType=VARCHAR},
         company = #{company,jdbcType=VARCHAR},
         company_id = #{companyId,jdbcType=VARCHAR},
+        thesis_for_chinese_num = #{thesisForChineseNum,jdbcType=INTEGER},
+        thesis_for_english_num = #{thesisForEnglishNum,jdbcType=INTEGER},
         status = #{status,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -229,4 +260,57 @@
     <select id="selectAllCompany" resultType="java.lang.String" >
         SELECT company FROM t_area_and_company
     </select>
+    <!--查询所有的单位id-->
+    <select id="selectAllCompanyId" resultType="java.lang.String" >
+        SELECT company_id FROM t_area_and_company
+    </select>
+    <!--文献数量前X单位-->
+    <select id="selectChineseBeforeX" resultMap="BaseResultMap">
+       SELECT * FROM t_area_and_company ORDER BY thesis_for_chinese_num DESC LIMIT 0,#{X}
+    </select>
+    <select id="selectEnglishBeforeX" resultMap="BaseResultMap">
+        SELECT * FROM t_area_and_company ORDER BY thesis_for_english_num DESC LIMIT 0,#{X}
+    </select>
+    <!--各地区中文文献数量前20的单位-->
+    <select id="selectChineseBeforeTwentiethInEachArea" resultMap="BaseResultMap">
+        SELECT
+        *
+        FROM
+        t_area_and_company a
+        WHERE
+        (
+        SELECT
+        count(*)
+        FROM
+        t_area_and_company b
+        WHERE
+        b.city = a.city
+        AND b.thesis_for_chinese_num >= a.thesis_for_chinese_num
+        ) &lt;= 20
+        ORDER BY
+        a.city,
+        a.thesis_for_chinese_num DESC;
+    </select>
+    <!--各地区外文文献数量前20的单位-->
+    <select id="selectEnglishBeforeTwentiethInEachArea" resultMap="BaseResultMap">
+        SELECT
+        *
+        FROM
+        t_area_and_company a
+        WHERE
+        (
+        SELECT
+        count(*)
+        FROM
+        t_area_and_company b
+        WHERE
+        b.city = a.city
+        AND b.thesis_for_english_num >= a.thesis_for_english_num
+        ) &lt;= 20
+        ORDER BY
+        a.city,
+        a.thesis_for_english_num DESC;
+    </select>
+
+
 </mapper>

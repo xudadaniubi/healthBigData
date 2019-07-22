@@ -1,25 +1,32 @@
 package com.boku.www.service.impl;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
+import com.alibaba.fastjson.JSON;
+import com.boku.www.Enum.Area;
+import com.boku.www.config.SolrConfig;
 import com.boku.www.mapper.TAreaAndCompanyMapper;
 import com.boku.www.mapper.TThesisForEnglishMapper;
 import com.boku.www.pojo.*;
 import com.boku.www.pojo.system.URole;
 import com.boku.www.pojo.system.UUser;
 import com.boku.www.service.system.RoleService;
-import com.boku.www.utils.Count;
-import com.boku.www.utils.CurrentUser;
-import com.boku.www.utils.PageResult;
+import com.boku.www.utils.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.params.CursorMarkParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.boku.www.service.ThesisForEnglishService;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 
+import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,6 +48,9 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 
 	@Autowired
 	private TAreaAndCompanyMapper areaAndCompanyMapper;
+
+	@Autowired
+	private SolrClient solrClient;
 	/**
 	 * 查询全部
 	 */
@@ -88,7 +98,7 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 	 */
 	@Override
 	public void update(TThesisForEnglish thesisForEnglish){
-		thesisForEnglishMapper.updateByPrimaryKeyWithBLOBs(thesisForEnglish);
+		thesisForEnglishMapper.updateByPrimaryKey(thesisForEnglish);
 		//thesisForEnglishExampleMapper.updateByPrimaryKey(thesisForEnglish);
 	}
 
@@ -132,7 +142,7 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 			roleGrade = addThesisForChineseCriteria(thesisForEnglish, criteria);
 		}
 		PageHelper.startPage(pageNum, pageSize);
-		Page<TThesisForEnglish> page= (Page<TThesisForEnglish>)thesisForEnglishMapper.selectByExampleWithBLOBs(example);
+		Page<TThesisForEnglish> page= (Page<TThesisForEnglish>)thesisForEnglishMapper.selectByExample(example);
 		//查询已确认和未确认的数量
 		//将查询到的角色和已确认/未确认的信息保存到PageResult里面，然后返回给前端
 		PageResult pageResult = getPageResult(page);
@@ -251,10 +261,9 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 						criteria.andAreaEqualTo(currentUser.getArea());
 					}
 				}else if("个人".equals(role.getName())){
-					if(currentUser.getCompany()!=null && currentUser.getCompany().length()>0){
+					if(currentUser.getCompanyId()!=null && currentUser.getCompanyId().length()>0){
 						//添加本单位的名称
-						//criteria.andAuthorCompanyEqualTo(currentUser.getCompany());
-						criteria.andAuthorCompanyLike("%"+currentUser.getCompany()+"%");
+						criteria.andAuthorCompanyIdEqualTo(currentUser.getCompanyId());
 					}
 					if(currentUser.getArea()!=null && currentUser.getArea().length()>0){
 						//添加本人所属地区
@@ -262,12 +271,13 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 					}
 					if(currentUser.getUsername()!=null && currentUser.getUsername().length()>0){
 						//添加本人的名称
+						//criteria.andAuthor
 						criteria.andAuthorEqualTo(currentUser.getUsername());
 					}
 				}else if("医院".equals(role.getName())){
-					if(currentUser.getCompany()!=null && currentUser.getCompany().length()>0){
+					if(currentUser.getCompanyId()!=null && currentUser.getCompanyId().length()>0){
 						//添加本单位的名称
-						criteria.andAuthorCompanyLike("%"+currentUser.getCompany()+"%");
+						criteria.andAuthorCompanyIdEqualTo(currentUser.getCompanyId());
 					}
 					if(currentUser.getArea()!=null && currentUser.getArea().length()>0){
 						//添加本人所属地区
@@ -315,7 +325,9 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 	}
 
 	/**
-	 * 统计各地区论文的数量
+	 *sci论文
+	 *	地区
+	 区域统计比较
 	 */
 	@Override
 	public List<Count> countTheNumberOfThesisForEnglishInEachArea(){
@@ -349,4 +361,524 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 		}
 		System.out.println(setNew.size());
 	}
+
+
+
+	/**
+	 * 获取外文solr中的数据
+	 * 	传入省卫计委所有单位id
+	 */
+	HashMap map = new HashMap();
+	@Override
+	public  void getThesisForEnglishFromSolr() throws Exception{
+		List<String> allCompanyId = areaAndCompanyMapper.selectAllCompanyId();
+		//String queryStr = "tatistics_abstracts_blong_to_hospital_name:(\"12330100470116614F\")";
+		//String queryStr = "tatistics_abstracts_blong_to_hospital_name:(\"12330100470116614F\",\"12330000470051734A\")";
+		String queryStr = "";
+		for (String companyId:allCompanyId) {
+			queryStr += "\"" +companyId +"\",";
+		}
+		queryStr = "tatistics_abstracts_blong_to_hospital_name:(" + queryStr.substring(0,queryStr.length()-1) +")";
+		//System.out.println(queryStr);
+		//solr游标数据
+		Map<String,String> markMap = new HashMap();
+		markMap.put("mark","*");
+		int pageSize = 1000;
+		while (true){
+			//获取StatisticsAbstractSolr数据
+			String nextMark = getSimpleStatisticsAbstractSolrFromAbstractSolr(queryStr,markMap.get("mark"),pageSize);
+			if(StringUtils.isBlank(nextMark)){
+				break;
+			}else{
+				markMap.put("mark",nextMark);
+			}
+		}
+		RW2FileUtil.writeHashMap2File(map,"E:\\healthybigdata\\recordHashMap2File2.txt");
+	}
+
+	public String getSimpleStatisticsAbstractSolrFromAbstractSolr(String queryStr,String mark,int pageSize)  throws Exception{
+		SolrQuery sq = new SolrQuery(queryStr);
+		//查询超时时间
+		//sq.setTimeAllowed(3*1*1000);
+		//分页设置
+		sq.setStart(0);
+		sq.setRows(pageSize);
+		sq.setSort("abstract_id",SolrQuery.ORDER.asc);
+		sq.set(CursorMarkParams.CURSOR_MARK_PARAM,mark);
+		QueryResponse queryResponse = SafeSolrClientUtil.query(SolrConfig.SOLR_USER, SolrConfig.SOLR_PASSWORD, solrClient, sq, SolrConfig.ABSTRACT_STATISTICS);
+		SolrDocumentList results = queryResponse.getResults();
+		//System.out.println(results.getNumFound());
+		List<AbstractSolr> list = queryResponse.getBeans(AbstractSolr.class);
+		//List<AbstractMysql> insertList = new ArrayList();
+
+		for (AbstractSolr abstractSolr:list) {
+			AbstractMysql abstractMysql = new AbstractMysql();
+			if(abstractSolr.getAbstractAuthors()!=null && abstractSolr.getAbstractAuthors().size()>0){
+				abstractMysql.setAbstractAuthors(abstractSolr.getAbstractAuthors().toString());
+			}
+			abstractMysql.setAbstractId(abstractSolr.getAbstractId());
+			abstractMysql.setAbstractText(abstractSolr.getAbstractText());
+			abstractMysql.setAffiliationStr(abstractSolr.getAffiliationStr());
+			abstractMysql.setArticleTitle(abstractSolr.getArticleTitle());
+			abstractMysql.setAuthorsStr(abstractSolr.getAuthorsStr());
+			abstractMysql.setCountry(abstractSolr.getCountry());
+			abstractMysql.setElocationIdDOI(abstractSolr.getElocationIdDOI());
+			abstractMysql.setHadFreeFullText(abstractSolr.getHadFreeFullText());
+			abstractMysql.setHadFullText(abstractSolr.getHadFullText());
+			abstractMysql.setIsoAbbreviation(abstractSolr.getIsoAbbreviation());
+			abstractMysql.setIssn(abstractSolr.getIssn());
+			abstractMysql.setIssue(abstractSolr.getIssue());
+			abstractMysql.setJournalId(abstractSolr.getJournalId());
+			if(abstractSolr.getJournalIndexes()!=null && abstractSolr.getJournalIndexes().size()>0){
+				abstractMysql.setJournalIndexes(abstractSolr.getJournalIndexes().toString());
+			}
+			abstractMysql.setJournalTitleMain(abstractSolr.getJournalTitleMain());
+			abstractMysql.setKeyWords(abstractSolr.getKeyWords());
+			abstractMysql.setLanguage(abstractSolr.getLanguage());
+			abstractMysql.setMedlineDate(abstractSolr.getMedlineDate());
+			abstractMysql.setMedlinePage(abstractSolr.getMedlinePage());
+			abstractMysql.setMedlineTA(abstractSolr.getMedlineTA());
+			abstractMysql.setMeshHeads(abstractSolr.getMeshHeads());
+			abstractMysql.setMeshHeadsUI(abstractSolr.getMeshHeadsUI());
+			abstractMysql.setNlmUniqueID(abstractSolr.getNlmUniqueID());
+			abstractMysql.setOriginalURL(abstractSolr.getOriginalURL());
+			abstractMysql.setPmid(abstractSolr.getPmid());
+			if(abstractSolr.getPublicationTypes()!=null && abstractSolr.getPublicationTypes().size()>0){
+				abstractMysql.setPublicationTypes(abstractSolr.getPublicationTypes().toString());
+			}
+			if(abstractSolr.getQualifier()!=null && abstractSolr.getQualifier().size()>0){
+				abstractMysql.setQualifier(abstractSolr.getQualifier().toString());
+			}
+			if(abstractSolr.getTatisticsAbstractsBlongToHospitalName()!=null && abstractSolr.getTatisticsAbstractsBlongToHospitalName().size()>0){
+				abstractMysql.setTatisticsAbstractsBlongToHospitalName(abstractSolr.getTatisticsAbstractsBlongToHospitalName().toString());
+			}
+			abstractMysql.setTranslateTest(abstractSolr.getTranslateTest());
+			abstractMysql.setVolume(abstractSolr.getVolume());
+			try{
+				thesisForEnglishMapper.insertOne(abstractMysql);
+			}catch (UncategorizedSQLException u){
+				map.put(abstractMysql.getAbstractId(),abstractMysql);
+				u.printStackTrace();
+			}
+
+			//System.out.println("标题："+abstractSolr.getArticleTitle());
+			//insertList.add(abstractMysql);
+		}
+		//thesisForEnglishMapper.insertBatch(insertList);
+
+		if(list.isEmpty()){
+			return null;
+		}else {
+			System.out.println(list.get(0).getAbstractId());
+			return queryResponse.getNextCursorMark();
+		}
+	}
+
+	/**
+	 * 将solr的数据添加到外文表中
+	 * 	1.查询外文文献的数据
+	 * 	2.查询外文期刊的数据
+	 * 	3.查询外文jcr分区的数据
+	 * 	4.将这些数据封装到外文实体同，并存入数据库
+	 */
+	@Override
+	public void insertDataFromSolr(){
+		String regEx="[\\[\\] ]";
+		List<AbstractMysql> abstractMysqlList = thesisForEnglishMapper.selectThesisForEnglishFromSolr();
+		for (AbstractMysql abstractMysql:abstractMysqlList) {
+			TThesisForEnglish thesisForEnglish = new TThesisForEnglish();
+			String journalId = abstractMysql.getJournalId();
+			thesisForEnglish.setAuthorCompany(abstractMysql.getAffiliationStr());
+			thesisForEnglish.setAuthor(abstractMysql.getAuthorsStr());
+			//thesisForEnglish.setAuthorsAddress();
+			//thesisForEnglish.setAbstracts();
+			thesisForEnglish.setDoi(abstractMysql.getElocationIdDOI());
+			thesisForEnglish.setIssn(abstractMysql.getIssn());
+			thesisForEnglish.setJournalName(abstractMysql.getJournalTitleMain());
+			thesisForEnglish.setJournal(abstractMysql.getIssue());
+			thesisForEnglish.setKeywords(abstractMysql.getKeyWords());
+			thesisForEnglish.setPage(abstractMysql.getMedlinePage());
+			thesisForEnglish.setRoll(abstractMysql.getVolume());
+			thesisForEnglish.setTitle(abstractMysql.getArticleTitle());
+			DateFormat df = new SimpleDateFormat("yyyy");
+			if(abstractMysql.getMedlineDate()!=null){
+				String formatYear = df.format(abstractMysql.getMedlineDate());
+				thesisForEnglish.setYear(formatYear);
+				//查询文献当年的影响因子
+				List<String> allIf = thesisForEnglishMapper.selectIfByJournalId(journalId);
+				if(allIf!=null && allIf.size()>0){
+					String[] split1 = allIf.toString().split(";");
+					for (String ifAndYear:split1) {
+						if(ifAndYear.contains(formatYear)){
+							thesisForEnglish.setImpactFactor(ifAndYear.substring(ifAndYear.indexOf(":")+1));
+						}
+					}
+				}
+			}
+			//根据期刊id查询jcr分区
+			List<String> jcrList = thesisForEnglishMapper.selectJcrByJournalId(journalId);
+			if(jcrList!=null && jcrList.size()>0){
+				String jcr = CleanSpecialSymbolUtil.cleanSpecialSymbol(jcrList.toString(),regEx);
+				thesisForEnglish.setJcrPartition(jcr);
+			}
+			//根据期刊id查询学科
+			List<String> subjectList = thesisForEnglishMapper.selectSubjectByJournalId(journalId);
+			if(subjectList!=null && subjectList.size()>0){
+				String subject = CleanSpecialSymbolUtil.cleanSpecialSymbol(subjectList.toString(),regEx);
+				thesisForEnglish.setSubject(subject);
+			}
+			//根据单位id查询所属地区
+			String companyIds = abstractMysql.getTatisticsAbstractsBlongToHospitalName();
+			if(StringUtils.isNotBlank(companyIds)){
+				companyIds = CleanSpecialSymbolUtil.cleanSpecialSymbol(companyIds,regEx);
+				thesisForEnglish.setAuthorCompanyId(companyIds);
+				String[] split = companyIds.split(",");
+				String area = "";
+				for (String companyId:split) {
+					List<String> areaList = thesisForEnglishMapper.selectAreaByCompanyId(companyId);
+					if(areaList!=null && areaList.size()>0){
+						area += areaList.get(0)+";";
+					}
+				}
+				if(StringUtils.isNotBlank(area)){
+					thesisForEnglish.setArea(area.substring(0,area.length()-1));
+				}
+
+			}
+			thesisForEnglish.setAuthorsAddress(abstractMysql.getAbstractId());
+			thesisForEnglish.setConfirmStatus("2");
+			thesisForEnglish.setStatus("1");
+			thesisForEnglishMapper.insert(thesisForEnglish);
+		}
+	}
+
+	/**
+	 *sci论文
+	 	数量
+	 		插入单位top20
+	 */
+	@Override
+	public void insertCompanyBeforeTwentieth(){
+		TAreaAndCompanyExample example = new TAreaAndCompanyExample();
+		List<TAreaAndCompany> areaAndCompanyList = areaAndCompanyMapper.selectByExample(example);
+		for (TAreaAndCompany areaAndCompany:areaAndCompanyList) {
+			TThesisForEnglishExample thesisForEnglishExample = new TThesisForEnglishExample();
+			thesisForEnglishExample.createCriteria().andAuthorCompanyIdLike("%"+areaAndCompany.getCompanyId()+"%");
+			int count = thesisForEnglishMapper.countByExample(thesisForEnglishExample);
+			areaAndCompany.setThesisForEnglishNum(count);
+			System.out.println(areaAndCompany);
+			areaAndCompanyMapper.updateByPrimaryKey(areaAndCompany);
+		}
+	}
+	/**
+	 *sci论文
+		 数量
+	 		查询单位top20
+	 */
+	@Override
+	public List<TAreaAndCompany> selectBeforeTwentieth(){
+		return areaAndCompanyMapper.selectEnglishBeforeX(20);
+	}
+
+
+	/**
+	 * 插入学科前20的数据
+	 */
+	@Override
+	public void insertSujectBeforeTwentieth(){
+		List<Count> list = thesisForEnglishMapper.selectSujectBeforeTwentieth();
+		int i = 1;
+		for (Count count:list) {
+			TCountTopSubject countTopSubject = new TCountTopSubject();
+			countTopSubject.setCount(count.getCount());
+			countTopSubject.setSubject(count.getArea());
+			countTopSubject.setTopNum(i);
+			countTopSubject.setType("外文");
+			thesisForEnglishMapper.insertSujectBeforeTwentieth(countTopSubject);
+			i++;
+		}
+	}
+	/**
+	 *sci论文
+	 数量
+	 学科top20
+	 */
+	@Override
+	public List<TCountTopSubject>  selectSujectBeforeTwentieth(){
+		return thesisForEnglishMapper.selectSujectTopTwentieth();
+	}
+
+	/**
+	 *sci论文
+	 	数量
+	 		关键词、热词研究top20
+	 */
+	@Override
+	public void insertKeywordsBeforeTwentieth(){
+		Map<String ,Integer> map = new HashMap<String ,Integer>();
+		TThesisForEnglishExample example = new TThesisForEnglishExample();
+		example.createCriteria().andKeywordsIsNotNull();
+		List<TThesisForEnglish> thesisForEnglishList = thesisForEnglishMapper.selectByExample(example);
+		for (TThesisForEnglish thesisForEnglish:thesisForEnglishList) {
+			String[] split = thesisForEnglish.getKeywords().split(",");
+			for (String keyword: split ) {
+				if(map.get(keyword)==null){
+					map.put(keyword,1);
+				}else{
+					map.put(keyword,map.get(keyword)+1);
+				}
+			}
+		}
+
+		Map<String, Integer> stringIntegerMap = sortDescend(map);
+		int i = 1;
+		for(Map.Entry<String, Integer> entry : stringIntegerMap.entrySet()){
+			TCountTopKeywords countTopKeywords = new TCountTopKeywords();
+			countTopKeywords.setKeywords(entry.getKey());
+			countTopKeywords.setCount(entry.getValue());
+			countTopKeywords.setTopNum(i);
+			countTopKeywords.setType("外文");
+			thesisForEnglishMapper.insertKeywordsBeforeTwentieth(countTopKeywords);
+			i++;
+		}
+	}
+	/**
+	 *sci论文
+	 数量
+	 关键词、热词研究top20
+	 */
+	@Override
+	public List<TCountTopKeywords> selectKeywordsBeforeTwentieth(){
+		return thesisForEnglishMapper.selectKeywordsBeforeTwentieth("外文","浙江省");
+	}
+	/**
+	 * 排序
+	 * @param map
+	 * @param <K>
+	 * @param <V>
+	 * @return
+	 */
+	public static <K,V extends Comparable<? super V>> Map<K,V> sortDescend(Map<K,V> map){
+		List<Map.Entry<K,V>> list = new ArrayList<>(map.entrySet());
+		Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
+			@Override
+			public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
+				int compare = (o1.getValue()).compareTo(o2.getValue());
+				return -compare;
+			}
+		});
+		//返回前20的
+		int i = 0;
+		Map<K,V> returnMap = new LinkedHashMap<K,V>();
+		for(Map.Entry<K,V> entry :list){
+			if(i==20){
+				break;
+			}
+			returnMap.put(entry.getKey(),entry.getValue());
+			i++;
+		}
+
+		return returnMap;
+	}
+
+	/**
+	 *sci论文
+	 *	if（影响因子总和）
+	 *		单位top20
+	 */
+	@Override
+	public void insertIfCompanyBeforeTwentieth() {
+		Map<String ,Double> map = new HashMap<String ,Double>();
+		TAreaAndCompanyExample example = new TAreaAndCompanyExample();
+		List<TAreaAndCompany> areaAndCompanyList = areaAndCompanyMapper.selectByExample(example);
+		for (TAreaAndCompany areaAndCompany : areaAndCompanyList) {
+			Object ifSum = thesisForEnglishMapper.selectIfByCompanyId("%" + areaAndCompany.getCompanyId() + "%");
+			if(ifSum!=null){
+				System.out.println(ifSum);
+				map.put(areaAndCompany.getCompany(),Double.parseDouble(ifSum.toString()));
+			}
+
+		}
+		Map<String, Double> stringDoubleMap = sortDescend(map);
+		for (Map.Entry<String, Double> entry : stringDoubleMap.entrySet()){
+			TCountTopIf countTopIf = new TCountTopIf();
+			countTopIf.setCompany(entry.getKey());
+			countTopIf.setImpactFactorSum(entry.getValue().toString());
+			countTopIf.setType("1");
+			thesisForEnglishMapper.insertCountImpactFactor(countTopIf);
+		}
+	}
+	@Override
+	public List<TCountTopIf> selectIfCompanyBeforeTwentieth(){
+		return thesisForEnglishMapper.selectCountImpactFactor("1");
+	}
+
+	/**
+	 *sci论文
+	 *	if（影响因子总和）
+	 *		插入学科top20
+	 */
+	@Override
+	public void insertIfSubjectBeforeTwentieth(){
+		List<Count> countList = thesisForEnglishMapper.selectIfSubjectBeforeTwentieth();
+		for (Count count:countList) {
+			TCountTopIf countTopIf = new TCountTopIf();
+			countTopIf.setImpactFactorSum(count.getCount().toString());
+			countTopIf.setSubject(count.getArea());
+			countTopIf.setType("2");
+			thesisForEnglishMapper.insertCountImpactFactor(countTopIf);
+		}
+	}
+	/**
+	 *sci论文
+	 *	if（影响因子总和）
+	 *		查询学科top20
+	 */
+	@Override
+	public List<TCountTopIf> selectIfSubjectBeforeTwentieth(){
+		return thesisForEnglishMapper.selectCountImpactFactor("2");
+	}
+	/**
+	 *sci论文
+	 *	论文top20（影响因子最高的、单个、附带这篇文章的单位）
+	 */
+	@Override
+	public List<TCountTopIf> selectIfThesisBeforeTwentieth(){
+		return thesisForEnglishMapper.selectCountImpactFactor("3");
+	}
+
+	/**
+	 *sci论文
+	 *	地区
+	 *		区域研究热词（top20，每个地区的）
+	 */
+	@Override
+	public void insertKeywordsBeforeTwentiethInEachArea(){
+		Map<String,Map> returnAreaMap = new HashMap();
+		for (Area area:Area.values()) {
+			Map<String ,Integer> map = new HashMap<String ,Integer>();
+			TThesisForEnglishExample example = new TThesisForEnglishExample();
+			TThesisForEnglishExample.Criteria criteria = example.createCriteria();
+			criteria.andKeywordsIsNotNull();
+			criteria.andAreaLike("%"+area.getMsg()+"%");
+			List<TThesisForEnglish> thesisForEnglishList = thesisForEnglishMapper.selectByExample(example);
+			for (TThesisForEnglish thesisForEnglish:thesisForEnglishList) {
+				String[] split = thesisForEnglish.getKeywords().split(",");
+				for (String keyword: split ) {
+					if(map.get(keyword)==null){
+						map.put(keyword,1);
+					}else{
+						map.put(keyword,map.get(keyword)+1);
+					}
+				}
+			}
+			Map<String, Integer> areaMap = sortDescend(map);
+			int i = 1;
+			for(Map.Entry<String, Integer> entry : areaMap.entrySet()){
+				TCountTopKeywords countTopKeywords = new TCountTopKeywords();
+				countTopKeywords.setKeywords(entry.getKey());
+				countTopKeywords.setCount(entry.getValue());
+				countTopKeywords.setTopNum(i);
+				countTopKeywords.setType("外文");
+				countTopKeywords.setArea(area.getMsg());
+				thesisForEnglishMapper.insertKeywordsBeforeTwentieth(countTopKeywords);
+				i++;
+			}
+		}
+	}
+	@Override
+	public HashMap selectKeywordsBeforeTwentiethInEachArea(){
+		HashMap map = new HashMap();
+		for (Area area:Area.values()) {
+			List<TCountTopKeywords> keywordsList = thesisForEnglishMapper.selectKeywordsBeforeTwentieth("外文", area.getMsg());
+			map.put(area.getMsg(),keywordsList);
+		}
+		return map;
+	}
+	/**
+	 *sci论文
+	 *	地区
+	 *		区域单位排名
+	 */
+	@Override
+	public List<TAreaAndCompany> selectBeforeTwentiethInEachArea(){
+		return areaAndCompanyMapper.selectEnglishBeforeTwentiethInEachArea();
+	}
+	/**
+	 * 清理jcr分区数据
+	 */
+	@Override
+	public void cleanJcr(){
+		String regEx="[\\[\\] ]";
+		TThesisForEnglishExample example = new TThesisForEnglishExample();
+		TThesisForEnglishExample.Criteria criteria = example.createCriteria();
+		criteria.andJcrPartitionIsNotNull();
+		List<TThesisForEnglish> thesisForEnglishList = thesisForEnglishMapper.selectByExample(example);
+		for (TThesisForEnglish thesisForEnglish:thesisForEnglishList) {
+			String[] split = thesisForEnglish.getJcrPartition().split(",");
+			Set<String> set = new HashSet();
+			if(split != null && split.length>0){
+				for (String jcrp:split) {
+					set.add(jcrp);
+				}
+			}
+			String jcr = CleanSpecialSymbolUtil.cleanSpecialSymbol(set.toString(), regEx);
+			thesisForEnglish.setJcrPartition(jcr);
+			thesisForEnglishMapper.updateByPrimaryKey(thesisForEnglish);
+			//System.out.println(thesisForEnglish);
+		}
+	}
+	/**
+	 *sci论文
+	 *	jcr分区
+	 *		浙江省论文jcr分区分布(饼状图，各分区的数量)
+	 */
+	public List<TCountTopJcr> selectJcrDistribution(){
+		return thesisForEnglishMapper.selectJcrDistribution("1");
+	}
+
+	/**
+	 *sci论文
+	 *	jcr分区
+	 *		各地区jcr分区分布(饼状图，杭州市各分区的数量)
+	 */
+
+	/**
+	 *sci论文
+	 *	jcr分区
+	 *		一区单位top10
+	 */
+
+	/**
+	 *sci论文
+	 *	jcr分区
+	 *		二区单位top10
+	 */
+
+	/**
+	 *sci论文
+	 *	jcr分区
+	 *		三区单位top10
+	 */
+
+	/**
+	 *sci论文
+	 *	jcr分区
+	 *		四区单位top10
+	 */
+
+	/**
+	 *sci论文
+	 	期刊发文排名top20（期刊发表文献数量前20）
+	 */
+
+	/**
+	 *sci论文
+	 *	top10作者合作关系网
+	 */
+
+	/**
+	 *sci论文
+	 *	top10单位合作关系网
+	 */
 }

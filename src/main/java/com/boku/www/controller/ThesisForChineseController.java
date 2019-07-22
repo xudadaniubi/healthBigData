@@ -1,15 +1,21 @@
 package com.boku.www.controller;
 import java.util.List;
+import java.util.Map;
 
+import com.boku.www.pojo.TAreaAndCompany;
+import com.boku.www.pojo.TCountTopKeywords;
+import com.boku.www.pojo.TCountTopSubject;
 import com.boku.www.pojo.TThesisForChinese;
 import com.boku.www.service.ThesisForChineseService;
-import com.boku.www.utils.Count;
-import com.boku.www.utils.CurrentUser;
-import com.boku.www.utils.PageResult;
-import com.boku.www.utils.Result;
+import com.boku.www.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,6 +26,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/thesisForChinese")
 @CrossOrigin//解决跨域问题
+@Configurable
+//开启计划任务支持
+@EnableScheduling
+//多个任务同时运行是需要添加这个类注解
+@EnableAsync
 public class ThesisForChineseController {
 	private static Logger logger = LoggerFactory.getLogger(ThesisForChineseController.class);
 	@Autowired
@@ -174,7 +185,7 @@ public class ThesisForChineseController {
 		}
 	}
 	/**
-	 * 统计各地区论文的数量
+	 * 添加单位id
 	 */
 	@RequestMapping("/addCommpanyId")
 	public void addCommpanyId(){
@@ -185,4 +196,211 @@ public class ThesisForChineseController {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * 插入各单位中文文献的数量
+	 * 	做定时更新
+	 * 	当文献数据新增和删除时，相应的加减，详见add和delete方法
+	 */
+	@RequestMapping("/insertCompanyChesisNum")
+	@Async
+	//计划任务声明
+	@Scheduled(cron="0 0 3 ? * SUN") //每周日凌晨3点执行一次
+	public void insertCompanyChesisNum(){
+		try {
+			thesisForChineseService.insertCompanyChesisNum();
+		} catch (Exception e) {
+			logger.info("查询失败");
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 查询浙江省内文献数量排名前20的单位
+	 */
+	@RequestMapping("/selectBeforeTwentieth")
+	public List<TAreaAndCompany> selectBeforeTwentieth(){
+		try {
+			return thesisForChineseService.selectBeforeTwentieth();
+		} catch (Exception e) {
+			logger.info("查询失败");
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 *
+	 *查询各市单位文献量前20的
+	 */
+	@RequestMapping("/selectBeforeTwentiethInEachArea")
+	public List<TAreaAndCompany> selectBeforeTwentiethInEachArea(){
+		try {
+			return thesisForChineseService.selectBeforeTwentiethInEachArea();
+		} catch (Exception e) {
+			logger.info("查询失败");
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 *查询关键词出现在前20的热词
+	 */
+	@RequestMapping("/selectKeywordsBeforeTwentieth")
+	public List<TCountTopKeywords>selectKeywordsBeforeTwentieth(){
+		try {
+			return thesisForChineseService.selectKeywordsBeforeTwentieth();
+		} catch (Exception e) {
+			logger.info("查询失败");
+			e.printStackTrace();
+			return null;
+		}
+	}
+	@RequestMapping("/insertKeywordsBeforeTwentieth")
+	public void insertKeywordsBeforeTwentieth(){
+		try {
+			thesisForChineseService.insertKeywordsBeforeTwentieth();
+		} catch (Exception e) {
+			logger.info("插入失败");
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 查询各地级市关键词出现前20的
+	 */
+	@RequestMapping("/insertKeywordsBeforeTwentiethInEachArea")
+	public void insertKeywordsBeforeTwentiethInEachArea() {
+		try {
+			thesisForChineseService.insertKeywordsBeforeTwentiethInEachArea();
+		} catch (Exception e) {
+			logger.info("插入失败");
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 查询各地级市关键词出现前20的
+	 */
+	@RequestMapping("/selectKeywordsBeforeTwentiethInEachArea")
+	public Map<String,List<TCountTopKeywords>> selectKeywordsBeforeTwentiethInEachArea() {
+		try {
+			return thesisForChineseService.selectKeywordsBeforeTwentiethInEachArea();
+		} catch (Exception e) {
+			logger.info("查询失败");
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * 第一作者top20（如杭州市内单位排名）
+	 */
+	@RequestMapping("/selectFirstAuthorBeforeTwentiethInEachArea")
+	public Map<String,List> selectFirstAuthorBeforeTwentiethInEachArea() {
+		try {
+			return thesisForChineseService.selectFirstAuthorBeforeTwentiethInEachArea();
+		} catch (Exception e) {
+			logger.info("查询失败");
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * 学科top20（R6）
+	 */
+	@RequestMapping("/insertSujectBeforeTwentieth")
+	public void insertSujectBeforeTwentieth() {
+		try {
+			thesisForChineseService.insertSujectBeforeTwentieth();
+		} catch (Exception e) {
+			logger.info("插入失败");
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 学科top20（R6）
+	 */
+	@RequestMapping("/selectSujectBeforeTwentieth")
+	public List<TCountTopSubject> selectSujectBeforeTwentieth() {
+		try {
+			return thesisForChineseService.selectSujectBeforeTwentieth();
+		} catch (Exception e) {
+			logger.info("查询失败");
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * 核心期刊学科top20（R6）
+	 */
+	@RequestMapping("/selectSujectBeforeTwentiethInCorePerio")
+	public List<Count> selectSujectBeforeTwentiethInCorePerio() {
+		try {
+			return thesisForChineseService.selectSujectBeforeTwentiethInCorePerio();
+		} catch (Exception e) {
+			logger.info("查询失败");
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * 核心期刊学科top20（R6）
+	 */
+	@RequestMapping("/selectBeforeTwentiethInCorePerio")
+	public List<Count> selectBeforeTwentiethInCorePerio() {
+		try {
+			return thesisForChineseService.selectBeforeTwentiethInCorePerio();
+		} catch (Exception e) {
+			logger.info("查询失败");
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * 插入作者合作关系网
+	 */
+	@RequestMapping("/insertAuthorNetwork")
+	public void insertAuthorNetwork() {
+		try {
+			thesisForChineseService.insertAuthorNetwork();
+		} catch (Exception e) {
+			logger.info("插入失败");
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 查询作者合作关系网
+	 */
+	@RequestMapping("/selectAuthorNetwork")
+	public CountAuthorNetwork selectAuthorNetwork() {
+		try {
+			return thesisForChineseService.selectAuthorNetwork();
+		} catch (Exception e) {
+			logger.info("查询失败");
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * 插入单位合作关系网
+	 */
+	@RequestMapping("/insertCompanyNetwork")
+	public void insertCompanyNetwork() {
+		try {
+			thesisForChineseService.insertCompanyNetwork();
+		} catch (Exception e) {
+			logger.info("插入失败");
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 查询单位合作关系网
+	 */
+	@RequestMapping("/selectCompanyNetwork")
+	public CountCompanyNetwork selectCompanyNetwork() {
+		try {
+			return thesisForChineseService.selectCompanyNetwork();
+		} catch (Exception e) {
+			logger.info("查询失败");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+
 }

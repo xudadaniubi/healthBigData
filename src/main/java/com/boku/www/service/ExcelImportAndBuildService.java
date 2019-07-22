@@ -36,4 +36,6 @@ public interface ExcelImportAndBuildService {
 	public String importAreaAndCompanyExcelToUser(File file, String fileName) throws Exception;
 
 	public String importUser(File file, String fileName) throws Exception;
+
+	public String repeatUserCompany(File file, String fileName) throws Exception;
 }

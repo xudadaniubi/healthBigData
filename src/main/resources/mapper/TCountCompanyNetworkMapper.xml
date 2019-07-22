@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.boku.www.mapper.TCountCompanyNetworkMapper" >
+  <resultMap id="BaseResultMap1" type="com.boku.www.pojo.TCountCompanyNetwork1" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="company_post_num" property="companyPostNum" jdbcType="INTEGER" />
+    <result column="cooperator" property="cooperator" jdbcType="VARCHAR" />
+    <result column="cooperation_num" property="cooperationNum" jdbcType="INTEGER" />
+  </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.boku.www.pojo.TCountCompanyNetwork2" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="cooperator_id" property="cooperatorId" jdbcType="INTEGER" />
+        <result column="company" property="company" jdbcType="VARCHAR" />
+        <result column="cooperator" property="cooperator" jdbcType="VARCHAR" />
+        <result column="cooperation_num" property="cooperationNum" jdbcType="INTEGER" />
+    </resultMap>
+
+  <sql id="Base_Column_List1" >
+    id, company, company_post_num, cooperator, cooperation_num
+  </sql>
+
+    <sql id="Base_Column_List2" >
+        id, cooperator_id, company, cooperator, cooperation_num
+    </sql>
+
+  <insert id="insert1" parameterType="com.boku.www.pojo.TCountCompanyNetwork1" >
+    insert into t_count_company_network1 (id, company, company_post_num, 
+      cooperator, cooperation_num)
+    values (#{id,jdbcType=INTEGER}, #{company,jdbcType=VARCHAR}, #{companyPostNum,jdbcType=INTEGER}, 
+      #{cooperator,jdbcType=VARCHAR}, #{cooperationNum,jdbcType=INTEGER})
+  </insert>
+
+    <insert id="insert2" parameterType="com.boku.www.pojo.TCountCompanyNetwork2" >
+        insert into t_count_company_network2 (id, cooperator_id, company,
+          cooperator, cooperation_num)
+        values (#{id,jdbcType=INTEGER}, #{cooperatorId,jdbcType=INTEGER}, #{company,jdbcType=VARCHAR},
+          #{cooperator,jdbcType=VARCHAR}, #{cooperationNum,jdbcType=INTEGER})
+    </insert>
+
+    <select id="selectByAll" resultMap="BaseResultMap1">
+        SELECT Base_Column_List1 FROM t_count_company_network1
+    </select>
+
+    <select id="selectByForeignKey" resultMap="BaseResultMap2">
+        SELECT Base_Column_List2 FROM t_count_company_network2 WHERE cooperatorId = #{id}
+    </select>
+
+</mapper>

@@ -1,4 +1,5 @@
 package com.boku.www.pojo.system;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -17,6 +18,7 @@ import java.util.List;
  * @version V1.0   
  */
 @Data
+//@JsonFormat(pattern = "yyyy-MM-dd", locale = "zh", timezone = "GMT+8")
 public class UUser  implements Serializable {
 	 /** serialVersionUID. */
  	private static final long serialVersionUID =1493049839167L;
@@ -25,12 +27,13 @@ public class UUser  implements Serializable {
 	private String username;//用户昵称
 	private String email;//邮箱|登录帐号
 	private String pswd;//密码
-		private Date createTime;//创建时间
+	private Date createTime;//创建时间
 	private Date lastLoginTime;//最后登录时间
 	private String status;//1:有效，0:禁止登录
 	private String company;//所属单位
 	private String companyId;//所属单位id
 	private String area;//所属地区
+	private String district;//所属区县
 
 	private List<String> roleStrlist;
 	private List<String> perminsStrlist;

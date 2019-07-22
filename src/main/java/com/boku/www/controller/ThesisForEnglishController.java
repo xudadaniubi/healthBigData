@@ -1,7 +1,8 @@
 package com.boku.www.controller;
+import java.util.HashMap;
 import java.util.List;
 
-import com.boku.www.pojo.TThesisForEnglish;
+import com.boku.www.pojo.*;
 import com.boku.www.utils.Count;
 import com.boku.www.utils.CurrentUser;
 import com.boku.www.utils.PageResult;
@@ -170,4 +171,265 @@ public class ThesisForEnglishController {
 			return null;
 		}
 	}
+	/**
+	 * 插入论文的数据
+	 */
+	@RequestMapping("/insertDataFromSolr")
+	public void insertDataFromSolr(){
+		try {
+			thesisForEnglishService.insertDataFromSolr();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"插入英文论文的数据失败,Exception:"+e);
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 *sci论文
+	 数量
+	 插入单位top20
+	 */
+	@RequestMapping("/insertCompanyBeforeTwentieth")
+	public void insertCompanyBeforeTwentieth(){
+		try {
+			thesisForEnglishService.insertCompanyBeforeTwentieth();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"插入英文论文单位top20的数据失败,Exception:"+e);
+			e.printStackTrace();
+		}
+	}
+	/**
+	 *sci论文
+	 数量
+	 查询单位top20
+	 */
+	@RequestMapping("/selectBeforeTwentieth")
+	public List<TAreaAndCompany> selectBeforeTwentieth(){
+		try {
+			return thesisForEnglishService.selectBeforeTwentieth();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询英文论文单位top20的数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 *sci论文
+	 数量
+	 插入学科top20
+	 */
+	@RequestMapping("/insertSujectBeforeTwentieth")
+	public void insertSujectBeforeTwentieth(){
+		try {
+			thesisForEnglishService.insertSujectBeforeTwentieth();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"插入英文论文学科top20的数据失败,Exception:"+e);
+			e.printStackTrace();
+		}
+	}
+	/**
+	 *sci论文
+	 数量
+	 查询学科top20
+	 */
+	@RequestMapping("/selectSujectBeforeTwentieth")
+	public List<TCountTopSubject>  selectSujectBeforeTwentieth(){
+		try {
+			return thesisForEnglishService.selectSujectBeforeTwentieth();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询英文论文学科top20的数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 *sci论文
+	 数量
+	 插入关键词top20
+	 */
+	@RequestMapping("/insertKeywordsBeforeTwentieth")
+	public void  insertKeywordsBeforeTwentieth(){
+		try {
+			thesisForEnglishService.insertKeywordsBeforeTwentieth();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"插入英文论文关键词top20的数据失败,Exception:"+e);
+			e.printStackTrace();
+		}
+	}
+	/**
+	 *sci论文
+	 数量
+	 查询关键词top20
+	 */
+	@RequestMapping("/selectKeywordsBeforeTwentieth")
+	public List<TCountTopKeywords>  selectKeywordsBeforeTwentieth(){
+		try {
+			return thesisForEnglishService.selectKeywordsBeforeTwentieth();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询英文论文关键词top20的数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 *sci论文
+	 *	if（影响因子总和）
+	 *		插入单位top20
+	 */
+	@RequestMapping("/insertIfCompanyBeforeTwentieth")
+	public void insertIfCompanyBeforeTwentieth(){
+		try {
+			thesisForEnglishService.insertIfCompanyBeforeTwentieth();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"插入英文论文单位影响因子top20的数据失败,Exception:"+e);
+			e.printStackTrace();
+		}
+	}
+	/**
+	 *sci论文
+	 *	if（影响因子总和）
+	 *		查询单位top20
+	 */
+	@RequestMapping("/selectIfCompanyBeforeTwentieth")
+	public List<TCountTopIf> selectIfCompanyBeforeTwentieth(){
+		try {
+			return thesisForEnglishService.selectIfCompanyBeforeTwentieth();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询英文论文单位影响因子top20的数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 *sci论文
+	 *	if（影响因子总和）
+	 *		学科top20
+	 */
+	@RequestMapping("/insertIfSubjectBeforeTwentieth")
+	public void insertIfSubjectBeforeTwentieth(){
+		try {
+			thesisForEnglishService.insertIfSubjectBeforeTwentieth();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"插入英文论文学科影响因子top20的数据失败,Exception:"+e);
+			e.printStackTrace();
+		}
+	}
+	@RequestMapping("/selectIfSubjectBeforeTwentieth")
+	public List<TCountTopIf> selectIfSubjectBeforeTwentieth(){
+		try {
+			return thesisForEnglishService.selectIfSubjectBeforeTwentieth();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询英文论文影响学科因子top20的数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 *sci论文
+	 *	论文top20（影响因子最高的、单个、附带这篇文章的单位）
+	 */
+	@RequestMapping("/selectIfThesisBeforeTwentieth")
+	public List<TCountTopIf> selectIfThesisBeforeTwentieth() {
+		try {
+			return thesisForEnglishService.selectIfThesisBeforeTwentieth();
+		} catch (Exception e) {
+			logger.info("用户" + CurrentUser.returnCurrentUser() + "查询英文单篇论文影响因子top20的数据失败,Exception:" + e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 *sci论文
+	 *	地区
+	 *		区域研究热词（top20，每个地区的）
+	 */
+	@RequestMapping("/insertKeywordsBeforeTwentiethInEachArea")
+	public void insertKeywordsBeforeTwentiethInEachArea(){
+		try {
+			thesisForEnglishService.insertKeywordsBeforeTwentiethInEachArea();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"插入英文区域研究热词top20的数据失败,Exception:"+e);
+			e.printStackTrace();
+		}
+	}
+	@RequestMapping("/selectKeywordsBeforeTwentiethInEachArea")
+	public HashMap selectKeywordsBeforeTwentiethInEachArea(){
+		try {
+			return thesisForEnglishService.selectKeywordsBeforeTwentiethInEachArea();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询英文单篇论文影响因子top20的数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 *sci论文
+	 *	地区
+	 *		区域单位排名
+	 */
+	@RequestMapping("/selectBeforeTwentiethInEachArea")
+	public List<TAreaAndCompany> selectBeforeTwentiethInEachArea(){
+		try {
+			return thesisForEnglishService.selectBeforeTwentiethInEachArea();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询英文区域单位排名top20的数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 *sci论文
+	 *	jcr分区
+	 *		浙江省论文jcr分区分布(饼状图，各分区的数量)
+	 */
+
+	/**
+	 *sci论文
+	 *	jcr分区
+	 *		各地区jcr分区分布(饼状图，杭州市各分区的数量)
+	 */
+
+	/**
+	 *sci论文
+	 *	jcr分区
+	 *		一区单位top10
+	 */
+
+	/**
+	 *sci论文
+	 *	jcr分区
+	 *		二区单位top10
+	 */
+
+	/**
+	 *sci论文
+	 *	jcr分区
+	 *		三区单位top10
+	 */
+
+	/**
+	 *sci论文
+	 *	jcr分区
+	 *		四区单位top10
+	 */
+
+	/**
+	 *sci论文
+	 期刊发文排名top20（期刊发表文献数量前20）
+	 */
+
+	/**
+	 *sci论文
+	 *	top10作者合作关系网
+	 */
+
+	/**
+	 *sci论文
+	 *	top10单位合作关系网
+	 */
 }

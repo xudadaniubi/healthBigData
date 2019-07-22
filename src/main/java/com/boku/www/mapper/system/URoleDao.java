@@ -14,4 +14,6 @@ public interface URoleDao {
 	 * @param obj
 	 */
 	public List<URole> findRoleByUid(Integer obj);
+
+
 }
