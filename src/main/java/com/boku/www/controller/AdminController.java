@@ -7,6 +7,7 @@ import com.boku.www.service.system.RoleService;
 import com.boku.www.service.system.UserService;
 import com.boku.www.utils.PageResult;
 import com.boku.www.utils.Result;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
@@ -48,6 +49,17 @@ public class AdminController {
 	@ResponseBody
     public Map<String,Object> index(UUser user) {
 		Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+    	//校验验证码
+		//session中的验证码
+		/*String sessionCaptcha = (String) SecurityUtils.getSubject().getSession().getAttribute(CaptchaController.KEY_CAPTCHA);
+		System.out.println(sessionCaptcha);
+		System.out.println(user.getCaptcha());
+		if (null == user.getCaptcha() || !user.getCaptcha().equalsIgnoreCase(sessionCaptcha)) {
+			resultMap.put("status", 500);
+			resultMap.put("message", "验证码错误");
+			return resultMap;
+		}*/
+
     	if (user.getUsername() != null && user.getPswd() != null) {
         	//封装用户数据
             UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPswd(), "login");

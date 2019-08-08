@@ -10,11 +10,13 @@
  */
 package com.boku.www.utils;
 
+import com.boku.www.pojo.TCountCompanyNetwork1;
 import com.boku.www.pojo.TCountCompanyNetwork2;
 import lombok.Data;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -26,7 +28,11 @@ import java.util.Map;
  */
 @Data
 public class CountCompanyNetwork {
-	private List list;
-	private Map<Integer,List<TCountCompanyNetwork2>> map;
+	/*private List list;
+	private Map<Integer,List<TCountCompanyNetwork2>> map;*/
+	private List<TCountCompanyNetwork1> companyPostNum;
+	private List<String> allCompany;
+	private Set set;
+
 
 }

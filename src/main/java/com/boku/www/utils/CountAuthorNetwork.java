@@ -12,10 +12,12 @@ package com.boku.www.utils;
 
 import com.boku.www.pojo.TCountAuthorNetwork1;
 import com.boku.www.pojo.TCountAuthorNetwork2;
+import com.boku.www.pojo.TCountCompanyNetwork1;
 import lombok.Data;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -28,9 +30,13 @@ import java.util.Map;
 @Data
 public class CountAuthorNetwork {
 
-	private Map<String,List<TCountAuthorNetwork1>> firstMap;
+	/*private Map<String,List<TCountAuthorNetwork1>> firstMap;
 
-	private Map<Integer,List<TCountAuthorNetwork2>> secondMap;
+	private Map<Integer, List<TCountAuthorNetwork2>> secondMap;*/
+
+	private List<TCountAuthorNetwork1> authorPostNum;
+	private List<String> allAuthor;
+	private Set set;
 
 
 }

@@ -545,6 +545,22 @@
     <select id="selectFirstAuthorBeforeTwentiethInEachArea" resultMap="CountResultMap">
         SELECT first_author AS area, count(*) AS count FROM t_thesis_for_chinese WHERE area LIKE #{area} AND first_author IS NOT NULL  GROUP BY first_author ORDER BY count desc LIMIT 0,#{top};
     </select>
+    <insert id="insertFirstAuthorBeforeTwentiethInEachArea" parameterType="com.boku.www.pojo.TCountTopFirstAuthor" >
+        insert into t_count_top_first_author (id, count, area,
+        first_author)
+        values (#{id,jdbcType=INTEGER}, #{count,jdbcType=INTEGER}, #{area,jdbcType=VARCHAR},
+        #{firstAuthor,jdbcType=VARCHAR})
+    </insert>
+    <resultMap id="BaseResultMapFirstAuthorBeforeTwentiethInEachArea" type="com.boku.www.pojo.TCountTopFirstAuthor" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="count" property="count" jdbcType="INTEGER" />
+        <result column="area" property="area" jdbcType="VARCHAR" />
+        <result column="first_author" property="firstAuthor" jdbcType="VARCHAR" />
+    </resultMap>
+    <select id="selectFirstAuthorBeforeTwentiethInEachAreaByTable" resultMap="BaseResultMapFirstAuthorBeforeTwentiethInEachArea">
+        select * from t_count_top_first_author WHERE area = #{area};
+    </select>
+
     <!--学科top20（R6）-->
     <select id="selectSujectBeforeTwentieth" resultMap="CountResultMap">
         SELECT subject AS  area,count(*) AS count  FROM t_thesis_for_chinese WHERE `subject` IS NOT NULL GROUP BY subject ORDER BY count DESC LIMIT 0,20
@@ -587,10 +603,23 @@
     <select id="selectKeywordsBeforeTwentieth" resultMap="BaseResultMapTopKeywords">
         SELECT id, keywords, top_num,count, type,area FROM t_count_top_keywords WHERE  type = #{type} AND  area = #{area} ORDER BY count DESC  LIMIT 0,20
     </select>
-    <!--核心期刊发文单位top20
-    <select id="selectCompanyBeforeTwentiethInCorePerio">
-
-    </select>-->
+    <resultMap id="BaseResultMapCountTopCorePerio" type="com.boku.www.pojo.TCountTopCorePerio" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="company" property="company" jdbcType="VARCHAR" />
+        <result column="count" property="count" jdbcType="INTEGER" />
+        <result column="subject" property="subject" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+    </resultMap>
+    <!--核心期刊发文单位top20-->
+    <insert id="insertCountTopCorePerio" parameterType="com.boku.www.pojo.TCountTopCorePerio" >
+        insert into t_count_top_core_perio (id, company, count,
+        subject, type)
+        values (#{id,jdbcType=INTEGER}, #{company,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER},
+        #{subject,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR})
+    </insert>
+    <select id="selectBeforeTwentiethInCorePerioByType" resultMap="BaseResultMapCountTopCorePerio">
+        SELECT id, company, count, subject,type FROM t_count_top_core_perio WHERE type = #{type}
+    </select>
     <!--核心期刊发文学科top20-->
     <select id="selectSujectBeforeTwentiethInCorePerio" resultMap="CountResultMap">
        SELECT subject AS area ,count(*) count  FROM t_thesis_for_chinese WHERE core_perio IS NOT NULL AND `subject` IS NOT NULL GROUP BY subject ORDER BY count DESC LIMIT 0,20;
@@ -603,7 +632,7 @@
     <select id="selectAuthorByExample" resultType="string">
         SELECT author FROM t_thesis_for_chinese WHERE author LIKE #{author}
     </select>
-    <!--根据作者查询与之合作的所有作者-->
+    <!--根据作者查询与之合作的所有单位-->
     <select id="selectCompanyByExample" resultType="string">
         SELECT author_company FROM t_thesis_for_chinese WHERE author_company LIKE #{company}
     </select>

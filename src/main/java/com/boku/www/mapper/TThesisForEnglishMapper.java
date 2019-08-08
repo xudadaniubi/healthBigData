@@ -123,5 +123,58 @@ public interface TThesisForEnglishMapper {
 	 */
 	List<TCountTopJcr> selectJcrDistribution(String type);
 
+	/**
+	 * 统计各地级市jcr分区分布
+	 * @param jcr
+	 * @param area
+	 * @return
+	 */
+	int countJcrByArea(@Param("jcr") String jcr,@Param("area")String area);
 
+	/**
+	 * 插入jcr分区
+	 * @param countTopJcr
+	 * @return
+	 */
+	int insertJcr(TCountTopJcr countTopJcr);
+	/**
+	 * 查询jcr分区
+	 */
+	List selectJcrDistributionByJcr(@Param("type") String type,@Param("jcr")String jcr);
+
+	/**
+	 * 查询期刊发文前20的数据
+	 * @return
+	 */
+	List<Count> selectJournalTopTwentieth();
+
+	/**
+	 * 插入期刊发文前20的数据
+	 * @param countTopJournal
+	 * @return
+	 */
+	int insertJournalTopTwentieth(TCountTopJournal countTopJournal);
+
+	/**
+	 * 查询期刊发文前20的数据(存储在表格里的)
+	 * @param type
+	 * @return
+	 */
+	List<TCountTopJournal> selectJournalTopTwentiethByTable( String type);
+
+	/**
+	 * 查询各地区的所有作者
+	 * @param area
+	 * @return
+	 */
+	List<String> selectAllAuthorInEachArea(String area);
+
+	List<String> selectAuthorByExample(String area);
+
+	/**
+	 根据单位查询与之合作的所有单位
+	 */
+	List<String> selectCompanyByCompanyId(String companyId);
+
+	List<String> selectCompanyByCompany(String company);
 }

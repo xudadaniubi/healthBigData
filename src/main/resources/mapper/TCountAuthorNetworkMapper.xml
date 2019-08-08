@@ -48,4 +48,44 @@
     <select id="selectByForeignKey" resultMap="BaseResultMap2">
          SELECT <include refid="Base_Column_List2" /> FROM t_count_author_network2 WHERE cooperator_id = #{id}
     </select>
+
+    <insert id="insertEnglish1" parameterType="com.boku.www.pojo.TCountEnglishAuthorNetwork1" >
+        insert into t_count_english_author_network1 (id, area, author,
+        author_post_num, cooperator, cooperation_num
+        )
+        values (#{id,jdbcType=INTEGER}, #{area,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR},
+        #{authorPostNum,jdbcType=INTEGER}, #{cooperator,jdbcType=VARCHAR}, #{cooperationNum,jdbcType=INTEGER}
+        )
+    </insert>
+    <insert id="insertEnglish2" parameterType="com.boku.www.pojo.TCountEnglishAuthorNetwork2" >
+        insert into t_count_english_author_network2 (id, cooperator_id, author,
+        cooperator, cooperation_num)
+        values (#{id,jdbcType=INTEGER}, #{cooperatorId,jdbcType=INTEGER}, #{author,jdbcType=VARCHAR},
+        #{cooperator,jdbcType=VARCHAR}, #{cooperationNum,jdbcType=INTEGER})
+    </insert>
+
+
+
+    <select id="selectAllAuthor" resultType="string">
+        SELECT DISTINCT first_author FROM t_count_author_network1 UNION
+        SELECT DISTINCT cooperator FROM t_count_author_network1 UNION
+        SELECT DISTINCT cooperator FROM t_count_author_network2;
+    </select>
+    <resultMap id="BaseResultMap3" type="com.boku.www.utils.Relation" >
+
+        <result column="first_author" property="target" jdbcType="VARCHAR" />
+        <result column="author" property="target" jdbcType="VARCHAR" />
+        <result column="cooperator" property="source" jdbcType="VARCHAR" />
+        <result column="cooperation_num" property="cooperationNum" jdbcType="INTEGER" />
+    </resultMap>
+    <select id="selectAllCooperator1" resultMap="BaseResultMap3">
+        SELECT first_author,cooperator,cooperation_num FROM t_count_author_network1;
+    </select>
+    <select id="selectAllCooperator2" resultMap="BaseResultMap3">
+        SELECT author,cooperator,cooperation_num FROM t_count_author_network2;
+    </select>
+
+    <select id="selectAuthorPostNum" resultMap="BaseResultMap1">
+        SELECT DISTINCT area, first_author,first_author_post_num FROM t_count_author_network1
+    </select>
 </mapper>

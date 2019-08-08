@@ -305,17 +305,22 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 				rowNumber = row.getRowNum();
 				System.out.println(rowNumber+1);
 				//项目管理单位
-				projectData.setManagementCompany(row.getCell(0).getStringCellValue());
+				if(row.getCell(0)!=null) {
+					row.getCell(0).setCellType(Cell.CELL_TYPE_STRING);
+					projectData.setManagementCompany(row.getCell(0).getStringCellValue());
+				}
+
 				//项目级别
-				projectData.setProjectCategoryGrade(row.getCell(1).getStringCellValue());
-				//项目类别
-				if(titleRow.getCell(2).getStringCellValue().indexOf("项目类别")>=0){
-					if(row.getCell(2)!=null && row.getCell(2).getCellType()==row.getCell(2).CELL_TYPE_NUMERIC){
-						row.getCell(2).setCellType(Cell.CELL_TYPE_STRING);
-						projectData.setProjectCategory(row.getCell(2).getStringCellValue().trim());
-					}else if(row.getCell(2)!=null && row.getCell(2).getCellType()==row.getCell(2).CELL_TYPE_STRING){
-						projectData.setProjectCategory(row.getCell(2).getStringCellValue().trim());
-					}
+				if(row.getCell(1)!=null) {
+					row.getCell(1).setCellType(Cell.CELL_TYPE_STRING);
+					projectData.setProjectCategoryGrade(row.getCell(1).getStringCellValue());
+				}
+				//projectData.setProjectCategory(row.getCell(2).getStringCellValue());
+
+
+				if(row.getCell(2)!=null){
+					row.getCell(2).setCellType(Cell.CELL_TYPE_STRING);
+					projectData.setProjectCategory(row.getCell(2).getStringCellValue());
 					if (projectData.getProjectCategory() != null && projectData.getProjectCategory().length() > 0) {
 						//查询项目字典表里是否有修改的项目，如果有就不用重新添加新的项目，如果没有就新增新的项目类别
 						TProjectCategoryExample example = new TProjectCategoryExample();
@@ -333,38 +338,53 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 						}
 					}
 				}
+
+				//项目类别
+				if(titleRow.getCell(2).getStringCellValue().indexOf("project_category")>=0){
+					if(row.getCell(2)!=null && row.getCell(2).getCellType()==row.getCell(2).CELL_TYPE_NUMERIC){
+						row.getCell(2).setCellType(Cell.CELL_TYPE_STRING);
+						projectData.setProjectCategory(row.getCell(2).getStringCellValue().trim());
+					}else if(row.getCell(2)!=null && row.getCell(2).getCellType()==row.getCell(2).CELL_TYPE_STRING){
+						projectData.setProjectCategory(row.getCell(2).getStringCellValue().trim());
+					}
+
+				}
 				//一级学科分类
-				if(titleRow.getCell(3).getStringCellValue().indexOf("一级学科")>=0){
+				if(titleRow.getCell(3).getStringCellValue().indexOf("subject_name1")>=0){
 					if(row.getCell(3)!=null && row.getCell(3).getCellType()==row.getCell(3).CELL_TYPE_STRING){
 						projectData.setSubjectName1(row.getCell(3).getStringCellValue().trim());
 					}
 				}
 				//projectData.setSubjectName1(row.getCell(3).getStringCellValue());
 				//二级学科分类
-				if(titleRow.getCell(4).getStringCellValue().indexOf("二级学科")>=0){
+				if(titleRow.getCell(4).getStringCellValue().indexOf("subject_name2")>=0){
 					if(row.getCell(4)!=null && row.getCell(4).getCellType()==row.getCell(4).CELL_TYPE_STRING){
 						projectData.setSubjectName2(row.getCell(4).getStringCellValue().trim());
 					}
 				}
 				//projectData.setSubjectName2(row.getCell(4).getStringCellValue());
 				//项目名称
-				projectData.setProjectName(row.getCell(5).getStringCellValue());
+				if(row.getCell(5)!=null) {
+					row.getCell(5).setCellType(Cell.CELL_TYPE_STRING);
+					projectData.setProjectName(row.getCell(5).getStringCellValue());
+				}
+
 				//项目子类
 				//projectData.setProjectKidcat(row.getCell(6).getStringCellValue());
-				if(titleRow.getCell(6).getStringCellValue().indexOf("项目子类")>=0){
+				if(titleRow.getCell(6).getStringCellValue().indexOf("project_kidcat")>=0){
 					if(row.getCell(6)!=null && row.getCell(6).getCellType()==row.getCell(6).CELL_TYPE_STRING){
 						projectData.setProjectKidcat(row.getCell(6).getStringCellValue().trim());
 					}
 				}
 				//类目
-				if(titleRow.getCell(7).getStringCellValue().indexOf("类目")>=0){
+				if(titleRow.getCell(7).getStringCellValue().indexOf("category")>=0){
 					if(row.getCell(7)!=null && row.getCell(7).getCellType()==row.getCell(7).CELL_TYPE_STRING){
 						projectData.setCategory(row.getCell(7).getStringCellValue().trim());
 					}
 				}
 				//projectData.setCategory(row.getCell(7).getStringCellValue());
 				//立项时间
-				if(titleRow.getCell(8).getStringCellValue().indexOf("立项时间")>=0){
+				if(titleRow.getCell(8).getStringCellValue().indexOf("project_start_time")>=0){
 					if(row.getCell(8)!=null && row.getCell(8).getCellType()==row.getCell(8).CELL_TYPE_NUMERIC){
 						row.getCell(8).setCellType(Cell.CELL_TYPE_STRING);
 						projectData.setProjectStartTime(row.getCell(8).getStringCellValue().trim());
@@ -373,7 +393,7 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 					}
 				}
 				//结题时间
-				if(titleRow.getCell(9).getStringCellValue().indexOf("结题时间")>=0){
+				if(titleRow.getCell(9).getStringCellValue().indexOf("project_end_time")>=0){
 					if(row.getCell(9)!=null && row.getCell(9).getCellType()==row.getCell(9).CELL_TYPE_NUMERIC){
 						row.getCell(9).setCellType(Cell.CELL_TYPE_STRING);
 						projectData.setProjectEndTime(row.getCell(9).getStringCellValue().trim());
@@ -382,10 +402,20 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 					}
 				}
 				//所在地区
-				projectData.setArea(row.getCell(10).getStringCellValue());
+				if(row.getCell(10)!=null) {
+					row.getCell(10).setCellType(Cell.CELL_TYPE_STRING);
+					projectData.setArea(row.getCell(10).getStringCellValue());
+				}
+
 				//第一承办单位
-				String allOrganizerCompany = row.getCell(11).getStringCellValue();
-				String[] organizerCompanys = allOrganizerCompany.split(",");
+				if(row.getCell(11)!=null) {
+					row.getCell(11).setCellType(Cell.CELL_TYPE_STRING);
+					String allOrganizerCompany = row.getCell(11).getStringCellValue();
+					//所有承办单位
+					projectData.setOrganizer(allOrganizerCompany);
+				}
+
+				/*String[] organizerCompanys = allOrganizerCompany.split(",");
 				//将第一个承办单位存到实体中
 				projectData.setFirstOrganizerCompany(organizerCompanys[0]);
 				//其他承办单位
@@ -400,15 +430,31 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 						}
 					}
 					projectData.setOtherOrganizerCompany(otherOrganizerCompanys);
+				}*/
+
+				if(row.getCell(12)!=null) {
+					row.getCell(12).setCellType(Cell.CELL_TYPE_STRING);
+					projectData.setOtherOrganizerCompany(row.getCell(12).getStringCellValue());
 				}
-				//所有承办单位
-				projectData.setOrganizer(allOrganizerCompany);
+				if(row.getCell(13)!=null) {
+					row.getCell(13).setCellType(Cell.CELL_TYPE_STRING);
+					projectData.setFirstOrganizerCompany(row.getCell(13).getStringCellValue());
+				}
+				if(row.getCell(14)!=null) {
+					row.getCell(14).setCellType(Cell.CELL_TYPE_STRING);
+					projectData.setOrganizerCompanyId(row.getCell(14).getStringCellValue());
+				}
+
 				//项目负责人
-				projectData.setProjectLeader(row.getCell(12).getStringCellValue());
+				if(row.getCell(15)!=null) {
+					row.getCell(15).setCellType(Cell.CELL_TYPE_STRING);
+					projectData.setProjectLeader(row.getCell(15).getStringCellValue());
+				}
+
 				//团队成员
-				if(titleRow.getCell(13).getStringCellValue().indexOf("团队成员")>=0){
-					if(row.getCell(13)!=null && row.getCell(13).getCellType()==row.getCell(13).CELL_TYPE_STRING){
-						projectData.setTeamMembers(row.getCell(13).getStringCellValue().trim());
+				if(titleRow.getCell(16).getStringCellValue().indexOf("team_members")>=0){
+					if(row.getCell(16)!=null && row.getCell(16).getCellType()==row.getCell(16).CELL_TYPE_STRING){
+						projectData.setTeamMembers(row.getCell(16).getStringCellValue().trim());
 					}
 				}
 				//projectData.setTeamMembers(row.getCell(13).getStringCellValue());

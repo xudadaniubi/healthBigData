@@ -46,6 +46,8 @@ public interface TThesisForChineseMapper {
 	 * @return
 	 */
 	List<Count> selectFirstAuthorBeforeTwentiethInEachArea(@Param("area") String area,@Param("top") int top);
+	int insertFirstAuthorBeforeTwentiethInEachArea(TCountTopFirstAuthor countTopFirstAuthor);
+	List<TCountTopFirstAuthor> selectFirstAuthorBeforeTwentiethInEachAreaByTable(String area);
 
 	/**
 	 * 学科前20
@@ -74,6 +76,8 @@ public interface TThesisForChineseMapper {
 	 * 核心期刊单位top20
 	 */
 	//selectCompanyBeforeTwentiethInCorePerio();
+	int insertCountTopCorePerio(TCountTopCorePerio countTopCorePerio);
+	List<TCountTopCorePerio> selectBeforeTwentiethInCorePerioByType(@Param("type") String type);
 	/**
 	 * 核心期刊学科top20
 	 */

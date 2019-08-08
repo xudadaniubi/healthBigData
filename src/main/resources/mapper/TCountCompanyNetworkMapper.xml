@@ -40,11 +40,34 @@
     </insert>
 
     <select id="selectByAll" resultMap="BaseResultMap1">
-        SELECT Base_Column_List1 FROM t_count_company_network1
+        SELECT id, company, company_post_num, cooperator, cooperation_num FROM t_count_company_network1
     </select>
 
     <select id="selectByForeignKey" resultMap="BaseResultMap2">
-        SELECT Base_Column_List2 FROM t_count_company_network2 WHERE cooperatorId = #{id}
+        SELECT id, cooperator_id, company, cooperator, cooperation_num FROM t_count_company_network2 WHERE cooperator_id = #{id}
     </select>
 
+    <select id="selectAllCompany" resultType="string">
+        SELECT DISTINCT company FROM t_count_company_network1 UNION
+        SELECT DISTINCT cooperator FROM t_count_company_network1 UNION
+        SELECT DISTINCT cooperator FROM t_count_company_network2;
+    </select>
+
+
+    <resultMap id="BaseResultMap3" type="com.boku.www.utils.Relation" >
+
+        <result column="company" property="target" jdbcType="VARCHAR" />
+        <result column="cooperator" property="source" jdbcType="VARCHAR" />
+        <result column="cooperation_num" property="cooperationNum" jdbcType="INTEGER" />
+    </resultMap>
+    <select id="selectAllCooperator1" resultMap="BaseResultMap3">
+        SELECT company,cooperator,cooperation_num FROM t_count_company_network1;
+    </select>
+    <select id="selectAllCooperator2" resultMap="BaseResultMap3">
+        SELECT company,cooperator,cooperation_num FROM t_count_company_network2;
+    </select>
+
+    <select id="selectCompanyPostNum" resultMap="BaseResultMap1">
+        SELECT DISTINCT company,company_post_num FROM t_count_company_network1
+    </select>
 </mapper>

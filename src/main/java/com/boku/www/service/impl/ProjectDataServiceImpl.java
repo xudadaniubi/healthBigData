@@ -589,7 +589,7 @@ public class ProjectDataServiceImpl implements ProjectDataService {
 					criteria.andCompanyEqualTo(s);
 					List<TAreaAndCompany> areaAndCompanyList = areaAndCompanyMapper.selectByExample(areaAndCompanyExample);
 					if(areaAndCompanyList!=null && areaAndCompanyList.size()>0){
-						projectData.setArea(areaAndCompanyList.get(0).getCity());
+						//projectData.setArea(areaAndCompanyList.get(0).getCity());
 						if(StringUtils.isNotBlank(projectData.getOrganizerCompanyId())){
 							if(!projectData.getOrganizerCompanyId().contains(areaAndCompanyList.get(0).getCompanyId())){
 								projectData.setOrganizerCompanyId(projectData.getOrganizerCompanyId()+","+areaAndCompanyList.get(0).getCompanyId());

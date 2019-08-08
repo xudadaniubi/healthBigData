@@ -2,11 +2,13 @@ package com.boku.www.service.impl;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.alibaba.fastjson.JSON;
 import com.boku.www.Enum.Area;
 import com.boku.www.config.SolrConfig;
 import com.boku.www.mapper.TAreaAndCompanyMapper;
+import com.boku.www.mapper.TCountAuthorNetworkMapper;
 import com.boku.www.mapper.TThesisForEnglishMapper;
 import com.boku.www.pojo.*;
 import com.boku.www.pojo.system.URole;
@@ -14,6 +16,7 @@ import com.boku.www.pojo.system.UUser;
 import com.boku.www.service.system.RoleService;
 import com.boku.www.utils.*;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -48,6 +51,9 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 
 	@Autowired
 	private TAreaAndCompanyMapper areaAndCompanyMapper;
+
+	@Autowired
+	private TCountAuthorNetworkMapper countAuthorNetworkMapper;
 
 	@Autowired
 	private SolrClient solrClient;
@@ -630,7 +636,7 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 			}
 		}
 
-		Map<String, Integer> stringIntegerMap = sortDescend(map);
+		Map<String, Integer> stringIntegerMap = sortDescend(map,20);
 		int i = 1;
 		for(Map.Entry<String, Integer> entry : stringIntegerMap.entrySet()){
 			TCountTopKeywords countTopKeywords = new TCountTopKeywords();
@@ -658,7 +664,7 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 	 * @param <V>
 	 * @return
 	 */
-	public static <K,V extends Comparable<? super V>> Map<K,V> sortDescend(Map<K,V> map){
+	public static <K,V extends Comparable<? super V>> Map<K,V> sortDescend(Map<K,V> map ,int top){
 		List<Map.Entry<K,V>> list = new ArrayList<>(map.entrySet());
 		Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
 			@Override
@@ -671,7 +677,7 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 		int i = 0;
 		Map<K,V> returnMap = new LinkedHashMap<K,V>();
 		for(Map.Entry<K,V> entry :list){
-			if(i==20){
+			if(i==top){
 				break;
 			}
 			returnMap.put(entry.getKey(),entry.getValue());
@@ -699,7 +705,7 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 			}
 
 		}
-		Map<String, Double> stringDoubleMap = sortDescend(map);
+		Map<String, Double> stringDoubleMap = sortDescend(map,20);
 		for (Map.Entry<String, Double> entry : stringDoubleMap.entrySet()){
 			TCountTopIf countTopIf = new TCountTopIf();
 			countTopIf.setCompany(entry.getKey());
@@ -772,7 +778,7 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 					}
 				}
 			}
-			Map<String, Integer> areaMap = sortDescend(map);
+			Map<String, Integer> areaMap = sortDescend(map,20);
 			int i = 1;
 			for(Map.Entry<String, Integer> entry : areaMap.entrySet()){
 				TCountTopKeywords countTopKeywords = new TCountTopKeywords();
@@ -787,13 +793,18 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 		}
 	}
 	@Override
-	public HashMap selectKeywordsBeforeTwentiethInEachArea(){
+	public List selectKeywordsBeforeTwentiethInEachArea(){
 		HashMap map = new HashMap();
+		List list = new ArrayList();
 		for (Area area:Area.values()) {
+			Count count = new Count();
 			List<TCountTopKeywords> keywordsList = thesisForEnglishMapper.selectKeywordsBeforeTwentieth("外文", area.getMsg());
-			map.put(area.getMsg(),keywordsList);
+			//map.put(area.getMsg(),keywordsList);
+			count.setArea(area.getMsg());
+			count.setCountList(keywordsList);
+			list.add(count);
 		}
-		return map;
+		return list;
 	}
 	/**
 	 *sci论文
@@ -801,8 +812,22 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 	 *		区域单位排名
 	 */
 	@Override
-	public List<TAreaAndCompany> selectBeforeTwentiethInEachArea(){
-		return areaAndCompanyMapper.selectEnglishBeforeTwentiethInEachArea();
+	public List selectBeforeTwentiethInEachArea(){
+		List rlist = new ArrayList();
+		List<TAreaAndCompany> areaAndCompanyList = areaAndCompanyMapper.selectEnglishBeforeTwentiethInEachArea();
+		for (Area area:Area.values()) {
+			Count count = new Count();
+			List list = new ArrayList();
+			for (TAreaAndCompany areaAndCompany:areaAndCompanyList) {
+				if(area.getMsg().equals(areaAndCompany.getCity())){
+					list.add(areaAndCompany);
+				}
+			}
+			count.setArea(area.getMsg());
+			count.setCountList(list);
+			rlist.add(count);
+		}
+		return rlist;
 	}
 	/**
 	 * 清理jcr分区数据
@@ -833,6 +858,7 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 	 *	jcr分区
 	 *		浙江省论文jcr分区分布(饼状图，各分区的数量)
 	 */
+	@Override
 	public List<TCountTopJcr> selectJcrDistribution(){
 		return thesisForEnglishMapper.selectJcrDistribution("1");
 	}
@@ -842,41 +868,267 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 	 *	jcr分区
 	 *		各地区jcr分区分布(饼状图，杭州市各分区的数量)
 	 */
+	@Override
+	public void insertJcrAndArea(){
+		String jcrArray[] = {"Q1","Q2","Q3","Q4"};
+		for (Area area:Area.values()) {
+			for (String jcr:jcrArray) {
+				TCountTopJcr countTopJcr = new TCountTopJcr();
+				int countJcrByArea = thesisForEnglishMapper.countJcrByArea("%" + jcr + "%", "%" + area.getMsg() + "%");
+				countTopJcr.setArea(area.getMsg());
+				countTopJcr.setCount(countJcrByArea);
+				countTopJcr.setJcr(jcr);
+				countTopJcr.setType("2");
+				thesisForEnglishMapper.insertJcr(countTopJcr);
+			}
+		}
 
+	}
+	@Override
+	public List<TCountTopJcr> selectJcrAndAreaDistribution(){
+		return thesisForEnglishMapper.selectJcrDistribution("2");
+	}
+
+	/**
+	 * 插入jcr分区单位top10
+	 */
+	@Override
+	public void insertJcrTopTenCompany(){
+		TAreaAndCompanyExample example = new TAreaAndCompanyExample();
+		List<TAreaAndCompany> areaAndCompanyList = areaAndCompanyMapper.selectByExample(example);
+		String jcrArray[] = {"Q1","Q2","Q3","Q4"};
+
+		for (String jcr:jcrArray) {
+			Map<String ,Integer> map = new HashMap<String ,Integer>();
+			for (TAreaAndCompany areaAndCompany:areaAndCompanyList) {
+				TThesisForEnglishExample englishExample = new TThesisForEnglishExample();
+				TThesisForEnglishExample.Criteria criteria = englishExample.createCriteria();
+				criteria.andAuthorCompanyIdLike("%" + areaAndCompany.getCompanyId() + "%");
+				criteria.andJcrPartitionLike("%" + jcr + "%");
+				List<TThesisForEnglish> thesisForEnglishList = thesisForEnglishMapper.selectByExample(englishExample);
+				map.put(areaAndCompany.getCompany(),thesisForEnglishList.size());
+			}
+			Map<String, Integer> stringIntegerMap = sortDescend(map,20);
+			for(Map.Entry<String, Integer> entry : stringIntegerMap.entrySet()){
+				TCountTopJcr countTopJcr = new TCountTopJcr();
+				countTopJcr.setType("3");
+				countTopJcr.setJcr(jcr);
+				countTopJcr.setCompany(entry.getKey());
+				countTopJcr.setCount(entry.getValue());
+				System.out.println(countTopJcr);
+				thesisForEnglishMapper.insertJcr(countTopJcr);
+			}
+
+		}
+
+	}
 	/**
 	 *sci论文
 	 *	jcr分区
 	 *		一区单位top10
 	 */
+	@Override
+	public List<TCountTopJcr> oneAreaTopTenCompany(){
+		return thesisForEnglishMapper.selectJcrDistributionByJcr("3","Q1");
+	}
 
 	/**
 	 *sci论文
 	 *	jcr分区
 	 *		二区单位top10
 	 */
-
+	@Override
+	public List<TCountTopJcr> twoAreaTopTenCompany(){
+		return thesisForEnglishMapper.selectJcrDistributionByJcr("3","Q2");
+	}
 	/**
 	 *sci论文
 	 *	jcr分区
 	 *		三区单位top10
 	 */
-
+	@Override
+	public List<TCountTopJcr> threeAreaTopTenCompany(){
+		return thesisForEnglishMapper.selectJcrDistributionByJcr("3","Q3");
+	}
 	/**
 	 *sci论文
 	 *	jcr分区
 	 *		四区单位top10
 	 */
-
+	@Override
+	public List<TCountTopJcr> foreAreaTopTenCompany(){
+		return thesisForEnglishMapper.selectJcrDistributionByJcr("3","Q4");
+	}
 	/**
 	 *sci论文
 	 	期刊发文排名top20（期刊发表文献数量前20）
 	 */
+	@Override
+	public void insertJournalTopTwentieth(){
+		List<Count> countList = thesisForEnglishMapper.selectJournalTopTwentieth();
+		for (Count count:countList) {
+			TCountTopJournal countTopJournal = new TCountTopJournal();
+			countTopJournal.setJournalName(count.getArea());
+			countTopJournal.setCount(count.getCount());
+			countTopJournal.setType("2");
+			thesisForEnglishMapper.insertJournalTopTwentieth(countTopJournal);
+		}
+	}
+	@Override
+	public List<TCountTopJournal> selectJournalTopTwentieth(){
+		return thesisForEnglishMapper.selectJournalTopTwentiethByTable("2");
+	}
 
 	/**
 	 *sci论文
 	 *	top10作者合作关系网
+	 *	1.查询出所有的作者
+	 *	2.统计每个作者出现的次数，取出top10
+	 *	3.根据top10第一次查询和他们有合作关系的作者
+	 *	4.统计和做次数，取出合作次数大于2次的
+	 *	5.根据合作人1，查询与	他们有合作关系的合作人2
+	 *	6.统计合作人2的次数，取出	合作次数大于2次的
 	 */
+	@Override
+	public void insertAuthorNetwork(){
+		int top = 10;
+		int i = 1;
+		for (Area area:Area.values()) {
+			//查询出第一作者发文量top10的作者及发文次数
+			List<String> authorList1 = thesisForEnglishMapper.selectAllAuthorInEachArea("%" + area.getMsg() + "%");
+			List<String> list1 = new ArrayList() ;
+			for (String authors:authorList1) {
+				//2.统计每个作者出现的次数，取出top10
+				String[] split1 = authors.split(";");
+				for (String author:split1) {
+					list1.add(author);
+				}
 
+			}
+			Map<String, Long> map1 = list1.stream().collect(Collectors.groupingBy(p -> p,Collectors.counting()));
+			Map<String, Long> authorTopMap = sortDescend(map1, top);
+			for (Map.Entry<String, Long> entry : authorTopMap.entrySet()) {
+				//3.根据top10第一次查询和他们有合作关系的作者
+				List<String> authorList2 = thesisForEnglishMapper.selectAuthorByExample("%" + entry.getKey() + "%");
+				List<String> list2 = new ArrayList() ;
+				for (String authors:authorList2) {
+					String[] split2 = authors.split(";");
+					for (String author:split2) {
+						list2.add(author);
+					}
+				}
+				//统计作者出现的次数，并封装到map集合里面
+				Map<String, Long> map2 = list2.stream().collect(Collectors.groupingBy(p -> p,Collectors.counting()));
+				//遍历集合
+				for (Map.Entry<String, Long> entry2 : map2.entrySet()) {
+					if(entry2.getValue()>2){
+						TCountEnglishAuthorNetwork1 countEnglishAuthorNetwork1 = new TCountEnglishAuthorNetwork1();
+						countEnglishAuthorNetwork1.setId(i);
+						countEnglishAuthorNetwork1.setArea(area.getMsg());
+						countEnglishAuthorNetwork1.setAuthor(entry.getKey());
+						countEnglishAuthorNetwork1.setAuthorPostNum(entry.getValue().intValue());
+						countEnglishAuthorNetwork1.setCooperator(entry2.getKey());
+						countEnglishAuthorNetwork1.setCooperationNum(entry2.getValue().intValue());
+						countAuthorNetworkMapper.insertEnglish1(countEnglishAuthorNetwork1);
+						//System.out.println(countEnglishAuthorNetwork1);
+						List<String> authorList3 = thesisForEnglishMapper.selectAuthorByExample("%" + entry2.getKey() + "%");
+						List<String> list3 = new ArrayList() ;
+						for (String authors:authorList1) {
+							String[] split3 = authors.split(";");
+							for (String author:split3) {
+								list3.add(author);
+							}
+
+						}
+						Map<String, Long> map3 = list3.stream().collect(Collectors.groupingBy(p -> p,Collectors.counting()));
+						//遍历集合
+						for (Map.Entry<String, Long> entry3 : map3.entrySet()) {
+							//if(entry3.getValue()>2){
+								TCountEnglishAuthorNetwork2 countEnglishAuthorNetwork2 = new TCountEnglishAuthorNetwork2();
+								countEnglishAuthorNetwork2.setCooperatorId(countEnglishAuthorNetwork1.getId());
+								countEnglishAuthorNetwork2.setAuthor(countEnglishAuthorNetwork1.getCooperator());
+								countEnglishAuthorNetwork2.setCooperator(entry3.getKey());
+								countEnglishAuthorNetwork2.setCooperationNum(entry3.getValue().intValue());
+								countAuthorNetworkMapper.insertEnglish2(countEnglishAuthorNetwork2);
+								//System.out.println(countEnglishAuthorNetwork2);
+							//}
+						}
+						i++;
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * 插入top10单位合作关系网
+
+	 * 	2.查询出单位发文量top10
+	 * 	3.查询所有包含top10单位的合作单位
+	 * 	4.统计合作单位出现的次数
+	 * 	5.查询所有包含合作单位的下级合作单位
+	 * 	6.统计下级合作单位的次数
+	 * 	7.将数据插入数据库
+	 */
+	@Override
+	public void insertCompanyNetwork(){
+		List<TAreaAndCompany> companyList = areaAndCompanyMapper.selectChineseBeforeX(10);
+		int i = 1;
+		for (TAreaAndCompany areaAndCompany:companyList) {
+			//查询所有包含top10单位的合作单位
+			List<String> listCompany = thesisForEnglishMapper.selectCompanyByCompanyId("%" + areaAndCompany.getCompanyId() + "%");
+			//将这些单位全部添加到list集合中
+			List<String> list = new ArrayList() ;
+			for (String cooperator:listCompany) {
+				String[] split = cooperator.split(",");
+				for (String author:split) {
+					list.add(author);
+				}
+			}
+			//统计作者出现的次数，并封装到map集合里面
+			Map<String, Long> map = list.stream().collect(Collectors.groupingBy(p -> p,Collectors.counting()));
+			//遍历集合
+			for (Map.Entry<String, Long> entry : map.entrySet()) {
+				//插入合作次数大于2的
+				if((entry.getValue().intValue()>2)){
+					//排除自己和自己的合作关系
+					if(!areaAndCompany.getCompany().equals(entry.getKey())){
+						TCountEnglishCompanyNetwork1 countEnglishCompanyNetwork1 = new TCountEnglishCompanyNetwork1();
+						countEnglishCompanyNetwork1.setId(i);
+						countEnglishCompanyNetwork1.setCompany(areaAndCompany.getCompany());
+						countEnglishCompanyNetwork1.setCompanyPostNum(areaAndCompany.getThesisForEnglishNum());
+						countEnglishCompanyNetwork1.setCooperator(entry.getKey());
+						countEnglishCompanyNetwork1.setCooperationNum(entry.getValue().intValue());
+						System.out.println(countEnglishCompanyNetwork1);
+						//countCompanyNetworkMapper.insert1(countEnglishCompanyNetwork1);
+						List<String> listCompany1 = thesisForEnglishMapper.selectCompanyByCompany("%" + entry.getKey() + "%");
+						List<String> list1 = new ArrayList() ;
+						for (String cooperator2:listCompany1) {
+							String[] split = cooperator2.split(", ");
+							for (String company:split) {
+								list1.add(company);
+							}
+
+						}
+						//统计作者出现的次数，并封装到map集合里面
+						Map<String, Long> map1 = list1.stream().collect(Collectors.groupingBy(p -> p,Collectors.counting()));
+						for (Map.Entry<String, Long> entry1 : map1.entrySet()) {
+							if(!entry.getKey().equals(entry1.getKey()) && entry1.getValue().intValue()>2){
+								TCountEnglishCompanyNetwork2 countEnglishCompanyNetwork2 = new TCountEnglishCompanyNetwork2();
+								countEnglishCompanyNetwork2.setCooperatorId(countEnglishCompanyNetwork1.getId());
+								countEnglishCompanyNetwork2.setCompany(countEnglishCompanyNetwork1.getCooperator());
+								countEnglishCompanyNetwork2.setCooperator(entry1.getKey());
+								countEnglishCompanyNetwork2.setCooperationNum(entry1.getValue().intValue());
+								System.out.println(countEnglishCompanyNetwork2);
+								//countCompanyNetworkMapper.insert2(countEnglishCompanyNetwork2);
+							}
+						}
+						i++;
+					}
+				}
+			}
+		}
+	}
 	/**
 	 *sci论文
 	 *	top10单位合作关系网

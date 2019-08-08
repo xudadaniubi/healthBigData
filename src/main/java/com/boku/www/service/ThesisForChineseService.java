@@ -1,9 +1,6 @@
 package com.boku.www.service;
 
-import com.boku.www.pojo.TAreaAndCompany;
-import com.boku.www.pojo.TCountTopKeywords;
-import com.boku.www.pojo.TCountTopSubject;
-import com.boku.www.pojo.TThesisForChinese;
+import com.boku.www.pojo.*;
 import com.boku.www.utils.Count;
 import com.boku.www.utils.CountAuthorNetwork;
 import com.boku.www.utils.CountCompanyNetwork;
@@ -117,11 +114,12 @@ public interface ThesisForChineseService {
 	/**
 	 * 查询各地级市关键词出现前20的
 	 */
-	public Map<String,List<TCountTopKeywords>> selectKeywordsBeforeTwentiethInEachArea();
+	public List selectKeywordsBeforeTwentiethInEachArea();
 	/**
 	 * 第一作者top20（如杭州市内单位排名）
 	 */
-	public Map<String,List>  selectFirstAuthorBeforeTwentiethInEachArea();
+	public Map<String,List>  insertFirstAuthorBeforeTwentiethInEachArea();
+	public List  selectFirstAuthorBeforeTwentiethInEachArea();
 	/**
 	 * 插入学科前20的数据
 	 */
@@ -133,10 +131,20 @@ public interface ThesisForChineseService {
 	 */
 	public List<TCountTopSubject>  selectSujectBeforeTwentieth();
 
-	public List<Count> selectSujectBeforeTwentiethInCorePerio();
+	public void insertSujectBeforeTwentiethInCorePerio();
+	public List<TCountTopCorePerio> selectSujectBeforeTwentiethInCorePerio();
+	/**
+	 * 核心期刊中期刊文献量top20
+	 */
+	public void insertJournalTopTwentieth();
 
-	public  List<Count> selectBeforeTwentiethInCorePerio();
+	public  List<TCountTopJournal> selectBeforeTwentiethInCorePerio();
 
+	/**
+	 * 插入和查询核心期刊单位top20
+	 */
+	public void insertCompanyBeforeTwentiethInCorePerio();
+	public List<TCountTopCorePerio> selectCompanyBeforeTwentiethInCorePerio();
 
 	public void insertAuthorNetwork();
 

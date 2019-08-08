@@ -149,14 +149,52 @@ public interface ThesisForEnglishService {
 	 *		区域研究热词（top20，每个地区的）
 	 */
 	public void insertKeywordsBeforeTwentiethInEachArea();
-	public HashMap selectKeywordsBeforeTwentiethInEachArea();
+	public List selectKeywordsBeforeTwentiethInEachArea();
 
 	/**
 	 *sci论文
 	 *	地区
 	 *		区域单位排名
 	 */
-	public List<TAreaAndCompany> selectBeforeTwentiethInEachArea();
+	public List selectBeforeTwentiethInEachArea();
 
 	public void cleanJcr();
+	/**
+	 *sci论文
+	 *	jcr分区
+	 *		浙江省论文jcr分区分布(饼状图，各分区的数量)
+	 */
+	public List<TCountTopJcr> selectJcrDistribution();
+	/**
+	 *sci论文
+	 *	jcr分区
+	 *		各地区jcr分区分布(饼状图，杭州市各分区的数量)
+	 */
+	public void insertJcrAndArea();
+
+	public List<TCountTopJcr> selectJcrAndAreaDistribution();
+	/**
+	 *sci论文
+	 *	jcr分区
+	 *		插入jcr分区单位top10
+	 */
+	public void insertJcrTopTenCompany();
+	/**
+	 *sci论文
+	 *	jcr分区
+	 *		一至四区单位top10
+	 */
+	public List<TCountTopJcr> oneAreaTopTenCompany();
+	public List<TCountTopJcr> twoAreaTopTenCompany();
+	public List<TCountTopJcr> threeAreaTopTenCompany();
+	public List<TCountTopJcr> foreAreaTopTenCompany();
+	/**
+	 *sci论文
+	 期刊发文排名top20（期刊发表文献数量前20）
+	 */
+	public void insertJournalTopTwentieth();
+	public List<TCountTopJournal> selectJournalTopTwentieth();
+
+	public void insertAuthorNetwork();
+	public void insertCompanyNetwork();
 }

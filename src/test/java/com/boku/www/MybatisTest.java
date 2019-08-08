@@ -48,7 +48,7 @@ public class MybatisTest {
 	@Test
 	public void test2() throws Exception {
 		//String filePath = "E:\\模板.xls";
-		String filePath = "E:\\healthybigdata\\2019年5月20日飞蝶给的数据\\浙江省自然基金项目.xlsx";
+		String filePath = "E:\\healthybigdata\\Excel文档上传下载\\省卫计委数据库导出项目数据（2019年7月26日）.xlsx";
 		File file = new File(filePath);
 		//截取字符串名称
 		String fileName = filePath.substring(filePath.lastIndexOf("\\")+1);

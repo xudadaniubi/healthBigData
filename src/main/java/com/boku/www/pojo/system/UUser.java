@@ -34,6 +34,8 @@ public class UUser  implements Serializable {
 	private String companyId;//所属单位id
 	private String area;//所属地区
 	private String district;//所属区县
+	//验证码
+	private String captcha;
 
 	private List<String> roleStrlist;
 	private List<String> perminsStrlist;

@@ -2,10 +2,7 @@ package com.boku.www.controller;
 import java.util.List;
 import java.util.Map;
 
-import com.boku.www.pojo.TAreaAndCompany;
-import com.boku.www.pojo.TCountTopKeywords;
-import com.boku.www.pojo.TCountTopSubject;
-import com.boku.www.pojo.TThesisForChinese;
+import com.boku.www.pojo.*;
 import com.boku.www.service.ThesisForChineseService;
 import com.boku.www.utils.*;
 import org.slf4j.Logger;
@@ -278,7 +275,7 @@ public class ThesisForChineseController {
 	 * 查询各地级市关键词出现前20的
 	 */
 	@RequestMapping("/selectKeywordsBeforeTwentiethInEachArea")
-	public Map<String,List<TCountTopKeywords>> selectKeywordsBeforeTwentiethInEachArea() {
+	public List selectKeywordsBeforeTwentiethInEachArea() {
 		try {
 			return thesisForChineseService.selectKeywordsBeforeTwentiethInEachArea();
 		} catch (Exception e) {
@@ -290,8 +287,18 @@ public class ThesisForChineseController {
 	/**
 	 * 第一作者top20（如杭州市内单位排名）
 	 */
+	@RequestMapping("/insertFirstAuthorBeforeTwentiethInEachArea")
+	public Map<String,List> insertFirstAuthorBeforeTwentiethInEachArea() {
+		try {
+			return thesisForChineseService.insertFirstAuthorBeforeTwentiethInEachArea();
+		} catch (Exception e) {
+			logger.info("查询失败");
+			e.printStackTrace();
+			return null;
+		}
+	}
 	@RequestMapping("/selectFirstAuthorBeforeTwentiethInEachArea")
-	public Map<String,List> selectFirstAuthorBeforeTwentiethInEachArea() {
+	public List selectFirstAuthorBeforeTwentiethInEachArea() {
 		try {
 			return thesisForChineseService.selectFirstAuthorBeforeTwentiethInEachArea();
 		} catch (Exception e) {
@@ -328,8 +335,17 @@ public class ThesisForChineseController {
 	/**
 	 * 核心期刊学科top20（R6）
 	 */
+	@RequestMapping("/insertSujectBeforeTwentiethInCorePerio")
+	public void insertSujectBeforeTwentiethInCorePerio() {
+		try {
+			thesisForChineseService.insertSujectBeforeTwentiethInCorePerio();
+		} catch (Exception e) {
+			logger.info("查询失败");
+			e.printStackTrace();
+		}
+	}
 	@RequestMapping("/selectSujectBeforeTwentiethInCorePerio")
-	public List<Count> selectSujectBeforeTwentiethInCorePerio() {
+	public List<TCountTopCorePerio> selectSujectBeforeTwentiethInCorePerio() {
 		try {
 			return thesisForChineseService.selectSujectBeforeTwentiethInCorePerio();
 		} catch (Exception e) {
@@ -339,10 +355,22 @@ public class ThesisForChineseController {
 		}
 	}
 	/**
-	 * 核心期刊学科top20（R6）
+	 * 插入核心期刊top20（）
+	 */
+	@RequestMapping("/insertJournalTopTwentieth")
+	public void insertJournalTopTwentieth() {
+		try {
+			thesisForChineseService.insertJournalTopTwentieth();
+		} catch (Exception e) {
+			logger.info("插入失败");
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 查询核心期刊top20（）
 	 */
 	@RequestMapping("/selectBeforeTwentiethInCorePerio")
-	public List<Count> selectBeforeTwentiethInCorePerio() {
+	public List<TCountTopJournal> selectBeforeTwentiethInCorePerio() {
 		try {
 			return thesisForChineseService.selectBeforeTwentiethInCorePerio();
 		} catch (Exception e) {
@@ -351,6 +379,29 @@ public class ThesisForChineseController {
 			return null;
 		}
 	}
+	/**
+	 * 插入和查询核心期刊单位top20
+	 */
+	@RequestMapping("/insertCompanyBeforeTwentiethInCorePerio")
+	public void  insertCompanyBeforeTwentiethInCorePerio() {
+		try {
+			thesisForChineseService.insertCompanyBeforeTwentiethInCorePerio();
+		} catch (Exception e) {
+			logger.info("查询失败");
+			e.printStackTrace();
+		}
+	}
+	@RequestMapping("/selectCompanyBeforeTwentiethInCorePerio")
+	public List<TCountTopCorePerio>  selectCompanyBeforeTwentiethInCorePerio() {
+		try {
+			return thesisForChineseService.selectCompanyBeforeTwentiethInCorePerio();
+		} catch (Exception e) {
+			logger.info("查询失败");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	/**
 	 * 插入作者合作关系网
 	 */

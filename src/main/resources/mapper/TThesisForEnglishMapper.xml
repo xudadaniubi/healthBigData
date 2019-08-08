@@ -673,7 +673,62 @@
         <result column="count" property="count" jdbcType="INTEGER" />
         <result column="type" property="type" jdbcType="VARCHAR" />
     </resultMap>
+    <!--查询jcr分区的分布-->
     <select id="selectJcrDistribution" resultMap="BaseResultMapJcr">
         SELECT id, jcr, area, company, count, type FROM t_count_top_jcr WHERE type = #{type}
     </select>
+    <!--统计各地级市jcr分区分布-->
+    <select id="countJcrByArea" resultType="int">
+        SELECT count(*) FROM t_thesis_for_english WHERE jcr_partition LIKE #{jcr} AND area like #{area}
+    </select>
+   <!--插入jcr分区-->
+    <insert id="insertJcr" parameterType="com.boku.www.pojo.TCountTopJcr" >
+        insert into t_count_top_jcr (id, jcr, area,
+        company, count, type
+        )
+        values (#{id,jdbcType=INTEGER}, #{jcr,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR},
+        #{company,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}
+        )
+    </insert>
+    <!--查询jcr分区top10数据-->
+    <select id="selectJcrDistributionByJcr" resultMap="BaseResultMapJcr">
+        SELECT id, jcr, area, company, count, type FROM t_count_top_jcr WHERE type = #{type} and jcr = #{jcr}  order by count desc limit 0,10
+    </select>
+    <resultMap id="BaseResultMapJournalTopTwentieth" type="com.boku.www.pojo.TCountTopJournal" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="journal_name" property="journalName" jdbcType="VARCHAR" />
+        <result column="count" property="count" jdbcType="INTEGER" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+    </resultMap>
+    <!--查询期刊发文前20的数据-->
+    <select id="selectJournalTopTwentieth" resultType="com.boku.www.utils.Count">
+        SELECT journal_name AS area,count(*) as count FROM t_thesis_for_english GROUP BY journal_name ORDER BY count DESC LIMIT 0,20
+    </select>
+    <!--插入期刊发文前20的数据-->
+    <insert id="insertJournalTopTwentieth" parameterType="com.boku.www.pojo.TCountTopJournal" >
+        insert into t_count_top_journal (id, journal_name, count,
+        type)
+        values (#{id,jdbcType=INTEGER}, #{journalName,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER},
+        #{type,jdbcType=VARCHAR})
+    </insert>
+    <!--查询期刊发文前20的数据(存储在表格里的)-->
+    <select id="selectJournalTopTwentiethByTable" resultMap="BaseResultMapJournalTopTwentieth">
+        SELECT id, journal_name, count, type FROM t_count_top_journal WHERE type = #{type}
+    </select>
+    <select id="selectAllAuthorInEachArea" resultType="string">
+        SELECT author FROM t_thesis_for_english WHERE area LIKE #{area}
+    </select>
+
+    <select id="selectAuthorByExample" resultType="string">
+        SELECT author FROM t_thesis_for_english WHERE author LIKE #{author}
+    </select>
+
+    <!--根据作者查询与之合作的所有单位-->
+    <select id="selectCompanyByCompanyId">
+        SELECT author_company FROM t_thesis_for_english WHERE author_company_id LIKE #{companyId}
+    </select>
+    <select id="selectCompanyByCompany" resultType="string">
+        SELECT author_company FROM t_thesis_for_english WHERE author_company LIKE #{company}
+    </select>
+
 </mapper>

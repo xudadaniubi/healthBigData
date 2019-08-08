@@ -16,6 +16,7 @@ import com.boku.www.pojo.system.UUser;
 import com.boku.www.service.ThesisForChineseService;
 import com.boku.www.service.system.RoleService;
 import com.boku.www.utils.*;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.SecurityUtils;
@@ -39,6 +40,9 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 
 	@Autowired
 	private TThesisForChineseMapper thesisForChineseMapper;
+
+	@Autowired
+	private TThesisForEnglishMapper thesisForEnglishMapper;
 
 	@Autowired
 	private RoleService roleService;
@@ -537,13 +541,16 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 
 	}
 	@Override
-	public Map<String,List<TCountTopKeywords>> selectKeywordsBeforeTwentiethInEachArea(){
-		HashMap<String,List<TCountTopKeywords>> map = new HashMap();
+	public List selectKeywordsBeforeTwentiethInEachArea(){
+		List list = new ArrayList();
 		for (Area area:Area.values()) {
 			List<TCountTopKeywords> keywordsList = thesisForChineseMapper.selectKeywordsBeforeTwentieth("中文", area.getMsg());
-			map.put(area.getMsg(),keywordsList);
+			Count count = new Count();
+			count.setArea(area.getMsg());
+			count.setCountList(keywordsList);
+			list.add(count);
 		}
-		return map;
+		return list;
 	}
 
 
@@ -581,14 +588,31 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 	 * 第一作者top20（如杭州市内单位排名）
 	 */
 	@Override
-	public Map<String,List>  selectFirstAuthorBeforeTwentiethInEachArea(){
+	public Map<String,List> insertFirstAuthorBeforeTwentiethInEachArea(){
 		Map<String,List> returnAreaMap = new HashMap();
 		int top = 20;
 		for (Area area:Area.values()) {
 			List<Count> countList = thesisForChineseMapper.selectFirstAuthorBeforeTwentiethInEachArea("%" + area.getMsg() + "%" ,top);
+			for (Count count:countList) {
+				TCountTopFirstAuthor countTopFirstAuthor = new TCountTopFirstAuthor();
+				countTopFirstAuthor.setArea(area.getMsg());
+				countTopFirstAuthor.setCount(count.getCount());
+				countTopFirstAuthor.setFirstAuthor(count.getArea());
+				thesisForChineseMapper.insertFirstAuthorBeforeTwentiethInEachArea(countTopFirstAuthor);
+			}
 			returnAreaMap.put(area.getMsg(),countList);
 		}
+
 		return returnAreaMap;
+	}
+	@Override
+	public List selectFirstAuthorBeforeTwentiethInEachArea(){
+		List list = new ArrayList();
+		for (Area area:Area.values()) {
+			List<TCountTopFirstAuthor> areaAuthorList = thesisForChineseMapper.selectFirstAuthorBeforeTwentiethInEachAreaByTable(area.getMsg());
+			list.add(areaAuthorList);
+		}
+		return list;
 	}
 
 	/**
@@ -621,23 +645,68 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 	 * 查询核心期刊，学科top20的数据
 	 */
 	@Override
-	public List<Count> selectSujectBeforeTwentiethInCorePerio(){
-		return thesisForChineseMapper.selectSujectBeforeTwentiethInCorePerio();
-	}
+	public void insertSujectBeforeTwentiethInCorePerio(){
+		List<Count> list = thesisForChineseMapper.selectSujectBeforeTwentiethInCorePerio();
+		for (Count count:list) {
+			TCountTopCorePerio countTopCorePerio = new TCountTopCorePerio();
+			countTopCorePerio.setSubject(count.getArea());
+			countTopCorePerio.setCount(count.getCount());
+			countTopCorePerio.setType("2");
+			thesisForChineseMapper.insertCountTopCorePerio(countTopCorePerio);
+		}
 
+	}
+	@Override
+	public List<TCountTopCorePerio> selectSujectBeforeTwentiethInCorePerio(){
+		return thesisForChineseMapper.selectBeforeTwentiethInCorePerioByType("2");
+	}
 	/**
 	 * 查询核心期刊单位top20
 	 */
-	public void selectCompanyBeforeTwentiethInCorePerio(){
-		//thesisForChineseMapper.selectCompanyBeforeTwentiethInCorePerio();
+	@Override
+	public void insertCompanyBeforeTwentiethInCorePerio(){
+		HashMap map = new HashMap();
+		TAreaAndCompanyExample example = new TAreaAndCompanyExample();
+		List<TAreaAndCompany> areaAndCompanyList = areaAndCompanyMapper.selectByExample(example);
+		for (TAreaAndCompany areaAndCompany:areaAndCompanyList) {
+			TThesisForChineseExample thesisForChineseExample = new TThesisForChineseExample();
+			TThesisForChineseExample.Criteria criteria = thesisForChineseExample.createCriteria();
+			criteria.andAuthorCompanyIdLike("%"+areaAndCompany.getCompanyId()+"%");
+			criteria.andCorePerioIsNotNull();
+			int count = thesisForChineseMapper.countByExample(thesisForChineseExample);
+			map.put(areaAndCompany.getCompany(),count);
+		}
+		Map<String, Integer> stringIntegerMap = sortDescend(map);
+		for(Map.Entry<String, Integer> entry : stringIntegerMap.entrySet()){
+			TCountTopCorePerio countTopCorePerio = new TCountTopCorePerio();
+			countTopCorePerio.setCompany(entry.getKey());
+			countTopCorePerio.setCount(entry.getValue());
+			countTopCorePerio.setType("1");
+			thesisForChineseMapper.insertCountTopCorePerio(countTopCorePerio);
+		}
+	}
+	@Override
+	public List<TCountTopCorePerio> selectCompanyBeforeTwentiethInCorePerio(){
+		return thesisForChineseMapper.selectBeforeTwentiethInCorePerioByType("1");
 	}
 
 	/**
 	 * 核心期刊中期刊文献量top20
 	 */
 	@Override
-	public  List<Count> selectBeforeTwentiethInCorePerio(){
-		return thesisForChineseMapper.selectBeforeTwentiethInCorePerio();
+	public void insertJournalTopTwentieth(){
+		List<Count> countList = thesisForChineseMapper.selectBeforeTwentiethInCorePerio();
+		for (Count count:countList) {
+			TCountTopJournal countTopJournal = new TCountTopJournal();
+			countTopJournal.setJournalName(count.getArea());
+			countTopJournal.setCount(count.getCount());
+			countTopJournal.setType("1");
+			thesisForEnglishMapper.insertJournalTopTwentieth(countTopJournal);
+		}
+	}
+	@Override
+	public  List<TCountTopJournal> selectBeforeTwentiethInCorePerio(){
+		return thesisForEnglishMapper.selectJournalTopTwentiethByTable("1");
 	}
 
 	/**
@@ -651,7 +720,7 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 	 */
 	@Override
 	public void insertAuthorNetwork(){
-		Map<String,List> returnAreaMap = new HashMap();
+		//Map<String,List> returnAreaMap = new HashMap();
 		CountAuthorNetwork countAuthorNetwork = new CountAuthorNetwork();
 		int top = 10;
 		int i = 1;
@@ -710,7 +779,7 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 					i++;
 				}
 			}
-			returnAreaMap.put(area.getMsg(),countList);
+			//returnAreaMap.put(area.getMsg(),countList);
 		}
 	}
 
@@ -719,7 +788,24 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 	 */
 	@Override
 	public CountAuthorNetwork selectAuthorNetwork(){
-		Map<String,List<TCountAuthorNetwork1>> map1 = new HashMap();
+
+		CountAuthorNetwork countAuthorNetwork = new CountAuthorNetwork();
+		List<String> allCompany = countAuthorNetworkMapper.selectAllAuthor();
+		List<TCountAuthorNetwork1> authorPostNum = countAuthorNetworkMapper.selectAuthorPostNum();
+		List<Relation> list1 = countAuthorNetworkMapper.selectAllCooperator1();
+		List<Relation> list2 = countAuthorNetworkMapper.selectAllCooperator2();
+		Set set = new HashSet();
+		for (Relation relation:list1) {
+			set.add(relation);
+		}
+		for (Relation relation:list2) {
+			set.add(relation);
+		}
+		countAuthorNetwork.setAuthorPostNum(authorPostNum);
+		countAuthorNetwork.setAllAuthor(allCompany);
+		countAuthorNetwork.setSet(set);
+
+		/*Map<String,List<TCountAuthorNetwork1>> map1 = new HashMap();
 		Map<Integer,List<TCountAuthorNetwork2>> map2 = new HashMap();
 		for (Area area:Area.values()) {
 			List<TCountAuthorNetwork1> countAuthorNetworkList1 = countAuthorNetworkMapper.selectByArea(area.getMsg());
@@ -731,7 +817,7 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 		}
 		CountAuthorNetwork countAuthorNetwork = new CountAuthorNetwork();
 		countAuthorNetwork.setFirstMap(map1);
-		countAuthorNetwork.setSecondMap(map2);
+		countAuthorNetwork.setSecondMap(map2);*/
 		return countAuthorNetwork;
 	}
 
@@ -807,10 +893,28 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 
 	/**
 	 * 查询top10单位合作关系网
+	 * 	1.查询所有出现过的单位
+	 * 	2.查询他们的合作关系
 	 */
 	@Override
 	public CountCompanyNetwork selectCompanyNetwork(){
-		Map<Integer,List<TCountCompanyNetwork2>> map = new HashMap();
+		CountCompanyNetwork countCompanyNetwork = new CountCompanyNetwork();
+		List<String> allCompany = countCompanyNetworkMapper.selectAllCompany();
+		List<TCountCompanyNetwork1> companyPostNum = countCompanyNetworkMapper.selectCompanyPostNum();
+		List<Relation> list1 = countCompanyNetworkMapper.selectAllCooperator1();
+		List<Relation> list2 = countCompanyNetworkMapper.selectAllCooperator2();
+		Set set = new HashSet();
+		for (Relation relation:list1) {
+			set.add(relation);
+		}
+		for (Relation relation:list2) {
+			set.add(relation);
+		}
+		countCompanyNetwork.setCompanyPostNum(companyPostNum);
+		countCompanyNetwork.setAllCompany(allCompany);
+		countCompanyNetwork.setSet(set);
+
+		/*Map<Integer,List<TCountCompanyNetwork2>> map = new HashMap();
 		List<TCountCompanyNetwork1> companyNetwork1List = countCompanyNetworkMapper.selectByAll();
 		for (TCountCompanyNetwork1 countCompanyNetwork1:companyNetwork1List) {
 			List<TCountCompanyNetwork2> countAuthorNetworkList2 = countCompanyNetworkMapper.selectByForeignKey(countCompanyNetwork1.getId());
@@ -818,9 +922,11 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 		}
 		CountCompanyNetwork countCompanyNetwork = new CountCompanyNetwork();
 		countCompanyNetwork.setList(companyNetwork1List);
-		countCompanyNetwork.setMap(map);
+		countCompanyNetwork.setMap(map);*/
 		return countCompanyNetwork;
 	}
+
+
 	/**
 	 * 补充论文期刊信息和第一作者信息
 	 *补充学科和关键字信息

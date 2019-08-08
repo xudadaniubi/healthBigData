@@ -10,6 +10,10 @@
  */
 package com.boku.www.utils;
 
+import lombok.Data;
+
+import java.util.List;
+
 /**
  * 〈一句话功能简述〉<br> 
  * 〈统计地区中专利、项目、论文的数量〉
@@ -18,23 +22,9 @@ package com.boku.www.utils;
  * @create 2018/12/12
  * @since 1.0.0
  */
+@Data
 public class Count {
 	private String area;
 	private Integer count;
-
-	public String getArea() {
-		return area;
-	}
-
-	public void setArea(String area) {
-		this.area = area;
-	}
-
-	public Integer getCount() {
-		return count;
-	}
-
-	public void setCount(Integer count) {
-		this.count = count;
-	}
+	private List countList;
 }

@@ -1,5 +1,6 @@
 package com.boku.www.config;
 
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -47,7 +48,23 @@ public class ShiroConfiguration {
 //        credentialsMatcher.setStoredCredentialsHexEncoded(true);
 //        return credentialsMatcher;
 //    }
-
+	/**
+	 * 密码校验规则HashedCredentialsMatcher
+	 * 这个类是为了对密码进行编码的 ,
+	 * 防止密码在数据库里明码保存 , 当然在登陆认证的时候 ,
+	 * 这个类也负责对form里输入的密码进行编码
+	 * 处理认证匹配处理器：如果自定义需要实现继承HashedCredentialsMatcher
+	 */
+	/*@Bean("hashedCredentialsMatcher")
+	public HashedCredentialsMatcher hashedCredentialsMatcher() {
+		HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
+		//指定加密方式为MD5
+		credentialsMatcher.setHashAlgorithmName("MD5");
+		//加密次数
+		credentialsMatcher.setHashIterations(2);
+		credentialsMatcher.setStoredCredentialsHexEncoded(true);
+		return credentialsMatcher;
+	}*/
 	@Bean(name = "shiroRealm")
 	@DependsOn("lifecycleBeanPostProcessor")
 	public ShiroRealm shiroRealm() {
@@ -100,6 +117,7 @@ public class ShiroConfiguration {
 		filterChainDefinitionManager.put("/ajaxLogin", "anon");//anon 可以理解为不拦截
 		filterChainDefinitionManager.put("/fileUpload", "anon");//anon 可以理解为不拦截
 		filterChainDefinitionManager.put("/statistic/**",  "anon");//静态资源不拦截
+		filterChainDefinitionManager.put("/Captcha.jpg","anon");
 		//filterChainDefinitionManager.put("/**",  "authc");//认证后可以访问所有页面		原数据：其他资源全部拦截"authc,roles[user]"
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionManager);
 		shiroFilterFactoryBean.setLoginUrl("/login");//设置未登录跳转页面

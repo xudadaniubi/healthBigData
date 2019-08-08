@@ -13,6 +13,7 @@ import com.boku.www.service.system.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
@@ -53,7 +54,9 @@ public class ShiroRealm extends AuthorizingRealm {
         logger.info("验证当前Subject时获取到token为：" + token.toString());
         //查出是否有此用户
         UUser hasUser = userService.findByName(token.getUsername());
-//        String md5Pwd = new Md5Hash("123", "lucare",2).toString();
+		//String md5Pwd = new Md5Hash(token.getPassword(), "lucare",2).toString();
+		/*System.out.println("token.getPassword()"+token.getPassword());
+		System.out.println("md5Pwd"+md5Pwd);*/
         if (hasUser != null) {
             // 若存在，将此用户存放到登录认证info中，无需自己做密码对比，Shiro会为我们进行密码对比校验
             List<URole> rlist = roleService.findRoleByUid(hasUser.getId());//获取用户角色
@@ -75,7 +78,8 @@ public class ShiroRealm extends AuthorizingRealm {
 			//第一个参数：期望登录后，保存在subject中的信息
 			//第二个参数：密码
 			//第三个参数：realm名称
-            return new SimpleAuthenticationInfo(hasUser, hasUser.getPswd(), getName());//添加资源的授权字符串
+			System.out.println(hasUser+hasUser.getPswd()+getName());
+			return new SimpleAuthenticationInfo(hasUser, hasUser.getPswd(), getName());//添加资源的授权字符串
         }
         return null;
     }

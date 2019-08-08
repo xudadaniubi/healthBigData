@@ -356,7 +356,7 @@ public class ThesisForEnglishController {
 		}
 	}
 	@RequestMapping("/selectKeywordsBeforeTwentiethInEachArea")
-	public HashMap selectKeywordsBeforeTwentiethInEachArea(){
+	public List selectKeywordsBeforeTwentiethInEachArea(){
 		try {
 			return thesisForEnglishService.selectKeywordsBeforeTwentiethInEachArea();
 		} catch (Exception e) {
@@ -372,7 +372,7 @@ public class ThesisForEnglishController {
 	 *		区域单位排名
 	 */
 	@RequestMapping("/selectBeforeTwentiethInEachArea")
-	public List<TAreaAndCompany> selectBeforeTwentiethInEachArea(){
+	public List selectBeforeTwentiethInEachArea(){
 		try {
 			return thesisForEnglishService.selectBeforeTwentiethInEachArea();
 		} catch (Exception e) {
@@ -387,49 +387,156 @@ public class ThesisForEnglishController {
 	 *	jcr分区
 	 *		浙江省论文jcr分区分布(饼状图，各分区的数量)
 	 */
-
+	@RequestMapping("/selectJcrDistribution")
+	public List<TCountTopJcr> selectJcrDistribution(){
+		try {
+			return thesisForEnglishService.selectJcrDistribution();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询英文jcr分区分布的数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
 	/**
 	 *sci论文
 	 *	jcr分区
 	 *		各地区jcr分区分布(饼状图，杭州市各分区的数量)
 	 */
-
+	@RequestMapping("/insertJcrAndArea")
+	public void insertJcrAndArea(){
+		try {
+			thesisForEnglishService.insertJcrAndArea();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"插入英文jcr各地区分区分布的数据失败,Exception:"+e);
+			e.printStackTrace();
+		}
+	}
+	@RequestMapping("/selectJcrAndAreaDistribution")
+	public List<TCountTopJcr> selectJcrAndAreaDistribution(){
+		try {
+			return thesisForEnglishService.selectJcrAndAreaDistribution();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询英文jcr各地区分区分布的数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	@RequestMapping("/insertJcrTopTenCompany")
+	public void insertJcrTopTenCompany(){
+		try {
+			thesisForEnglishService.insertJcrTopTenCompany();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"插入英文jcr分区topten的数据失败,Exception:"+e);
+			e.printStackTrace();
+		}
+	}
 	/**
 	 *sci论文
 	 *	jcr分区
 	 *		一区单位top10
 	 */
-
+	@RequestMapping("/oneAreaTopTenCompany")
+	public List<TCountTopJcr> oneAreaTopTenCompany(){
+		try {
+			return thesisForEnglishService.oneAreaTopTenCompany();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询英文jcr各一区top10的数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
 	/**
 	 *sci论文
 	 *	jcr分区
 	 *		二区单位top10
 	 */
-
+	@RequestMapping("/twoAreaTopTenCompany")
+	public List<TCountTopJcr> twoAreaTopTenCompany(){
+		try {
+			return thesisForEnglishService.twoAreaTopTenCompany();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询英文jcr各二区top10的数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
 	/**
 	 *sci论文
 	 *	jcr分区
 	 *		三区单位top10
 	 */
-
+	@RequestMapping("/threeAreaTopTenCompany")
+	public List<TCountTopJcr> threeAreaTopTenCompany(){
+		try {
+			return thesisForEnglishService.threeAreaTopTenCompany();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询英文jcr各三区top10的数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
 	/**
 	 *sci论文
 	 *	jcr分区
 	 *		四区单位top10
 	 */
-
+	@RequestMapping("/foreAreaTopTenCompany")
+	public List<TCountTopJcr> foreAreaTopTenCompany(){
+		try {
+			return thesisForEnglishService.foreAreaTopTenCompany();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询英文jcr各四区top10的数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
 	/**
 	 *sci论文
 	 期刊发文排名top20（期刊发表文献数量前20）
 	 */
-
+	@RequestMapping("/insertJournalTopTwentieth")
+	public void insertJournalTopTwentieth(){
+		try {
+			thesisForEnglishService.insertJournalTopTwentieth();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"插入期刊发文排名top20（期刊发表文献数量前20)数据失败,Exception:"+e);
+			e.printStackTrace();
+		}
+	}
+	@RequestMapping("/selectJournalTopTwentieth")
+	public List<TCountTopJournal> selectJournalTopTwentieth(){
+		try {
+			return thesisForEnglishService.selectJournalTopTwentieth();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询期刊发文排名top20（期刊发表文献数量前20）数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
 	/**
 	 *sci论文
 	 *	top10作者合作关系网
 	 */
-
+	@RequestMapping("/insertAuthorNetwork")
+	public void insertAuthorNetwork(){
+		try {
+			thesisForEnglishService.insertAuthorNetwork();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"插入top10作者合作关系网数据失败,Exception:"+e);
+			e.printStackTrace();
+		}
+	}
 	/**
 	 *sci论文
 	 *	top10单位合作关系网
 	 */
+	@RequestMapping("/insertCompanyNetwork")
+	public void insertCompanyNetwork(){
+		try {
+			thesisForEnglishService.insertCompanyNetwork();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"插入top10单位合作关系网数据失败,Exception:"+e);
+			e.printStackTrace();
+		}
+	}
 }
