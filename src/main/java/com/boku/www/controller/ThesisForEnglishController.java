@@ -3,10 +3,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.boku.www.pojo.*;
-import com.boku.www.utils.Count;
-import com.boku.www.utils.CurrentUser;
-import com.boku.www.utils.PageResult;
-import com.boku.www.utils.Result;
+import com.boku.www.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -387,6 +384,20 @@ public class ThesisForEnglishController {
 	 *	jcr分区
 	 *		浙江省论文jcr分区分布(饼状图，各分区的数量)
 	 */
+	@RequestMapping("/insertJcrDistribution")
+	public void insertJcrDistribution(){
+		try {
+			thesisForEnglishService.insertJcrDistribution();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询英文jcr分区分布的数据失败,Exception:"+e);
+			e.printStackTrace();
+		}
+	}
+	/**
+	 *sci论文
+	 *	jcr分区
+	 *		浙江省论文jcr分区分布(饼状图，各分区的数量)
+	 */
 	@RequestMapping("/selectJcrDistribution")
 	public List<TCountTopJcr> selectJcrDistribution(){
 		try {
@@ -526,6 +537,16 @@ public class ThesisForEnglishController {
 			e.printStackTrace();
 		}
 	}
+	@RequestMapping("/selectAuthorNetwork")
+	public CountAuthorNetwork selectAuthorNetwork(){
+		try {
+			return thesisForEnglishService.selectAuthorNetwork();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"插入top10作者合作关系网数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
 	/**
 	 *sci论文
 	 *	top10单位合作关系网
@@ -537,6 +558,56 @@ public class ThesisForEnglishController {
 		} catch (Exception e) {
 			logger.info("用户"+ CurrentUser.returnCurrentUser()+"插入top10单位合作关系网数据失败,Exception:"+e);
 			e.printStackTrace();
+		}
+	}
+	@RequestMapping("/selectCompanyNetwork")
+	public CountCompanyNetwork selectCompanyNetwork(){
+		try {
+			return thesisForEnglishService.selectCompanyNetwork();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"插入top10单位合作关系网数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * 插入各单位平均影响因子和影响影子总和数据
+	 */
+	@RequestMapping("/insertIfAvgInEachCompany")
+	public void insertIfAvgInEachCompany(){
+		try {
+			thesisForEnglishService.insertIfAvgInEachCompany();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"插入各单位平均影响因子和影响影子总和数据失败,Exception:"+e);
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 查询top20平均影响因子
+	 */
+	@RequestMapping("/selectAvgIfTopTwentieth")
+	public List<TCountIf> selectAvgIfTopTwentieth(){
+		try {
+			return thesisForEnglishService.selectAvgIfTopTwentieth();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询top20平均影响因子数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * 查询top20平均影响因子
+	 */
+	@RequestMapping("/selectAuthorPostNumTopTen")
+	public List selectAuthorPostNumTopTen(){
+		try {
+			return thesisForEnglishService.selectAuthorPostNumTopTen();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询top10作者发文量数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
 		}
 	}
 }

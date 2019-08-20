@@ -18,6 +18,15 @@
         <result column="cooperation_num" property="cooperationNum" jdbcType="INTEGER" />
     </resultMap>
 
+    <resultMap id="BaseResultMapEnglish1" type="com.boku.www.pojo.TCountEnglishAuthorNetwork1" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="area" property="area" jdbcType="VARCHAR" />
+        <result column="author" property="author" jdbcType="VARCHAR" />
+        <result column="author_post_num" property="authorPostNum" jdbcType="INTEGER" />
+        <result column="cooperator" property="cooperator" jdbcType="VARCHAR" />
+        <result column="cooperation_num" property="cooperationNum" jdbcType="INTEGER" />
+    </resultMap>
+
   <sql id="Base_Column_List1" >
     id, area, first_author, first_author_post_num, cooperator, cooperation_num
   </sql>
@@ -71,6 +80,11 @@
         SELECT DISTINCT cooperator FROM t_count_author_network1 UNION
         SELECT DISTINCT cooperator FROM t_count_author_network2;
     </select>
+    <select id="selectEnglishAllAuthor" resultType="string">
+        SELECT DISTINCT author FROM t_count_english_author_network1 UNION
+        SELECT DISTINCT cooperator FROM t_count_english_author_network1 UNION
+        SELECT DISTINCT cooperator FROM t_count_english_author_network2;
+    </select>
     <resultMap id="BaseResultMap3" type="com.boku.www.utils.Relation" >
 
         <result column="first_author" property="target" jdbcType="VARCHAR" />
@@ -84,8 +98,26 @@
     <select id="selectAllCooperator2" resultMap="BaseResultMap3">
         SELECT author,cooperator,cooperation_num FROM t_count_author_network2;
     </select>
+    <select id="selectEnglishAllCooperator1" resultMap="BaseResultMap3">
+        SELECT author,cooperator,cooperation_num FROM t_count_english_author_network1;
+    </select>
+    <select id="selectEnglishAllCooperator2" resultMap="BaseResultMap3">
+        SELECT author,cooperator,cooperation_num FROM t_count_english_author_network2;
+    </select>
 
     <select id="selectAuthorPostNum" resultMap="BaseResultMap1">
         SELECT DISTINCT area, first_author,first_author_post_num FROM t_count_author_network1
+    </select>
+
+    <select id="selectEnglishAuthorPostNum" resultMap="BaseResultMapEnglish1">
+        SELECT DISTINCT area, author,author_post_num FROM t_count_english_author_network1
+    </select>
+
+    <select id="selectAuthorPostNumTopTen" resultMap="BaseResultMap1">
+        SELECT DISTINCT area, first_author,first_author_post_num FROM t_count_author_network1 ORDER BY first_author_post_num DESC LIMIT 0,10
+    </select>
+
+    <select id="selectEnglishAuthorPostNumTopTen" resultMap="BaseResultMapEnglish1">
+       SELECT DISTINCT area, author,author_post_num FROM t_count_english_author_network1 ORDER BY author_post_num DESC LIMIT 0,10
     </select>
 </mapper>

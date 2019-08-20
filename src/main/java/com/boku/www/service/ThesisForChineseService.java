@@ -154,6 +154,8 @@ public interface ThesisForChineseService {
 
 	public CountCompanyNetwork selectCompanyNetwork();
 
+	public List selectAuthorPostNumTopTen();
+
 	public void updateThiesis(File file, String fileName) throws Exception;
 
 	public void  cleanRepateArea();

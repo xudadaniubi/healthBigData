@@ -2,6 +2,8 @@ package com.boku.www.service;
 
 import com.boku.www.pojo.*;
 import com.boku.www.utils.Count;
+import com.boku.www.utils.CountAuthorNetwork;
+import com.boku.www.utils.CountCompanyNetwork;
 import com.boku.www.utils.PageResult;
 
 import java.util.HashMap;
@@ -159,6 +161,8 @@ public interface ThesisForEnglishService {
 	public List selectBeforeTwentiethInEachArea();
 
 	public void cleanJcr();
+
+	public void insertJcrDistribution();
 	/**
 	 *sci论文
 	 *	jcr分区
@@ -196,5 +200,13 @@ public interface ThesisForEnglishService {
 	public List<TCountTopJournal> selectJournalTopTwentieth();
 
 	public void insertAuthorNetwork();
+	public CountAuthorNetwork selectAuthorNetwork();
 	public void insertCompanyNetwork();
+	public CountCompanyNetwork selectCompanyNetwork();
+
+	public void insertIfAvgInEachCompany();
+
+	public List<TCountIf> selectAvgIfTopTwentieth();
+
+	public List selectAuthorPostNumTopTen();
 }

@@ -26,6 +26,8 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.formula.functions.T;
+import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -108,7 +110,13 @@ public class UserServiceImpl implements UserService {
 			for (TUserForPersonage userForPersonage:userForPersonageList) {
 				UUser user = new UUser();
 				user.setUsername(userForPersonage.getUsername());
-				user.setPswd("123456");
+				if(StringUtils.isNotBlank(user.getUsername())){
+					// 将用户名作为盐值
+					ByteSource salt = ByteSource.Util.bytes(user.getUsername());
+					//如果修改密码，将密码根据加密方式存储
+					String newPs = new SimpleHash("MD5", "123456", salt, 1024).toHex();
+					user.setPswd(newPs);
+				}
 				user.setCompany(userForPersonage.getCompany());
 				user.setArea(areaAndCompany.getCity());
 				user.setCompanyId(areaAndCompany.getCompanyId());
@@ -282,32 +290,82 @@ public class UserServiceImpl implements UserService {
 	 * 单位管理员修改用户
 	 *	修改用户的时候不能修改单位id和单位名称
 	 *	修改的内容为用户名和密码、邮箱，否则就只能删除和新增
+	 *
+	 *	1.根据用户名查询用户是否存在
+	 *		如果存在，判断用户名是否为原本的用户，是原本的用户则不变，如果不是原本的用户则是修改了用户名，但是修改的用户名数据库中已存在，就不能再修改了
+	 *		如果不存在，说明修改了用户名，并且新修改的用户名为唯一用户名
+	 *	2.修改密码等信息
 	 */
 	@Override
-	public String update(UUser user){
+	/*public String update(UUser user){
+		boolean flag = false;
 		List<UUser> ulist = userDao.selectByUsername(user.getUsername());
-
-		if(ulist.isEmpty()) {
-			UUser uUser = userDao.selectByPrimaryKey(user.getId());
-			if(StringUtils.isNotBlank(uUser.getCompany())){
+		UUser uUser = userDao.selectByPrimaryKey(user.getId());
+		if(ulist.isEmpty()){
+			//用户名已修改，但修改的新用户名为唯一用户
+			flag = true;
+		}else {
+			//用户名未修改
+			if(ulist.get(0).getUsername().equals(uUser.getUsername())){
+				flag = true;
+			}
+		}
+		if(flag){
+			//如果单位、单位id和区域发生的变化
+			if(StringUtils.isNotBlank(user.getArea())){
+				if(!uUser.getArea().equals(user.getArea())){
+					return "修改的内容为用户名和密码、邮箱，否则就只能删除和新增";
+				}
+			}if(StringUtils.isNotBlank(user.getCompanyId())){
+				if(!uUser.getCompanyId().equals(user.getCompanyId())){
+					return "修改的内容为用户名和密码、邮箱，否则就只能删除和新增";
+				}
+			}if(StringUtils.isNotBlank(user.getCompany())){
 				if(!uUser.getCompany().equals(user.getCompany())){
 					return "修改的内容为用户名和密码、邮箱，否则就只能删除和新增";
 				}
 			}
-			if(StringUtils.isNotBlank(uUser.getCompanyId())){
-				if(!uUser.getCompanyId().equals(user.getCompanyId())){
-					return "修改的内容为用户名和密码、邮箱，否则就只能删除和新增";
-				}
+			*//*
+			 * MD5加密：
+			 * 使用SimpleHash类对原始密码进行加密。
+			 * 第一个参数代表使用MD5方式加密
+			 * 第二个参数为原始密码
+			 * 第三个参数为盐值，即用户名
+			 * 第四个参数为加密次数
+			 * 最后用toHex()方法将加密后的密码转成String
+			 * *//*
+			if(StringUtils.isNotBlank(user.getPswd()) && StringUtils.isNotBlank(user.getUsername())){
+				// 将用户名作为盐值
+				ByteSource salt = ByteSource.Util.bytes(user.getUsername());
+				//如果修改密码，将密码根据加密方式存储
+				String newPs = new SimpleHash("MD5", user.getPswd(), salt, 1024).toHex();
+				user.setPswd(newPs);
 			}
-			if(StringUtils.isNotBlank(uUser.getArea())){
-				if(!uUser.getArea().equals(user.getArea())){
-					return "修改的内容为用户名和密码、邮箱，否则就只能删除和新增";
-				}
-			}
-			userDao.updateByPrimaryKey(user);
+			userDao.updateByPrimaryKeySelective(user);
 		}else {
 			return "用户名已存在";
 		}
+
+		return "修改用户成功";
+	}*/
+
+	public String update(UUser user) {
+		UUserExample example = new UUserExample();
+		List<UUser> userList = userDao.selectByExample(example);
+		for (UUser uUser:userList) {
+			//判断当前传过来的密码是否改变，如果改变，则需要通过md5加密，如果没改变，就不加密修改
+			if(!CurrentUser.returnCurrentUser().getPswd().equals(user.getPswd())){
+				if(StringUtils.isNotBlank(uUser.getPswd()) && StringUtils.isNotBlank(uUser.getUsername())){
+					// 将用户名作为盐值
+					ByteSource salt = ByteSource.Util.bytes(uUser.getUsername());
+					//如果修改密码，将密码根据加密方式存储
+					String newPs = new SimpleHash("MD5", uUser.getPswd(), salt, 1024).toHex();
+					uUser.setPswd(newPs);
+				}
+			}
+			userDao.updateByPrimaryKey(uUser);
+		}
+
 		return "修改用户成功";
 	}
 

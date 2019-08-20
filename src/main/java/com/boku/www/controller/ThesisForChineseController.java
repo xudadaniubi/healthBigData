@@ -133,7 +133,6 @@ public class ThesisForChineseController {
 	
 		/**
 	 * 查询+分页
-	 * @param brand
 	 * @param page
 	 * @param rows
 	 * @return
@@ -453,5 +452,18 @@ public class ThesisForChineseController {
 		}
 	}
 
+	/**
+	 * 查询top20平均影响因子
+	 */
+	@RequestMapping("/selectAuthorPostNumTopTen")
+	public List selectAuthorPostNumTopTen(){
+		try {
+			return thesisForChineseService.selectAuthorPostNumTopTen();
+		} catch (Exception e) {
+			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询top10作者发文量数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 }

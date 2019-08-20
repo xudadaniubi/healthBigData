@@ -16,6 +16,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,12 +75,19 @@ public class ShiroRealm extends AuthorizingRealm {
             //hasUser.setPerminsStrlist(perminsStrlist);
 //            Session session = SecurityUtils.getSubject().getSession();
 //            session.setAttribute("user", hasUser);//成功则放入session
-         // 若存在，将此用户存放到登录认证info中，无需自己做密码对比，Shiro会为我们进行密码对比校验
-			//第一个参数：期望登录后，保存在subject中的信息
-			//第二个参数：密码
-			//第三个参数：realm名称
-			System.out.println(hasUser+hasUser.getPswd()+getName());
-			return new SimpleAuthenticationInfo(hasUser, hasUser.getPswd(), getName());//添加资源的授权字符串
+			/**
+			 * 四个参数
+			 * hasUser：认证的实体信息，可以是username，也可以是数据库表对应的用户的实体对象
+			 * hasUser.getPswd()：数据库中的密码（经过加密的密码）
+			 * salt：盐值（使用用户名）
+			 * realmName：当前realm对象的name，调用父类的getName()方法即可
+			 */
+			// 获取盐值，即用户名
+			ByteSource salt = ByteSource.Util.bytes(hasUser.getUsername());
+			String realmName = this.getName();
+			// 将用户，密码，盐值，realmName实例化到SimpleAuthenticationInfo中交给Shiro来管理
+			return new SimpleAuthenticationInfo(hasUser, hasUser.getPswd(), salt,realmName);
+			//return new SimpleAuthenticationInfo(hasUser, hasUser.getPswd(), getName());//添加资源的授权字符串
         }
         return null;
     }

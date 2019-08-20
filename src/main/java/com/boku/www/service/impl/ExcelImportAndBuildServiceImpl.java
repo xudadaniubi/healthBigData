@@ -90,11 +90,7 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 		//转换文件
 		Sheet sheet = ParseExcelUtils.parseExcel(file, fileName);
 		//解析数据
-		List<TProjectData> projectDataList = getProjectDataExcelContent(sheet);
-		for (TProjectData projectData : projectDataList) {
-			//将集合中所有的数据存入到数据库中
-			projectDataMapper.insert(projectData);
-		}
+		getProjectDataExcelContent(sheet);
 		return message;
 	}
 	/**插入奖励数据到数据库
@@ -281,8 +277,8 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 	 */
 	//告诉编译器忽略指定的警告，不用在编译完成后出现警告信息。
 	@SuppressWarnings("static-access")
-	public List<TProjectData> getProjectDataExcelContent(Sheet sheet)throws Exception{
-		List<TProjectData> list = new ArrayList<TProjectData>();
+	public void getProjectDataExcelContent(Sheet sheet)throws Exception{
+		//List<TProjectData> list = new ArrayList<TProjectData>();
 		//行数
 		int rowNumber = 0;
 		//总行数
@@ -315,9 +311,6 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 					row.getCell(1).setCellType(Cell.CELL_TYPE_STRING);
 					projectData.setProjectCategoryGrade(row.getCell(1).getStringCellValue());
 				}
-				//projectData.setProjectCategory(row.getCell(2).getStringCellValue());
-
-
 				if(row.getCell(2)!=null){
 					row.getCell(2).setCellType(Cell.CELL_TYPE_STRING);
 					projectData.setProjectCategory(row.getCell(2).getStringCellValue());
@@ -461,11 +454,19 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 				projectData.setStatus("1");
 				//默认为未确认
 				projectData.setConfirmStatus("2");
-				System.out.println(projectData);
-				list.add(projectData);
+				TProjectDataExample example = new TProjectDataExample();
+				if(org.apache.commons.lang3.StringUtils.isNotBlank(projectData.getProjectName())){
+					example.createCriteria().andProjectNameEqualTo(projectData.getProjectName());
+					List<TProjectData> tProjectData = projectDataMapper.selectByExample(example);
+					if(tProjectData.isEmpty()){
+						projectDataMapper.insert(projectData);
+						//list.add(projectData);
+					}else{
+						System.out.println(projectData.getProjectName());
+					}
+				}
 			}
 		}
-		return list;
 	}/**
 	 * 解析(读取)Excel内容(TPrizeData)
 	 * @param sheet

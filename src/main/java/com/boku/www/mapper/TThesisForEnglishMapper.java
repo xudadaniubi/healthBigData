@@ -112,10 +112,27 @@ public interface TThesisForEnglishMapper {
 	List<TCountTopIf> selectCountImpactFactor(String type);
 
 	/**
+	 * 论文top20（影响因子最高的、单个、附带这篇文章的单位）
+	 * @return
+	 */
+	List<TCountTopIf> selectIfThesisBeforeTwentieth();
+
+	/**
 	 * 查询学科影响因子总和top20
 	 * @return
 	 */
-	List<Count> selectIfSubjectBeforeTwentieth();
+	List<TCountTopIf> selectIfSubjectBeforeTwentieth();
+
+	/**
+	 * 根据学科查询该学科的平均影响因子
+	 * @param subject
+	 * @return
+	 */
+	double selectAvgIfBySubject(String subject);
+
+	int countJcrNum(@Param("jcr") String jcr);
+
+	int insertJcrDistribution(@Param("jcr") String jcr,@Param("count")int count,@Param("type")String type);
 
 	/**
 	 * 查询jcr分区
@@ -177,4 +194,19 @@ public interface TThesisForEnglishMapper {
 	List<String> selectCompanyByCompanyId(String companyId);
 
 	List<String> selectCompanyByCompany(String company);
+
+	/**
+	 * 根据issn号查询期刊
+	 */
+	List<TThesisForEnglish> selectJournalByIssn(String issn);
+
+	/**
+	 * 查询单位的平均影响因子
+	 */
+	Object selectAvgIf(String companyId);
+	/**
+	 * 查询单位的影响因子总和
+	 */
+	Object selectSumIf(String companyId);
+
 }

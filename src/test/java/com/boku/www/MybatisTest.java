@@ -45,10 +45,13 @@ public class MybatisTest {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private ImportService importService;
 	@Test
 	public void test2() throws Exception {
 		//String filePath = "E:\\模板.xls";
-		String filePath = "E:\\healthybigdata\\Excel文档上传下载\\省卫计委数据库导出项目数据（2019年7月26日）.xlsx";
+		String filePath = "E:\\healthybigdata\\省卫计委数据库导出项目数据（2019年8月19日飞蝶修改后的数据）.xlsx";
 		File file = new File(filePath);
 		//截取字符串名称
 		String fileName = filePath.substring(filePath.lastIndexOf("\\")+1);
@@ -412,4 +415,38 @@ public class MybatisTest {
 		System.out.println(1);
 	}
 
+	@Test
+	public void test(){
+		//String txtDirPath = "E:\\opt\\cnki\\tb_parse_cnki_document8\\documents";
+		String ciwDirPath = "E:\\healthybigdata\\浙江省医疗单位wos数据\\新建文件夹";
+		try{
+			importService.readCiwFilesToList(ciwDirPath);
+			System.out.println("插入成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("插入失败");
+		}
+
+	}
+	@Test
+	public void insertJcrAndJournal(){
+		try{
+			importService.insertJcrAndJournal();
+			System.out.println("插入成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("插入失败");
+		}
+	}
+	@Test
+	public void insertAreaCompanyId(){
+		try{
+			importService.insertAreaCompanyId();
+			System.out.println("插入成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("插入失败");
+		}
+
+	}
 }

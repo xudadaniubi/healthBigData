@@ -10,25 +10,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * Created by DELL on 2019/6/26.
  */
 @Configuration
-//public class WebMvcConfig implements WebMvcConfigurer{
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
-//    @Override
-//    public void addViewControllers(ViewControllerRegistry registry){
-//
-//        registry.addRedirectViewController("/file").
-//
-//    }
 	@Value("${web.upload-path}")
 	private String path;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
-
-        //registry.addResourceHandler("/file/**").addResourceLocations("file:E:/image/");
         registry.addResourceHandler("/file/**").addResourceLocations("file:"+path+"/");
-
         super.addResourceHandlers(registry);
     }
 

@@ -585,11 +585,11 @@
     </select>
     <!--根据期刊id查询外文jcr分区-->
     <select id="selectJcrByJournalId" resultType="string" parameterType="string">
-        SELECT jcr_partition FROM fd_partition_jcr WHERE journal_id = #{journalId}
+        SELECT DISTINCT jcr_partition FROM fd_partition_jcr WHERE journal_id = #{journalId}
     </select>
     <!--根据期刊id查询学科-->
     <select id="selectSubjectByJournalId" resultType="string" parameterType="string">
-        SELECT classification_value FROM fd_classification WHERE journal_id = #{journalId}
+        SELECT DISTINCT classification_value FROM fd_classification WHERE journal_id = #{journalId}
     </select>
     <!--根据单位id查询所属地区-->
     <select id="selectAreaByCompanyId" resultType="string" parameterType="string">
@@ -639,31 +639,38 @@
     <select id="selectIfByCompanyId" resultType="object">
         SELECT sum(impact_factor) from t_thesis_for_english WHERE author_company_id LIKE #{companyId}
     </select>
+
     <resultMap id="BaseResultMapImpactFactor" type="com.boku.www.pojo.TCountTopIf" >
-        <result column="id" property="id" jdbcType="INTEGER" />
-        <result column="impact_factor_sum" property="impactFactorSum" jdbcType="VARCHAR" />
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="impact_factor_sum" property="impactFactorSum" jdbcType="DOUBLE" />
         <result column="company" property="company" jdbcType="VARCHAR" />
         <result column="subject" property="subject" jdbcType="VARCHAR" />
-        <result column="thesis_title" property="thesisTitle" jdbcType="VARCHAR" />
-        <result column="impact_factor" property="impactFactor" jdbcType="VARCHAR" />
+        <result column="subject_avg_if" property="subjectAvgIf" jdbcType="DOUBLE" />
         <result column="type" property="type" jdbcType="VARCHAR" />
     </resultMap>
     <!--插入统计的影响因子数据-->
     <insert id="insertCountImpactFactor" parameterType="com.boku.www.pojo.TCountTopIf" >
         insert into t_count_top_if (id, impact_factor_sum, company,
-        subject, thesis_title, impact_factor,
+        subject, subject_avg_if,
         type)
-        values (#{id,jdbcType=INTEGER}, #{impactFactorSum,jdbcType=VARCHAR}, #{company,jdbcType=VARCHAR},
-        #{subject,jdbcType=VARCHAR}, #{thesisTitle,jdbcType=VARCHAR}, #{impactFactor,jdbcType=VARCHAR},
+        values (#{id,jdbcType=INTEGER}, #{impactFactorSum,jdbcType=DOUBLE}, #{company,jdbcType=VARCHAR},
+        #{subject,jdbcType=VARCHAR}, #{subjectAvgIf,jdbcType=DOUBLE},
         #{type,jdbcType=VARCHAR})
     </insert>
     <!--根据type查询统计影响因子的数据-->
     <select id="selectCountImpactFactor" resultMap="BaseResultMapImpactFactor">
-        SELECT id, impact_factor_sum, company, subject, thesis_title, impact_factor, type FROM t_count_top_if WHERE type = #{type}
+        SELECT id, impact_factor_sum, company, subject, subject_avg_if,type FROM t_count_top_if WHERE type = #{type}
+    </select>
+    <!--论文top20（影响因子最高的、单个、附带这篇文章的单位）-->
+    <select id="selectIfThesisBeforeTwentieth"  resultMap="BaseResultMapImpactFactor">
+        SELECT author_company AS company, title AS subject,impact_factor AS impact_factor_sum FROM t_thesis_for_english ORDER BY impact_factor DESC LIMIT 0,20
     </select>
     <!--查询学科影响因子总和top20-->
-    <select id="selectIfSubjectBeforeTwentieth" resultType="com.boku.www.utils.Count">
-        SELECT `subject` AS area,sum(impact_factor) as count from t_thesis_for_english WHERE `subject` IS NOT NULL AND `subject` != '未知'  GROUP BY `subject` ORDER BY count DESC LIMIT 0,20;
+    <select id="selectIfSubjectBeforeTwentieth" resultMap="BaseResultMapImpactFactor">
+        SELECT `subject` AS subject,sum(impact_factor) as impact_factor_sum from t_thesis_for_english WHERE `subject` IS NOT NULL AND `subject` != '未知'  GROUP BY `subject` ORDER BY impact_factor_sum DESC LIMIT 0,20;
+    </select>
+    <select id="selectAvgIfBySubject" resultType="double">
+        SELECT avg(impact_factor) FROM t_thesis_for_english WHERE `subject` LIKE #{subject}
     </select>
     <resultMap id="BaseResultMapJcr" type="com.boku.www.pojo.TCountTopJcr" >
         <id column="id" property="id" jdbcType="INTEGER" />
@@ -673,6 +680,15 @@
         <result column="count" property="count" jdbcType="INTEGER" />
         <result column="type" property="type" jdbcType="VARCHAR" />
     </resultMap>
+    <!--浙江省论文jcr分区分布(饼状图，各分区的数量)-->
+    <select id="countJcrNum" resultType="int">
+        SELECT COUNT(*) FROM t_thesis_for_english WHERE jcr_partition LIKE #{jcr,jdbcType=INTEGER}
+    </select>
+
+    <insert id="insertJcrDistribution">
+      INSERT INTO t_count_top_jcr (jcr,count,type)
+      VALUES (#{jcr,jdbcType=VARCHAR},#{count,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR})
+    </insert>
     <!--查询jcr分区的分布-->
     <select id="selectJcrDistribution" resultMap="BaseResultMapJcr">
         SELECT id, jcr, area, company, count, type FROM t_count_top_jcr WHERE type = #{type}
@@ -724,11 +740,32 @@
     </select>
 
     <!--根据作者查询与之合作的所有单位-->
-    <select id="selectCompanyByCompanyId">
+    <select id="selectCompanyByCompanyId" resultType="string">
         SELECT author_company FROM t_thesis_for_english WHERE author_company_id LIKE #{companyId}
     </select>
     <select id="selectCompanyByCompany" resultType="string">
         SELECT author_company FROM t_thesis_for_english WHERE author_company LIKE #{company}
+    </select>
+
+    <resultMap id="BaseResultMapJournal" type="com.boku.www.pojo.TThesisForEnglish" >
+        <result column="journal_id" property="title" jdbcType="VARCHAR" />
+        <result column="title_main" property="journalName" jdbcType="VARCHAR" />
+        <result column="jcr_partition" property="jcrPartition" jdbcType="VARCHAR" />
+        <result column="all_IFs" property="impactFactor" jdbcType="VARCHAR" />
+        <result column="subject" property="subject" jdbcType="VARCHAR" />
+
+    </resultMap>
+    <!--根据issn查询期刊信息-->
+    <select id="selectJournalByIssn" resultMap="BaseResultMapJournal">
+        SELECT journal_id,title_main,all_IFs FROM fd_journal WHERE ISSN_E = #{issn} or ISSN_P = #{issn} or ISSN_L = #{issn} or ISSN_U = #{issn}
+    </select>
+
+    <select id="selectAvgIf" resultType="object">
+        SELECT avg(impact_factor) FROM t_thesis_for_english WHERE author_company_id LIKE #{companyId};
+    </select>
+
+    <select id="selectSumIf" resultType="object">
+        SELECT sum(impact_factor) FROM t_thesis_for_english WHERE author_company_id LIKE #{companyId};
     </select>
 
 </mapper>

@@ -16,7 +16,16 @@ public interface TCountAuthorNetworkMapper {
 	int insertEnglish2(TCountEnglishAuthorNetwork2 record);
 
 	List<String> selectAllAuthor();
+	List<String> selectEnglishAllAuthor();
 	List<Relation> selectAllCooperator1();
 	List<Relation> selectAllCooperator2();
+	List<Relation> selectEnglishAllCooperator1();
+	List<Relation> selectEnglishAllCooperator2();
 	List<TCountAuthorNetwork1> selectAuthorPostNum();
+	List<TCountEnglishAuthorNetwork1> selectEnglishAuthorPostNum();
+	/**
+	 * 查询作者top10发文量
+	 */
+	List<TCountAuthorNetwork1> selectAuthorPostNumTopTen();
+	List<TCountEnglishAuthorNetwork1> selectEnglishAuthorPostNumTopTen();
 }

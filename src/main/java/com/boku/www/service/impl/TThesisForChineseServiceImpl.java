@@ -805,19 +805,6 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 		countAuthorNetwork.setAllAuthor(allCompany);
 		countAuthorNetwork.setSet(set);
 
-		/*Map<String,List<TCountAuthorNetwork1>> map1 = new HashMap();
-		Map<Integer,List<TCountAuthorNetwork2>> map2 = new HashMap();
-		for (Area area:Area.values()) {
-			List<TCountAuthorNetwork1> countAuthorNetworkList1 = countAuthorNetworkMapper.selectByArea(area.getMsg());
-			map1.put(area.getMsg(),countAuthorNetworkList1);
-			for (TCountAuthorNetwork1 countAuthorNetwork1:countAuthorNetworkList1) {
-				List<TCountAuthorNetwork2> countAuthorNetworkList2 = countAuthorNetworkMapper.selectByForeignKey(countAuthorNetwork1.getId());
-				map2.put(countAuthorNetwork1.getId(),countAuthorNetworkList2);
-			}
-		}
-		CountAuthorNetwork countAuthorNetwork = new CountAuthorNetwork();
-		countAuthorNetwork.setFirstMap(map1);
-		countAuthorNetwork.setSecondMap(map2);*/
 		return countAuthorNetwork;
 	}
 
@@ -913,16 +900,6 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 		countCompanyNetwork.setCompanyPostNum(companyPostNum);
 		countCompanyNetwork.setAllCompany(allCompany);
 		countCompanyNetwork.setSet(set);
-
-		/*Map<Integer,List<TCountCompanyNetwork2>> map = new HashMap();
-		List<TCountCompanyNetwork1> companyNetwork1List = countCompanyNetworkMapper.selectByAll();
-		for (TCountCompanyNetwork1 countCompanyNetwork1:companyNetwork1List) {
-			List<TCountCompanyNetwork2> countAuthorNetworkList2 = countCompanyNetworkMapper.selectByForeignKey(countCompanyNetwork1.getId());
-			map.put(countCompanyNetwork1.getId(),countAuthorNetworkList2);
-		}
-		CountCompanyNetwork countCompanyNetwork = new CountCompanyNetwork();
-		countCompanyNetwork.setList(companyNetwork1List);
-		countCompanyNetwork.setMap(map);*/
 		return countCompanyNetwork;
 	}
 
@@ -982,10 +959,6 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 	}
 
 
-
-
-
-
 	/**
 	 * 清理论文中重复的地级市
 	 */
@@ -1016,5 +989,12 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 		}
 	}
 
+	/**
+	 * 查询作者发文量top10
+	 */
+	@Override
+	public List selectAuthorPostNumTopTen(){
+		return countAuthorNetworkMapper.selectAuthorPostNumTopTen();
+	}
 
 }

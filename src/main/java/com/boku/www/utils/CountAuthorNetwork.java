@@ -13,6 +13,7 @@ package com.boku.www.utils;
 import com.boku.www.pojo.TCountAuthorNetwork1;
 import com.boku.www.pojo.TCountAuthorNetwork2;
 import com.boku.www.pojo.TCountCompanyNetwork1;
+import com.boku.www.pojo.TCountEnglishAuthorNetwork1;
 import lombok.Data;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class CountAuthorNetwork {
 	private Map<Integer, List<TCountAuthorNetwork2>> secondMap;*/
 
 	private List<TCountAuthorNetwork1> authorPostNum;
+	private List<TCountEnglishAuthorNetwork1> englishAuthorPostNum;
 	private List<String> allAuthor;
 	private Set set;
 

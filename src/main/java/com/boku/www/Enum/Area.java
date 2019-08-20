@@ -17,7 +17,8 @@ public enum Area {
 	ZHEZHONGDA("14","浙中大及其附属"),
 	HANGSHIDA("15","杭师大"),
 	QITAGAOXIAO("16","其他高校"),
-	WENYIDA("17","温医大及其附属");
+	WENYIDA("17","温医大及其附属")
+	;
 	private String code;
 	private String msg;
 

@@ -7,9 +7,7 @@ import java.util.stream.Collectors;
 import com.alibaba.fastjson.JSON;
 import com.boku.www.Enum.Area;
 import com.boku.www.config.SolrConfig;
-import com.boku.www.mapper.TAreaAndCompanyMapper;
-import com.boku.www.mapper.TCountAuthorNetworkMapper;
-import com.boku.www.mapper.TThesisForEnglishMapper;
+import com.boku.www.mapper.*;
 import com.boku.www.pojo.*;
 import com.boku.www.pojo.system.URole;
 import com.boku.www.pojo.system.UUser;
@@ -54,6 +52,12 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 
 	@Autowired
 	private TCountAuthorNetworkMapper countAuthorNetworkMapper;
+
+	@Autowired
+	private TCountCompanyNetworkMapper countCompanyNetworkMapper;
+
+	@Autowired
+	private TCountIfMapper countIfMapper;
 
 	@Autowired
 	private SolrClient solrClient;
@@ -579,11 +583,18 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 	/**
 	 *sci论文
 		 数量
-	 		查询单位top20
+	 		查询各地区单位top5
 	 */
 	@Override
 	public List<TAreaAndCompany> selectBeforeTwentieth(){
-		return areaAndCompanyMapper.selectEnglishBeforeX(20);
+		List  allList = new ArrayList();
+		for (Area area:Area.values()) {
+			List<TAreaAndCompany> list = areaAndCompanyMapper.selectEnglishBeforeX(area.getMsg(), 5);
+			for (TAreaAndCompany areaAndCompany:list) {
+				allList.add(areaAndCompany);
+			}
+		}
+		return allList;
 	}
 
 
@@ -709,7 +720,7 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 		for (Map.Entry<String, Double> entry : stringDoubleMap.entrySet()){
 			TCountTopIf countTopIf = new TCountTopIf();
 			countTopIf.setCompany(entry.getKey());
-			countTopIf.setImpactFactorSum(entry.getValue().toString());
+			countTopIf.setImpactFactorSum(entry.getValue());
 			countTopIf.setType("1");
 			thesisForEnglishMapper.insertCountImpactFactor(countTopIf);
 		}
@@ -726,18 +737,20 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 	 */
 	@Override
 	public void insertIfSubjectBeforeTwentieth(){
-		List<Count> countList = thesisForEnglishMapper.selectIfSubjectBeforeTwentieth();
-		for (Count count:countList) {
+		List<TCountTopIf> countList = thesisForEnglishMapper.selectIfSubjectBeforeTwentieth();
+		for (TCountTopIf count:countList) {
 			TCountTopIf countTopIf = new TCountTopIf();
-			countTopIf.setImpactFactorSum(count.getCount().toString());
-			countTopIf.setSubject(count.getArea());
+			double avgIfBySubject = thesisForEnglishMapper.selectAvgIfBySubject(count.getSubject());
+			countTopIf.setImpactFactorSum(count.getImpactFactorSum());
+			countTopIf.setSubject(count.getSubject());
+			countTopIf.setSubjectAvgIf(avgIfBySubject);
 			countTopIf.setType("2");
 			thesisForEnglishMapper.insertCountImpactFactor(countTopIf);
 		}
 	}
 	/**
 	 *sci论文
-	 *	if（影响因子总和）
+	 *	if（影响因子总和和平均影响因子）
 	 *		查询学科top20
 	 */
 	@Override
@@ -750,7 +763,7 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 	 */
 	@Override
 	public List<TCountTopIf> selectIfThesisBeforeTwentieth(){
-		return thesisForEnglishMapper.selectCountImpactFactor("3");
+		return thesisForEnglishMapper.selectIfThesisBeforeTwentieth();
 	}
 
 	/**
@@ -853,6 +866,22 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 			//System.out.println(thesisForEnglish);
 		}
 	}
+
+	/**
+	 * ci论文
+	 *	jcr分区 插入
+	 *		浙江省论文jcr分区分布(饼状图，各分区的数量)
+	 */
+	@Override
+	public void insertJcrDistribution(){
+		String jcrArray[] = {"Q1","Q2","Q3","Q4"};
+		for (String jcr:jcrArray) {
+			int countJcrNum = thesisForEnglishMapper.countJcrNum("%" + jcr + "%");
+			thesisForEnglishMapper.insertJcrDistribution(jcr, countJcrNum,"1");
+		}
+
+	}
+
 	/**
 	 *sci论文
 	 *	jcr分区
@@ -998,12 +1027,13 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 			List<String> authorList1 = thesisForEnglishMapper.selectAllAuthorInEachArea("%" + area.getMsg() + "%");
 			List<String> list1 = new ArrayList() ;
 			for (String authors:authorList1) {
-				//2.统计每个作者出现的次数，取出top10
-				String[] split1 = authors.split(";");
-				for (String author:split1) {
-					list1.add(author);
+				if(StringUtils.isNotBlank(authors)){
+					//2.统计每个作者出现的次数，取出top10
+					String[] split1 = authors.split(";");
+					for (String author:split1) {
+						list1.add(author);
+					}
 				}
-
 			}
 			Map<String, Long> map1 = list1.stream().collect(Collectors.groupingBy(p -> p,Collectors.counting()));
 			Map<String, Long> authorTopMap = sortDescend(map1, top);
@@ -1011,17 +1041,22 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 				//3.根据top10第一次查询和他们有合作关系的作者
 				List<String> authorList2 = thesisForEnglishMapper.selectAuthorByExample("%" + entry.getKey() + "%");
 				List<String> list2 = new ArrayList() ;
-				for (String authors:authorList2) {
-					String[] split2 = authors.split(";");
-					for (String author:split2) {
-						list2.add(author);
+				if(authorList2!=null && authorList2.size()>0){
+					for (String authors:authorList2) {
+						if(StringUtils.isNotBlank(authors)){
+							String[] split2 = authors.split(";");
+							for (String author:split2) {
+								list2.add(author);
+							}
+						}
 					}
 				}
 				//统计作者出现的次数，并封装到map集合里面
 				Map<String, Long> map2 = list2.stream().collect(Collectors.groupingBy(p -> p,Collectors.counting()));
 				//遍历集合
 				for (Map.Entry<String, Long> entry2 : map2.entrySet()) {
-					if(entry2.getValue()>2){
+					//获取合作次数大于4的
+					if(entry2.getValue()>4){
 						TCountEnglishAuthorNetwork1 countEnglishAuthorNetwork1 = new TCountEnglishAuthorNetwork1();
 						countEnglishAuthorNetwork1.setId(i);
 						countEnglishAuthorNetwork1.setArea(area.getMsg());
@@ -1033,17 +1068,22 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 						//System.out.println(countEnglishAuthorNetwork1);
 						List<String> authorList3 = thesisForEnglishMapper.selectAuthorByExample("%" + entry2.getKey() + "%");
 						List<String> list3 = new ArrayList() ;
-						for (String authors:authorList1) {
-							String[] split3 = authors.split(";");
-							for (String author:split3) {
-								list3.add(author);
+						if(authorList3!=null && authorList3.size()>0){
+							for (String authors:authorList3) {
+								if(StringUtils.isNotBlank(authors)){
+									String[] split3 = authors.split(";");
+									for (String author:split3) {
+										list3.add(author);
+									}
+								}
 							}
-
 						}
+
 						Map<String, Long> map3 = list3.stream().collect(Collectors.groupingBy(p -> p,Collectors.counting()));
 						//遍历集合
 						for (Map.Entry<String, Long> entry3 : map3.entrySet()) {
-							//if(entry3.getValue()>2){
+							//获取合作次数大于4的
+							if(entry3.getValue()>4){
 								TCountEnglishAuthorNetwork2 countEnglishAuthorNetwork2 = new TCountEnglishAuthorNetwork2();
 								countEnglishAuthorNetwork2.setCooperatorId(countEnglishAuthorNetwork1.getId());
 								countEnglishAuthorNetwork2.setAuthor(countEnglishAuthorNetwork1.getCooperator());
@@ -1051,13 +1091,39 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 								countEnglishAuthorNetwork2.setCooperationNum(entry3.getValue().intValue());
 								countAuthorNetworkMapper.insertEnglish2(countEnglishAuthorNetwork2);
 								//System.out.println(countEnglishAuthorNetwork2);
-							//}
+							}
 						}
 						i++;
 					}
 				}
 			}
 		}
+	}
+
+	/**
+	 * 查询作者关系网
+	 * @return
+	 */
+	@Override
+	public CountAuthorNetwork selectAuthorNetwork(){
+
+		CountAuthorNetwork countAuthorNetwork = new CountAuthorNetwork();
+		List<String> allCompany = countAuthorNetworkMapper.selectEnglishAllAuthor();
+		List<TCountEnglishAuthorNetwork1> authorPostNum = countAuthorNetworkMapper.selectEnglishAuthorPostNum();
+		List<Relation> list1 = countAuthorNetworkMapper.selectEnglishAllCooperator1();
+		List<Relation> list2 = countAuthorNetworkMapper.selectEnglishAllCooperator2();
+		Set set = new HashSet();
+		for (Relation relation:list1) {
+			set.add(relation);
+		}
+		for (Relation relation:list2) {
+			set.add(relation);
+		}
+		countAuthorNetwork.setEnglishAuthorPostNum(authorPostNum);
+		countAuthorNetwork.setAllAuthor(allCompany);
+		countAuthorNetwork.setSet(set);
+
+		return countAuthorNetwork;
 	}
 
 	/**
@@ -1080,17 +1146,17 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 			//将这些单位全部添加到list集合中
 			List<String> list = new ArrayList() ;
 			for (String cooperator:listCompany) {
-				String[] split = cooperator.split(",");
-				for (String author:split) {
-					list.add(author);
+				String[] split = cooperator.split(";");
+				for (String company:split) {
+					list.add(company);
 				}
 			}
-			//统计作者出现的次数，并封装到map集合里面
+			//统计单位出现的次数，并封装到map集合里面
 			Map<String, Long> map = list.stream().collect(Collectors.groupingBy(p -> p,Collectors.counting()));
 			//遍历集合
 			for (Map.Entry<String, Long> entry : map.entrySet()) {
-				//插入合作次数大于2的
-				if((entry.getValue().intValue()>2)){
+				//插入合作次数大于4的
+				if((entry.getValue().intValue()>4)){
 					//排除自己和自己的合作关系
 					if(!areaAndCompany.getCompany().equals(entry.getKey())){
 						TCountEnglishCompanyNetwork1 countEnglishCompanyNetwork1 = new TCountEnglishCompanyNetwork1();
@@ -1099,28 +1165,31 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 						countEnglishCompanyNetwork1.setCompanyPostNum(areaAndCompany.getThesisForEnglishNum());
 						countEnglishCompanyNetwork1.setCooperator(entry.getKey());
 						countEnglishCompanyNetwork1.setCooperationNum(entry.getValue().intValue());
-						System.out.println(countEnglishCompanyNetwork1);
-						//countCompanyNetworkMapper.insert1(countEnglishCompanyNetwork1);
+						//System.out.println(countEnglishCompanyNetwork1);
+						countCompanyNetworkMapper.insertEnglish1(countEnglishCompanyNetwork1);
+						//根据当前的合作单位，查询与当前合作单位合作的单位
 						List<String> listCompany1 = thesisForEnglishMapper.selectCompanyByCompany("%" + entry.getKey() + "%");
 						List<String> list1 = new ArrayList() ;
-						for (String cooperator2:listCompany1) {
-							String[] split = cooperator2.split(", ");
+						//将所有单位添加到集合中
+						for (String cooperator1:listCompany1) {
+							String[] split = cooperator1.split(", ");
 							for (String company:split) {
 								list1.add(company);
 							}
 
 						}
-						//统计作者出现的次数，并封装到map集合里面
+						//统计单位出现的次数，并封装到map集合里面
 						Map<String, Long> map1 = list1.stream().collect(Collectors.groupingBy(p -> p,Collectors.counting()));
 						for (Map.Entry<String, Long> entry1 : map1.entrySet()) {
-							if(!entry.getKey().equals(entry1.getKey()) && entry1.getValue().intValue()>2){
+							//获取合作大于4次的单位，并排除和自己合作的单位
+							if(!entry.getKey().equals(entry1.getKey()) && entry1.getValue().intValue()>4){
 								TCountEnglishCompanyNetwork2 countEnglishCompanyNetwork2 = new TCountEnglishCompanyNetwork2();
 								countEnglishCompanyNetwork2.setCooperatorId(countEnglishCompanyNetwork1.getId());
 								countEnglishCompanyNetwork2.setCompany(countEnglishCompanyNetwork1.getCooperator());
 								countEnglishCompanyNetwork2.setCooperator(entry1.getKey());
 								countEnglishCompanyNetwork2.setCooperationNum(entry1.getValue().intValue());
-								System.out.println(countEnglishCompanyNetwork2);
-								//countCompanyNetworkMapper.insert2(countEnglishCompanyNetwork2);
+								//System.out.println(countEnglishCompanyNetwork2);
+								countCompanyNetworkMapper.insertEnglish2(countEnglishCompanyNetwork2);
 							}
 						}
 						i++;
@@ -1133,4 +1202,64 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 	 *sci论文
 	 *	top10单位合作关系网
 	 */
+	@Override
+	public CountCompanyNetwork selectCompanyNetwork(){
+		CountCompanyNetwork countCompanyNetwork = new CountCompanyNetwork();
+		List<String> allCompany = countCompanyNetworkMapper.selectAllEnglishCompany();
+		List<TCountEnglishCompanyNetwork1> companyPostNum = countCompanyNetworkMapper.selectEnglishCompanyPostNum();
+
+		List<Relation> list1 = countCompanyNetworkMapper.selectEnglishAllCooperator1();
+		List<Relation> list2 = countCompanyNetworkMapper.selectEnglishAllCooperator2();
+		Set set = new HashSet();
+		for (Relation relation:list1) {
+			set.add(relation);
+		}
+		for (Relation relation:list2) {
+			set.add(relation);
+		}
+		countCompanyNetwork.setEnglishCompanyPostNum(companyPostNum);
+		countCompanyNetwork.setAllCompany(allCompany);
+		countCompanyNetwork.setSet(set);
+		return countCompanyNetwork;
+	}
+
+
+	/**
+	 * 插入各个单位的影响因子平均值
+	 */
+	@Override
+	public void insertIfAvgInEachCompany(){
+		TAreaAndCompanyExample example = new TAreaAndCompanyExample();
+		List<TAreaAndCompany> list = areaAndCompanyMapper.selectByExample(example);
+		for (TAreaAndCompany areaAndCompany:list) {
+			TCountIf countIf = new TCountIf();
+			Object avgIf = thesisForEnglishMapper.selectAvgIf("%" + areaAndCompany.getCompanyId() + "%");
+			if(avgIf!=null){
+				countIf.setAvgIf(Double.valueOf(avgIf.toString()));
+			}
+			Object sumIf = thesisForEnglishMapper.selectSumIf("%" + areaAndCompany.getCompanyId() + "%");
+			if(sumIf!=null){
+				countIf.setSumIf(Double.valueOf(sumIf.toString()));
+			}
+			countIf.setCompany(areaAndCompany.getCompany());
+			countIfMapper.insert(countIf);
+		}
+	}
+
+	/**
+	 * 查询平均影响因子top20
+	 */
+	@Override
+	public List<TCountIf> selectAvgIfTopTwentieth(){
+		return countIfMapper.selectAvgIfTopTwentieth();
+	}
+
+	/**
+	 * 查询作者发文量top10
+	 */
+	@Override
+	public List selectAuthorPostNumTopTen(){
+		return countAuthorNetworkMapper.selectEnglishAuthorPostNumTopTen();
+	}
+
 }

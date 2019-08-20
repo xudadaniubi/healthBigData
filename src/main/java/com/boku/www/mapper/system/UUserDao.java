@@ -37,6 +37,8 @@ public interface UUserDao{
 	 */
 	int updateByPrimaryKey(UUser user);
 
+	int updateByPrimaryKeySelective(UUser record);
+
 	List<UUser> selectByExample(UUserExample example);
 
 	int deleteByPrimaryKey(Integer id);

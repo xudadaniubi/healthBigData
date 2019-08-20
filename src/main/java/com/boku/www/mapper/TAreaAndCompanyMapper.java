@@ -36,7 +36,7 @@ public interface TAreaAndCompanyMapper {
 
 	List<TAreaAndCompany> selectChineseBeforeX(int X);
 
-	List<TAreaAndCompany> selectEnglishBeforeX(int X);
+	List<TAreaAndCompany> selectEnglishBeforeX(@Param("area")String area,@Param("X")int X);
 
 	List<TAreaAndCompany> selectChineseBeforeTwentiethInEachArea();
 

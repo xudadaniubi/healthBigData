@@ -7,6 +7,7 @@ import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSource
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,16 +39,6 @@ public class ShiroConfiguration {
 		return new LifecycleBeanPostProcessor();
 	}
 
-	//处理认证匹配处理器：如果自定义需要实现继承HashedCredentialsMatcher
-	//指定加密方式方式，也可以在这里加入缓存，当用户超过五次登陆错误就锁定该用户禁止不断尝试登陆
-//    @Bean(name = "hashedCredentialsMatcher")
-//    public HashedCredentialsMatcher hashedCredentialsMatcher() {
-//        HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
-//        credentialsMatcher.setHashAlgorithmName("MD5");
-//        credentialsMatcher.setHashIterations(2);
-//        credentialsMatcher.setStoredCredentialsHexEncoded(true);
-//        return credentialsMatcher;
-//    }
 	/**
 	 * 密码校验规则HashedCredentialsMatcher
 	 * 这个类是为了对密码进行编码的 ,
@@ -55,22 +46,26 @@ public class ShiroConfiguration {
 	 * 这个类也负责对form里输入的密码进行编码
 	 * 处理认证匹配处理器：如果自定义需要实现继承HashedCredentialsMatcher
 	 */
-	/*@Bean("hashedCredentialsMatcher")
+	/**
+	 * 密码匹配凭证管理器
+	 *
+	 * @return
+	 */
+	@Bean(name = "hashedCredentialsMatcher")
 	public HashedCredentialsMatcher hashedCredentialsMatcher() {
-		HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
-		//指定加密方式为MD5
-		credentialsMatcher.setHashAlgorithmName("MD5");
-		//加密次数
-		credentialsMatcher.setHashIterations(2);
-		credentialsMatcher.setStoredCredentialsHexEncoded(true);
-		return credentialsMatcher;
-	}*/
+		HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
+		// 采用MD5方式加密
+		hashedCredentialsMatcher.setHashAlgorithmName("MD5");
+		// 设置加密次数
+		hashedCredentialsMatcher.setHashIterations(1024);
+		return hashedCredentialsMatcher;
+	}
 	@Bean(name = "shiroRealm")
 	@DependsOn("lifecycleBeanPostProcessor")
-	public ShiroRealm shiroRealm() {
-		ShiroRealm realm = new ShiroRealm();
-//        realm.setCredentialsMatcher(hashedCredentialsMatcher());
-		return realm;
+	public ShiroRealm shiroRealm(HashedCredentialsMatcher matcher) {
+		ShiroRealm shiroRealm = new ShiroRealm();
+		shiroRealm.setCredentialsMatcher(matcher);
+		return shiroRealm;
 	}
 
 	@Bean(name = "ehCacheManager")
@@ -82,9 +77,9 @@ public class ShiroConfiguration {
 
 	@Bean(name = "securityManager")
 	//安全管理器
-	public DefaultWebSecurityManager securityManager(){
+	public DefaultWebSecurityManager securityManager(@Qualifier("hashedCredentialsMatcher") HashedCredentialsMatcher matcher){
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-		securityManager.setRealm(shiroRealm());
+		securityManager.setRealm(shiroRealm(matcher));
 		securityManager.setCacheManager(ehCacheManager());//用户授权/认证信息Cache, 采用EhCache 缓存
 		return securityManager;
 	}

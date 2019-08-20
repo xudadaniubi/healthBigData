@@ -20,18 +20,17 @@
   <sql id="Base_Column_List1" >
     id, company, company_post_num, cooperator, cooperation_num
   </sql>
-
     <sql id="Base_Column_List2" >
         id, cooperator_id, company, cooperator, cooperation_num
     </sql>
-
+    <!--插入中文单位关系网数据第一级-->
   <insert id="insert1" parameterType="com.boku.www.pojo.TCountCompanyNetwork1" >
     insert into t_count_company_network1 (id, company, company_post_num, 
       cooperator, cooperation_num)
     values (#{id,jdbcType=INTEGER}, #{company,jdbcType=VARCHAR}, #{companyPostNum,jdbcType=INTEGER}, 
       #{cooperator,jdbcType=VARCHAR}, #{cooperationNum,jdbcType=INTEGER})
   </insert>
-
+    <!--插入中文单位关系网数据第二级-->
     <insert id="insert2" parameterType="com.boku.www.pojo.TCountCompanyNetwork2" >
         insert into t_count_company_network2 (id, cooperator_id, company,
           cooperator, cooperation_num)
@@ -46,28 +45,84 @@
     <select id="selectByForeignKey" resultMap="BaseResultMap2">
         SELECT id, cooperator_id, company, cooperator, cooperation_num FROM t_count_company_network2 WHERE cooperator_id = #{id}
     </select>
-
+    <!--插入英文单位关系网数据第一级-->
+    <insert id="insertEnglish1" parameterType="com.boku.www.pojo.TCountEnglishCompanyNetwork1" >
+        insert into t_count_english_company_network1 (id, company, company_post_num, cooperator, cooperation_num
+        )
+        values (#{id,jdbcType=INTEGER}, #{company,jdbcType=VARCHAR},
+        #{companyPostNum,jdbcType=INTEGER}, #{cooperator,jdbcType=VARCHAR}, #{cooperationNum,jdbcType=INTEGER}
+        )
+    </insert>
+    <!--插入英文单位关系网数据第二级-->
+    <insert id="insertEnglish2" parameterType="com.boku.www.pojo.TCountEnglishCompanyNetwork2" >
+        insert into t_count_english_company_network2 (id, cooperator_id, company,
+        cooperator, cooperation_num)
+        values (#{id,jdbcType=INTEGER}, #{cooperatorId,jdbcType=INTEGER}, #{company,jdbcType=VARCHAR},
+        #{cooperator,jdbcType=VARCHAR}, #{cooperationNum,jdbcType=INTEGER})
+    </insert>
+    <!--中文单位网所有单位-->
     <select id="selectAllCompany" resultType="string">
         SELECT DISTINCT company FROM t_count_company_network1 UNION
         SELECT DISTINCT cooperator FROM t_count_company_network1 UNION
         SELECT DISTINCT cooperator FROM t_count_company_network2;
     </select>
-
+    <!--英文单位网所有单位-->
+    <select id="selectAllEnglishCompany" resultType="string">
+        SELECT DISTINCT company FROM t_count_english_company_network1 UNION
+        SELECT DISTINCT cooperator FROM t_count_english_company_network1 UNION
+        SELECT DISTINCT cooperator FROM t_count_english_company_network2;
+    </select>
 
     <resultMap id="BaseResultMap3" type="com.boku.www.utils.Relation" >
-
         <result column="company" property="target" jdbcType="VARCHAR" />
         <result column="cooperator" property="source" jdbcType="VARCHAR" />
         <result column="cooperation_num" property="cooperationNum" jdbcType="INTEGER" />
     </resultMap>
+    <!--查询中文关系网的关系-->
     <select id="selectAllCooperator1" resultMap="BaseResultMap3">
         SELECT company,cooperator,cooperation_num FROM t_count_company_network1;
     </select>
+    <!--查询中文关系网的关系-->
     <select id="selectAllCooperator2" resultMap="BaseResultMap3">
         SELECT company,cooperator,cooperation_num FROM t_count_company_network2;
     </select>
 
-    <select id="selectCompanyPostNum" resultMap="BaseResultMap1">
-        SELECT DISTINCT company,company_post_num FROM t_count_company_network1
+    <!--查询外文关系网的关系-->
+    <select id="selectEnglishAllCooperator1" resultMap="BaseResultMap3">
+        SELECT company,cooperator,cooperation_num FROM t_count_english_company_network1;
     </select>
+    <!--查询外文关系网的关系-->
+    <select id="selectEnglishAllCooperator2" resultMap="BaseResultMap3">
+        SELECT company,cooperator,cooperation_num FROM t_count_english_company_network2;
+    </select>
+    <!--中文单位网内所有单位的发文量-->
+    <select id="selectCompanyPostNum" resultMap="BaseResultMap1">
+        SELECT company,thesis_for_chinese_num AS company_post_num FROM t_area_and_company WHERE company IN
+        (SELECT DISTINCT company FROM t_count_company_network1 UNION
+        SELECT DISTINCT cooperator FROM t_count_company_network1 UNION
+        SELECT DISTINCT cooperator FROM t_count_company_network2)
+    </select>
+    <resultMap id="BaseResultMapEnglish1" type="com.boku.www.pojo.TCountEnglishCompanyNetwork1" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="company" property="company" jdbcType="VARCHAR" />
+        <result column="company_post_num" property="companyPostNum" jdbcType="INTEGER" />
+        <result column="cooperator" property="cooperator" jdbcType="VARCHAR" />
+        <result column="cooperation_num" property="cooperationNum" jdbcType="INTEGER" />
+    </resultMap>
+    <resultMap id="BaseResultMapEnglish2" type="com.boku.www.pojo.TCountEnglishCompanyNetwork2" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="cooperator_id" property="cooperatorId" jdbcType="INTEGER" />
+        <result column="company" property="company" jdbcType="VARCHAR" />
+        <result column="cooperator" property="cooperator" jdbcType="VARCHAR" />
+        <result column="cooperation_num" property="cooperationNum" jdbcType="INTEGER" />
+    </resultMap>
+    <!--外文单位网内所有单位的发文量-->
+    <select id="selectEnglishCompanyPostNum" resultMap="BaseResultMapEnglish1">
+        SELECT company,thesis_for_english_num AS company_post_num FROM t_area_and_company WHERE company IN
+        (SELECT DISTINCT company FROM t_count_english_company_network1 UNION
+        SELECT DISTINCT cooperator FROM t_count_english_company_network1 UNION
+        SELECT DISTINCT cooperator FROM t_count_english_company_network2)
+    </select>
+
+
 </mapper>

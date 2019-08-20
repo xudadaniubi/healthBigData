@@ -269,7 +269,7 @@
        SELECT * FROM t_area_and_company ORDER BY thesis_for_chinese_num DESC LIMIT 0,#{X}
     </select>
     <select id="selectEnglishBeforeX" resultMap="BaseResultMap">
-        SELECT * FROM t_area_and_company ORDER BY thesis_for_english_num DESC LIMIT 0,#{X}
+        SELECT * FROM t_area_and_company WHERE city = #{area} ORDER BY thesis_for_english_num DESC LIMIT 0,#{X}
     </select>
     <!--各地区中文文献数量前20的单位-->
     <select id="selectChineseBeforeTwentiethInEachArea" resultMap="BaseResultMap">
