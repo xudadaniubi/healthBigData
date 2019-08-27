@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.boku.www.mapper.TThesisForEnglishFromSolrMapper" >
+  <resultMap id="BaseResultMap" type="com.boku.www.pojo.TThesisForEnglishFromSolr" >
+    <id column="abstract_id" property="abstractId" jdbcType="VARCHAR" />
+    <result column="journal_id" property="journalId" jdbcType="VARCHAR" />
+    <result column="pmid" property="pmid" jdbcType="VARCHAR" />
+    <result column="issn" property="issn" jdbcType="VARCHAR" />
+    <result column="volume" property="volume" jdbcType="VARCHAR" />
+    <result column="issue" property="issue" jdbcType="VARCHAR" />
+    <result column="medline_date" property="medlineDate" jdbcType="DATE" />
+    <result column="medline_TA" property="medlineTa" jdbcType="VARCHAR" />
+    <result column="medline_page" property="medlinePage" jdbcType="VARCHAR" />
+    <result column="elocation_id_DOI" property="elocationIdDoi" jdbcType="VARCHAR" />
+    <result column="language" property="language" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="nlm_unique_ID" property="nlmUniqueId" jdbcType="VARCHAR" />
+    <result column="ISO_abbreviation" property="isoAbbreviation" jdbcType="VARCHAR" />
+    <result column="had_free_full_text" property="hadFreeFullText" jdbcType="VARCHAR" />
+    <result column="had_full_text" property="hadFullText" jdbcType="VARCHAR" />
+    <result column="key_words" property="keywords" jdbcType="VARCHAR"/>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.boku.www.pojo.TThesisForEnglishFromSolrWithBLOBs" extends="BaseResultMap" >
+    <result column="journal_title_main" property="journalTitleMain" jdbcType="LONGVARCHAR" />
+    <result column="article_title" property="articleTitle" jdbcType="LONGVARCHAR" />
+    <result column="abstract_text" property="abstractText" jdbcType="LONGVARCHAR" />
+    <result column="translateTest" property="translatetest" jdbcType="LONGVARCHAR" />
+    <result column="abstract_authors" property="abstractAuthors" jdbcType="LONGVARCHAR" />
+    <result column="publication_types" property="publicationTypes" jdbcType="LONGVARCHAR" />
+    <result column="mesh_heads_UI" property="meshHeadsUi" jdbcType="LONGVARCHAR" />
+    <result column="mesh_heads" property="meshHeads" jdbcType="LONGVARCHAR" />
+    <result column="qualifier" property="qualifier" jdbcType="LONGVARCHAR" />
+    <result column="key_words" property="keyWords" jdbcType="LONGVARCHAR" />
+    <result column="original_URL" property="originalUrl" jdbcType="LONGVARCHAR" />
+    <result column="authors_str" property="authorsStr" jdbcType="LONGVARCHAR" />
+    <result column="affiliation_str" property="affiliationStr" jdbcType="LONGVARCHAR" />
+    <result column="journal_indexes" property="journalIndexes" jdbcType="LONGVARCHAR" />
+    <result column="tatistics_abstracts_blong_to_hospital_name" property="tatisticsAbstractsBlongToHospitalName" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    abstract_id, journal_id, pmid, issn, volume, issue, medline_date, medline_TA, medline_page, 
+    elocation_id_DOI, language, country, nlm_unique_ID, ISO_abbreviation, had_free_full_text, 
+    had_full_text,key_words
+  </sql>
+  <sql id="Blob_Column_List" >
+    journal_title_main, article_title, abstract_text, translateTest, abstract_authors, 
+    publication_types, mesh_heads_UI, mesh_heads, qualifier, key_words, original_URL, 
+    authors_str, affiliation_str, journal_indexes, tatistics_abstracts_blong_to_hospital_name
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.boku.www.pojo.TThesisForEnglishFromSolrExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_thesis_for_english_from_solr
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.boku.www.pojo.TThesisForEnglishFromSolrExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_thesis_for_english_from_solr
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_thesis_for_english_from_solr
+    where abstract_id = #{abstractId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_thesis_for_english_from_solr
+    where abstract_id = #{abstractId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.boku.www.pojo.TThesisForEnglishFromSolrExample" >
+    delete from t_thesis_for_english_from_solr
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.boku.www.pojo.TThesisForEnglishFromSolrWithBLOBs" >
+    insert into t_thesis_for_english_from_solr (abstract_id, journal_id, pmid, 
+      issn, volume, issue, 
+      medline_date, medline_TA, medline_page, 
+      elocation_id_DOI, language, country, 
+      nlm_unique_ID, ISO_abbreviation, had_free_full_text, 
+      had_full_text, journal_title_main, article_title, 
+      abstract_text, translateTest, abstract_authors, 
+      publication_types, mesh_heads_UI, 
+      mesh_heads, qualifier, key_words, 
+      original_URL, authors_str, affiliation_str, 
+      journal_indexes, tatistics_abstracts_blong_to_hospital_name
+      )
+    values (#{abstractId,jdbcType=VARCHAR}, #{journalId,jdbcType=VARCHAR}, #{pmid,jdbcType=VARCHAR}, 
+      #{issn,jdbcType=VARCHAR}, #{volume,jdbcType=VARCHAR}, #{issue,jdbcType=VARCHAR}, 
+      #{medlineDate,jdbcType=DATE}, #{medlineTa,jdbcType=VARCHAR}, #{medlinePage,jdbcType=VARCHAR}, 
+      #{elocationIdDoi,jdbcType=VARCHAR}, #{language,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, 
+      #{nlmUniqueId,jdbcType=VARCHAR}, #{isoAbbreviation,jdbcType=VARCHAR}, #{hadFreeFullText,jdbcType=VARCHAR}, 
+      #{hadFullText,jdbcType=VARCHAR}, #{journalTitleMain,jdbcType=LONGVARCHAR}, #{articleTitle,jdbcType=LONGVARCHAR}, 
+      #{abstractText,jdbcType=LONGVARCHAR}, #{translatetest,jdbcType=LONGVARCHAR}, #{abstractAuthors,jdbcType=LONGVARCHAR}, 
+      #{publicationTypes,jdbcType=LONGVARCHAR}, #{meshHeadsUi,jdbcType=LONGVARCHAR}, 
+      #{meshHeads,jdbcType=LONGVARCHAR}, #{qualifier,jdbcType=LONGVARCHAR}, #{keyWords,jdbcType=LONGVARCHAR}, 
+      #{originalUrl,jdbcType=LONGVARCHAR}, #{authorsStr,jdbcType=LONGVARCHAR}, #{affiliationStr,jdbcType=LONGVARCHAR}, 
+      #{journalIndexes,jdbcType=LONGVARCHAR}, #{tatisticsAbstractsBlongToHospitalName,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.boku.www.pojo.TThesisForEnglishFromSolrWithBLOBs" >
+    insert into t_thesis_for_english_from_solr
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="abstractId != null" >
+        abstract_id,
+      </if>
+      <if test="journalId != null" >
+        journal_id,
+      </if>
+      <if test="pmid != null" >
+        pmid,
+      </if>
+      <if test="issn != null" >
+        issn,
+      </if>
+      <if test="volume != null" >
+        volume,
+      </if>
+      <if test="issue != null" >
+        issue,
+      </if>
+      <if test="medlineDate != null" >
+        medline_date,
+      </if>
+      <if test="medlineTa != null" >
+        medline_TA,
+      </if>
+      <if test="medlinePage != null" >
+        medline_page,
+      </if>
+      <if test="elocationIdDoi != null" >
+        elocation_id_DOI,
+      </if>
+      <if test="language != null" >
+        language,
+      </if>
+      <if test="country != null" >
+        country,
+      </if>
+      <if test="nlmUniqueId != null" >
+        nlm_unique_ID,
+      </if>
+      <if test="isoAbbreviation != null" >
+        ISO_abbreviation,
+      </if>
+      <if test="hadFreeFullText != null" >
+        had_free_full_text,
+      </if>
+      <if test="hadFullText != null" >
+        had_full_text,
+      </if>
+      <if test="journalTitleMain != null" >
+        journal_title_main,
+      </if>
+      <if test="articleTitle != null" >
+        article_title,
+      </if>
+      <if test="abstractText != null" >
+        abstract_text,
+      </if>
+      <if test="translatetest != null" >
+        translateTest,
+      </if>
+      <if test="abstractAuthors != null" >
+        abstract_authors,
+      </if>
+      <if test="publicationTypes != null" >
+        publication_types,
+      </if>
+      <if test="meshHeadsUi != null" >
+        mesh_heads_UI,
+      </if>
+      <if test="meshHeads != null" >
+        mesh_heads,
+      </if>
+      <if test="qualifier != null" >
+        qualifier,
+      </if>
+      <if test="keyWords != null" >
+        key_words,
+      </if>
+      <if test="originalUrl != null" >
+        original_URL,
+      </if>
+      <if test="authorsStr != null" >
+        authors_str,
+      </if>
+      <if test="affiliationStr != null" >
+        affiliation_str,
+      </if>
+      <if test="journalIndexes != null" >
+        journal_indexes,
+      </if>
+      <if test="tatisticsAbstractsBlongToHospitalName != null" >
+        tatistics_abstracts_blong_to_hospital_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="abstractId != null" >
+        #{abstractId,jdbcType=VARCHAR},
+      </if>
+      <if test="journalId != null" >
+        #{journalId,jdbcType=VARCHAR},
+      </if>
+      <if test="pmid != null" >
+        #{pmid,jdbcType=VARCHAR},
+      </if>
+      <if test="issn != null" >
+        #{issn,jdbcType=VARCHAR},
+      </if>
+      <if test="volume != null" >
+        #{volume,jdbcType=VARCHAR},
+      </if>
+      <if test="issue != null" >
+        #{issue,jdbcType=VARCHAR},
+      </if>
+      <if test="medlineDate != null" >
+        #{medlineDate,jdbcType=DATE},
+      </if>
+      <if test="medlineTa != null" >
+        #{medlineTa,jdbcType=VARCHAR},
+      </if>
+      <if test="medlinePage != null" >
+        #{medlinePage,jdbcType=VARCHAR},
+      </if>
+      <if test="elocationIdDoi != null" >
+        #{elocationIdDoi,jdbcType=VARCHAR},
+      </if>
+      <if test="language != null" >
+        #{language,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="nlmUniqueId != null" >
+        #{nlmUniqueId,jdbcType=VARCHAR},
+      </if>
+      <if test="isoAbbreviation != null" >
+        #{isoAbbreviation,jdbcType=VARCHAR},
+      </if>
+      <if test="hadFreeFullText != null" >
+        #{hadFreeFullText,jdbcType=VARCHAR},
+      </if>
+      <if test="hadFullText != null" >
+        #{hadFullText,jdbcType=VARCHAR},
+      </if>
+      <if test="journalTitleMain != null" >
+        #{journalTitleMain,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="articleTitle != null" >
+        #{articleTitle,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="abstractText != null" >
+        #{abstractText,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="translatetest != null" >
+        #{translatetest,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="abstractAuthors != null" >
+        #{abstractAuthors,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="publicationTypes != null" >
+        #{publicationTypes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="meshHeadsUi != null" >
+        #{meshHeadsUi,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="meshHeads != null" >
+        #{meshHeads,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="qualifier != null" >
+        #{qualifier,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="keyWords != null" >
+        #{keyWords,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="originalUrl != null" >
+        #{originalUrl,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="authorsStr != null" >
+        #{authorsStr,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="affiliationStr != null" >
+        #{affiliationStr,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="journalIndexes != null" >
+        #{journalIndexes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="tatisticsAbstractsBlongToHospitalName != null" >
+        #{tatisticsAbstractsBlongToHospitalName,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.boku.www.pojo.TThesisForEnglishFromSolrExample" resultType="java.lang.Integer" >
+    select count(*) from t_thesis_for_english_from_solr
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_thesis_for_english_from_solr
+    <set >
+      <if test="record.abstractId != null" >
+        abstract_id = #{record.abstractId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.journalId != null" >
+        journal_id = #{record.journalId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pmid != null" >
+        pmid = #{record.pmid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.issn != null" >
+        issn = #{record.issn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.volume != null" >
+        volume = #{record.volume,jdbcType=VARCHAR},
+      </if>
+      <if test="record.issue != null" >
+        issue = #{record.issue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.medlineDate != null" >
+        medline_date = #{record.medlineDate,jdbcType=DATE},
+      </if>
+      <if test="record.medlineTa != null" >
+        medline_TA = #{record.medlineTa,jdbcType=VARCHAR},
+      </if>
+      <if test="record.medlinePage != null" >
+        medline_page = #{record.medlinePage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.elocationIdDoi != null" >
+        elocation_id_DOI = #{record.elocationIdDoi,jdbcType=VARCHAR},
+      </if>
+      <if test="record.language != null" >
+        language = #{record.language,jdbcType=VARCHAR},
+      </if>
+      <if test="record.country != null" >
+        country = #{record.country,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nlmUniqueId != null" >
+        nlm_unique_ID = #{record.nlmUniqueId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isoAbbreviation != null" >
+        ISO_abbreviation = #{record.isoAbbreviation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hadFreeFullText != null" >
+        had_free_full_text = #{record.hadFreeFullText,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hadFullText != null" >
+        had_full_text = #{record.hadFullText,jdbcType=VARCHAR},
+      </if>
+      <if test="record.journalTitleMain != null" >
+        journal_title_main = #{record.journalTitleMain,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.articleTitle != null" >
+        article_title = #{record.articleTitle,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.abstractText != null" >
+        abstract_text = #{record.abstractText,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.translatetest != null" >
+        translateTest = #{record.translatetest,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.abstractAuthors != null" >
+        abstract_authors = #{record.abstractAuthors,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.publicationTypes != null" >
+        publication_types = #{record.publicationTypes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.meshHeadsUi != null" >
+        mesh_heads_UI = #{record.meshHeadsUi,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.meshHeads != null" >
+        mesh_heads = #{record.meshHeads,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.qualifier != null" >
+        qualifier = #{record.qualifier,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.keyWords != null" >
+        key_words = #{record.keyWords,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.originalUrl != null" >
+        original_URL = #{record.originalUrl,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.authorsStr != null" >
+        authors_str = #{record.authorsStr,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.affiliationStr != null" >
+        affiliation_str = #{record.affiliationStr,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.journalIndexes != null" >
+        journal_indexes = #{record.journalIndexes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.tatisticsAbstractsBlongToHospitalName != null" >
+        tatistics_abstracts_blong_to_hospital_name = #{record.tatisticsAbstractsBlongToHospitalName,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update t_thesis_for_english_from_solr
+    set abstract_id = #{record.abstractId,jdbcType=VARCHAR},
+      journal_id = #{record.journalId,jdbcType=VARCHAR},
+      pmid = #{record.pmid,jdbcType=VARCHAR},
+      issn = #{record.issn,jdbcType=VARCHAR},
+      volume = #{record.volume,jdbcType=VARCHAR},
+      issue = #{record.issue,jdbcType=VARCHAR},
+      medline_date = #{record.medlineDate,jdbcType=DATE},
+      medline_TA = #{record.medlineTa,jdbcType=VARCHAR},
+      medline_page = #{record.medlinePage,jdbcType=VARCHAR},
+      elocation_id_DOI = #{record.elocationIdDoi,jdbcType=VARCHAR},
+      language = #{record.language,jdbcType=VARCHAR},
+      country = #{record.country,jdbcType=VARCHAR},
+      nlm_unique_ID = #{record.nlmUniqueId,jdbcType=VARCHAR},
+      ISO_abbreviation = #{record.isoAbbreviation,jdbcType=VARCHAR},
+      had_free_full_text = #{record.hadFreeFullText,jdbcType=VARCHAR},
+      had_full_text = #{record.hadFullText,jdbcType=VARCHAR},
+      journal_title_main = #{record.journalTitleMain,jdbcType=LONGVARCHAR},
+      article_title = #{record.articleTitle,jdbcType=LONGVARCHAR},
+      abstract_text = #{record.abstractText,jdbcType=LONGVARCHAR},
+      translateTest = #{record.translatetest,jdbcType=LONGVARCHAR},
+      abstract_authors = #{record.abstractAuthors,jdbcType=LONGVARCHAR},
+      publication_types = #{record.publicationTypes,jdbcType=LONGVARCHAR},
+      mesh_heads_UI = #{record.meshHeadsUi,jdbcType=LONGVARCHAR},
+      mesh_heads = #{record.meshHeads,jdbcType=LONGVARCHAR},
+      qualifier = #{record.qualifier,jdbcType=LONGVARCHAR},
+      key_words = #{record.keyWords,jdbcType=LONGVARCHAR},
+      original_URL = #{record.originalUrl,jdbcType=LONGVARCHAR},
+      authors_str = #{record.authorsStr,jdbcType=LONGVARCHAR},
+      affiliation_str = #{record.affiliationStr,jdbcType=LONGVARCHAR},
+      journal_indexes = #{record.journalIndexes,jdbcType=LONGVARCHAR},
+      tatistics_abstracts_blong_to_hospital_name = #{record.tatisticsAbstractsBlongToHospitalName,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_thesis_for_english_from_solr
+    set abstract_id = #{record.abstractId,jdbcType=VARCHAR},
+      journal_id = #{record.journalId,jdbcType=VARCHAR},
+      pmid = #{record.pmid,jdbcType=VARCHAR},
+      issn = #{record.issn,jdbcType=VARCHAR},
+      volume = #{record.volume,jdbcType=VARCHAR},
+      issue = #{record.issue,jdbcType=VARCHAR},
+      medline_date = #{record.medlineDate,jdbcType=DATE},
+      medline_TA = #{record.medlineTa,jdbcType=VARCHAR},
+      medline_page = #{record.medlinePage,jdbcType=VARCHAR},
+      elocation_id_DOI = #{record.elocationIdDoi,jdbcType=VARCHAR},
+      language = #{record.language,jdbcType=VARCHAR},
+      country = #{record.country,jdbcType=VARCHAR},
+      nlm_unique_ID = #{record.nlmUniqueId,jdbcType=VARCHAR},
+      ISO_abbreviation = #{record.isoAbbreviation,jdbcType=VARCHAR},
+      had_free_full_text = #{record.hadFreeFullText,jdbcType=VARCHAR},
+      had_full_text = #{record.hadFullText,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.boku.www.pojo.TThesisForEnglishFromSolrWithBLOBs" >
+    update t_thesis_for_english_from_solr
+    <set >
+      <if test="journalId != null" >
+        journal_id = #{journalId,jdbcType=VARCHAR},
+      </if>
+      <if test="pmid != null" >
+        pmid = #{pmid,jdbcType=VARCHAR},
+      </if>
+      <if test="issn != null" >
+        issn = #{issn,jdbcType=VARCHAR},
+      </if>
+      <if test="volume != null" >
+        volume = #{volume,jdbcType=VARCHAR},
+      </if>
+      <if test="issue != null" >
+        issue = #{issue,jdbcType=VARCHAR},
+      </if>
+      <if test="medlineDate != null" >
+        medline_date = #{medlineDate,jdbcType=DATE},
+      </if>
+      <if test="medlineTa != null" >
+        medline_TA = #{medlineTa,jdbcType=VARCHAR},
+      </if>
+      <if test="medlinePage != null" >
+        medline_page = #{medlinePage,jdbcType=VARCHAR},
+      </if>
+      <if test="elocationIdDoi != null" >
+        elocation_id_DOI = #{elocationIdDoi,jdbcType=VARCHAR},
+      </if>
+      <if test="language != null" >
+        language = #{language,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="nlmUniqueId != null" >
+        nlm_unique_ID = #{nlmUniqueId,jdbcType=VARCHAR},
+      </if>
+      <if test="isoAbbreviation != null" >
+        ISO_abbreviation = #{isoAbbreviation,jdbcType=VARCHAR},
+      </if>
+      <if test="hadFreeFullText != null" >
+        had_free_full_text = #{hadFreeFullText,jdbcType=VARCHAR},
+      </if>
+      <if test="hadFullText != null" >
+        had_full_text = #{hadFullText,jdbcType=VARCHAR},
+      </if>
+      <if test="journalTitleMain != null" >
+        journal_title_main = #{journalTitleMain,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="articleTitle != null" >
+        article_title = #{articleTitle,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="abstractText != null" >
+        abstract_text = #{abstractText,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="translatetest != null" >
+        translateTest = #{translatetest,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="abstractAuthors != null" >
+        abstract_authors = #{abstractAuthors,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="publicationTypes != null" >
+        publication_types = #{publicationTypes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="meshHeadsUi != null" >
+        mesh_heads_UI = #{meshHeadsUi,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="meshHeads != null" >
+        mesh_heads = #{meshHeads,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="qualifier != null" >
+        qualifier = #{qualifier,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="keyWords != null" >
+        key_words = #{keyWords,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="originalUrl != null" >
+        original_URL = #{originalUrl,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="authorsStr != null" >
+        authors_str = #{authorsStr,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="affiliationStr != null" >
+        affiliation_str = #{affiliationStr,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="journalIndexes != null" >
+        journal_indexes = #{journalIndexes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="tatisticsAbstractsBlongToHospitalName != null" >
+        tatistics_abstracts_blong_to_hospital_name = #{tatisticsAbstractsBlongToHospitalName,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where abstract_id = #{abstractId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.boku.www.pojo.TThesisForEnglishFromSolrWithBLOBs" >
+    update t_thesis_for_english_from_solr
+    set journal_id = #{journalId,jdbcType=VARCHAR},
+      pmid = #{pmid,jdbcType=VARCHAR},
+      issn = #{issn,jdbcType=VARCHAR},
+      volume = #{volume,jdbcType=VARCHAR},
+      issue = #{issue,jdbcType=VARCHAR},
+      medline_date = #{medlineDate,jdbcType=DATE},
+      medline_TA = #{medlineTa,jdbcType=VARCHAR},
+      medline_page = #{medlinePage,jdbcType=VARCHAR},
+      elocation_id_DOI = #{elocationIdDoi,jdbcType=VARCHAR},
+      language = #{language,jdbcType=VARCHAR},
+      country = #{country,jdbcType=VARCHAR},
+      nlm_unique_ID = #{nlmUniqueId,jdbcType=VARCHAR},
+      ISO_abbreviation = #{isoAbbreviation,jdbcType=VARCHAR},
+      had_free_full_text = #{hadFreeFullText,jdbcType=VARCHAR},
+      had_full_text = #{hadFullText,jdbcType=VARCHAR},
+      journal_title_main = #{journalTitleMain,jdbcType=LONGVARCHAR},
+      article_title = #{articleTitle,jdbcType=LONGVARCHAR},
+      abstract_text = #{abstractText,jdbcType=LONGVARCHAR},
+      translateTest = #{translatetest,jdbcType=LONGVARCHAR},
+      abstract_authors = #{abstractAuthors,jdbcType=LONGVARCHAR},
+      publication_types = #{publicationTypes,jdbcType=LONGVARCHAR},
+      mesh_heads_UI = #{meshHeadsUi,jdbcType=LONGVARCHAR},
+      mesh_heads = #{meshHeads,jdbcType=LONGVARCHAR},
+      qualifier = #{qualifier,jdbcType=LONGVARCHAR},
+      key_words = #{keyWords,jdbcType=LONGVARCHAR},
+      original_URL = #{originalUrl,jdbcType=LONGVARCHAR},
+      authors_str = #{authorsStr,jdbcType=LONGVARCHAR},
+      affiliation_str = #{affiliationStr,jdbcType=LONGVARCHAR},
+      journal_indexes = #{journalIndexes,jdbcType=LONGVARCHAR},
+      tatistics_abstracts_blong_to_hospital_name = #{tatisticsAbstractsBlongToHospitalName,jdbcType=LONGVARCHAR}
+    where abstract_id = #{abstractId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.boku.www.pojo.TThesisForEnglishFromSolr" >
+    update t_thesis_for_english_from_solr
+    set journal_id = #{journalId,jdbcType=VARCHAR},
+      pmid = #{pmid,jdbcType=VARCHAR},
+      issn = #{issn,jdbcType=VARCHAR},
+      volume = #{volume,jdbcType=VARCHAR},
+      issue = #{issue,jdbcType=VARCHAR},
+      medline_date = #{medlineDate,jdbcType=DATE},
+      medline_TA = #{medlineTa,jdbcType=VARCHAR},
+      medline_page = #{medlinePage,jdbcType=VARCHAR},
+      elocation_id_DOI = #{elocationIdDoi,jdbcType=VARCHAR},
+      language = #{language,jdbcType=VARCHAR},
+      country = #{country,jdbcType=VARCHAR},
+      nlm_unique_ID = #{nlmUniqueId,jdbcType=VARCHAR},
+      ISO_abbreviation = #{isoAbbreviation,jdbcType=VARCHAR},
+      had_free_full_text = #{hadFreeFullText,jdbcType=VARCHAR},
+      had_full_text = #{hadFullText,jdbcType=VARCHAR}
+    where abstract_id = #{abstractId,jdbcType=VARCHAR}
+  </update>
+</mapper>

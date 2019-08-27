@@ -14,7 +14,7 @@ import com.boku.www.pojo.system.UUser;
 import com.boku.www.service.system.RoleService;
 import com.boku.www.utils.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
+
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -24,8 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.boku.www.service.ThesisForEnglishService;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 
 import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.stereotype.Service;
@@ -61,6 +59,9 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 
 	@Autowired
 	private SolrClient solrClient;
+
+	@Autowired
+	private TThesisForEnglishFromSolrMapper thesisForEnglishFromSolrMapper;
 	/**
 	 * 查询全部
 	 */
@@ -603,7 +604,7 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 	 */
 	@Override
 	public void insertSujectBeforeTwentieth(){
-		List<Count> list = thesisForEnglishMapper.selectSujectBeforeTwentieth();
+	/*	List<Count> list = thesisForEnglishMapper.selectSujectBeforeTwentieth();
 		int i = 1;
 		for (Count count:list) {
 			TCountTopSubject countTopSubject = new TCountTopSubject();
@@ -613,7 +614,40 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 			countTopSubject.setType("外文");
 			thesisForEnglishMapper.insertSujectBeforeTwentieth(countTopSubject);
 			i++;
+		}*/
+
+		Map<String ,Integer> map = new HashMap<>();
+		TThesisForEnglishExample example = new TThesisForEnglishExample();
+		example.createCriteria().andSubjectIsNotNull().andSubjectNotEqualTo("未知");
+		List<TThesisForEnglish> thesisForEnglishList = thesisForEnglishMapper.selectByExample(example);
+
+		for (TThesisForEnglish thesisForEnglish:thesisForEnglishList) {
+			String[] split = thesisForEnglish.getSubject().split(",");
+			for (String subject : split ) {
+				if(StringUtils.isNotBlank(subject)){
+					if(map.get(subject)==null){
+						map.put(subject,1);
+					}else{
+						map.put(subject,map.get(subject)+1);
+					}
+				}
+
+
+			}
 		}
+
+		Map<String, Integer> stringIntegerMap = sortDescend(map,20);
+		int i = 1;
+		for(Map.Entry<String, Integer> entry : stringIntegerMap.entrySet()){
+			TCountTopSubject countTopSubject = new TCountTopSubject();
+			countTopSubject.setCount(entry.getValue());
+			countTopSubject.setSubject(entry.getKey());
+			countTopSubject.setTopNum(i);
+			countTopSubject.setType("外文");
+			thesisForEnglishMapper.insertSujectBeforeTwentieth(countTopSubject);
+			i++;
+		}
+
 	}
 	/**
 	 *sci论文
@@ -632,18 +666,33 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 	 */
 	@Override
 	public void insertKeywordsBeforeTwentieth(){
-		Map<String ,Integer> map = new HashMap<String ,Integer>();
-		TThesisForEnglishExample example = new TThesisForEnglishExample();
+		Map<String ,Integer> map = new HashMap<>();
+		/*TThesisForEnglishExample example = new TThesisForEnglishExample();
 		example.createCriteria().andKeywordsIsNotNull();
-		List<TThesisForEnglish> thesisForEnglishList = thesisForEnglishMapper.selectByExample(example);
-		for (TThesisForEnglish thesisForEnglish:thesisForEnglishList) {
+		List<TThesisForEnglish> thesisForEnglishList = thesisForEnglishMapper.selectByExample(example);*/
+
+		//去重版
+		TThesisForEnglishFromSolrExample example = new TThesisForEnglishFromSolrExample();
+		example.createCriteria().andKeywordsIsNotNull();
+		List<TThesisForEnglishFromSolr> tThesisForEnglishFromSolrList = thesisForEnglishFromSolrMapper.selectByExample(example);
+		for (TThesisForEnglishFromSolr thesisForEnglish:tThesisForEnglishFromSolrList) {
 			String[] split = thesisForEnglish.getKeywords().split(",");
 			for (String keyword: split ) {
-				if(map.get(keyword)==null){
-					map.put(keyword,1);
-				}else{
-					map.put(keyword,map.get(keyword)+1);
+
+				if(StringUtils.isNotBlank(keyword) && keyword.length()>1){
+					String first = keyword.substring(0, 1);
+					first = first.toUpperCase();
+					String after = keyword.substring(1);
+					keyword = first + after;
 				}
+				if(!"China".equals(keyword)){
+					if(map.get(keyword)==null){
+						map.put(keyword,1);
+					}else{
+						map.put(keyword,map.get(keyword)+1);
+					}
+				}
+
 			}
 		}
 
@@ -655,6 +704,7 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 			countTopKeywords.setCount(entry.getValue());
 			countTopKeywords.setTopNum(i);
 			countTopKeywords.setType("外文");
+			countTopKeywords.setArea("浙江省");
 			thesisForEnglishMapper.insertKeywordsBeforeTwentieth(countTopKeywords);
 			i++;
 		}
@@ -994,13 +1044,32 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 	 */
 	@Override
 	public void insertJournalTopTwentieth(){
-		List<Count> countList = thesisForEnglishMapper.selectJournalTopTwentieth();
+		/*List<Count> countList = thesisForEnglishMapper.selectJournalTopTwentieth();
 		for (Count count:countList) {
 			TCountTopJournal countTopJournal = new TCountTopJournal();
 			countTopJournal.setJournalName(count.getArea());
 			countTopJournal.setCount(count.getCount());
 			countTopJournal.setType("2");
 			thesisForEnglishMapper.insertJournalTopTwentieth(countTopJournal);
+		}*/
+
+		Map<String ,Integer> map = new HashMap<>();
+		List<TThesisForEnglish> thesisForEnglishList = thesisForEnglishMapper.selectByExample(null);
+		for (TThesisForEnglish thesisForEnglish:thesisForEnglishList) {
+			String journalName = thesisForEnglish.getJournalName();
+			if(map.get(journalName)==null){
+						map.put(journalName,1);
+					}else{
+						map.put(journalName,map.get(journalName)+1);
+					}
+			}
+		Map<String, Integer> stringIntegerMap = sortDescend(map,50);
+		for(Map.Entry<String, Integer> entry : stringIntegerMap.entrySet()){
+				TCountTopJournal countTopJournal = new TCountTopJournal();
+				countTopJournal.setJournalName(entry.getKey());
+				countTopJournal.setCount(entry.getValue());
+				countTopJournal.setType("2");
+				thesisForEnglishMapper.insertJournalTopTwentieth(countTopJournal);
 		}
 	}
 	@Override

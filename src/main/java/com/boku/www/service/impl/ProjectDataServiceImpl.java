@@ -211,9 +211,9 @@ public class ProjectDataServiceImpl implements ProjectDataService {
 						criteria.andAreaEqualTo(currentUser.getArea());
 					}
 				}else if("医院".equals(role.getName())){
-					if(currentUser.getCompany()!=null && currentUser.getCompany().length()>0){
+					if(currentUser.getCompanyId()!=null && currentUser.getCompanyId().length()>0){
 						//添加本单位的名称
-						criteria.andOrganizerEqualTo(currentUser.getCompany());
+						criteria.andOrganizerCompanyIdLike("%"+currentUser.getCompanyId()+"%");
 					}
 					if(currentUser.getArea()!=null && currentUser.getArea().length()>0){
 						//添加本人所属地区

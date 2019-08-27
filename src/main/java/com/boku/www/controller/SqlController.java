@@ -91,7 +91,7 @@ public class SqlController {
 	@Async
 	//计划任务声明
 	@Scheduled(cron="0 0 1 ? * SUN") //每周日凌晨1点执行一次
-	//@Scheduled(cron="0/10 * *  * * ?") //每五秒执行一次
+	//@Scheduled(cron="0/10 * *  * * ?") //每10秒执行一次
 	//@Scheduled(cron="0 */10 * * * ?") //每十分钟执行一次
 	public void backup() throws  Exception{
 		logger.info("start push data scheduled!");

@@ -7,6 +7,8 @@ import com.boku.www.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import com.boku.www.service.ThesisForEnglishService;
 /**
@@ -17,6 +19,7 @@ import com.boku.www.service.ThesisForEnglishService;
 @RestController
 @RequestMapping("/thesisForEnglish")
 @CrossOrigin//解决跨域问题
+@EnableScheduling
 public class ThesisForEnglishController {
 	private static Logger logger = LoggerFactory.getLogger(ThesisForEnglishController.class);
 	@Autowired
@@ -245,6 +248,7 @@ public class ThesisForEnglishController {
 	 插入关键词top20
 	 */
 	@RequestMapping("/insertKeywordsBeforeTwentieth")
+	//@Scheduled(cron="0/5 * * * * ?")
 	public void  insertKeywordsBeforeTwentieth(){
 		try {
 			thesisForEnglishService.insertKeywordsBeforeTwentieth();

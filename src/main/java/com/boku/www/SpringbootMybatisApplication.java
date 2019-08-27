@@ -33,6 +33,7 @@ public class SpringbootMybatisApplication {
 		properties.setProperty("dialect","postgresql");
 		pageHelper.setProperties(properties);
 		return pageHelper;
+
 	}
 }
 

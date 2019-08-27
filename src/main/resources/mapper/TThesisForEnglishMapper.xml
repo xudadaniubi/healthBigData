@@ -601,9 +601,9 @@
     </select>
     <!--插入英文论文中学科top20-->
     <insert id="insertSujectBeforeTwentieth" parameterType="com.boku.www.pojo.TCountTopSubject">
-         insert into t_count_top_subject (id, subject, top_num,
+         insert into t_count_top_subject (subject_code, top_num,
             count, type)
-        values (#{id,jdbcType=INTEGER}, #{subject,jdbcType=VARCHAR}, #{topNum,jdbcType=INTEGER},
+        values (#{subject,jdbcType=VARCHAR}, #{topNum,jdbcType=INTEGER},
             #{count,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR})
     </insert>
     <resultMap id="BaseResultMapTopSubject" type="com.boku.www.pojo.TCountTopSubject" >
@@ -722,9 +722,9 @@
     </select>
     <!--插入期刊发文前20的数据-->
     <insert id="insertJournalTopTwentieth" parameterType="com.boku.www.pojo.TCountTopJournal" >
-        insert into t_count_top_journal (id, journal_name, count,
+        insert into t_count_top_journal ( journal_name, count,
         type)
-        values (#{id,jdbcType=INTEGER}, #{journalName,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER},
+        values ( #{journalName,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER},
         #{type,jdbcType=VARCHAR})
     </insert>
     <!--查询期刊发文前20的数据(存储在表格里的)-->

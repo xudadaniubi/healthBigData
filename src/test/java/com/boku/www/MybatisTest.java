@@ -449,4 +449,22 @@ public class MybatisTest {
 		}
 
 	}
+
+	//添加外文关键词更新
+	@Test
+	public void insert(){
+
+		thesisForEnglishService.insertKeywordsBeforeTwentieth();
+	}
+    //添加外文学科论文数量展示更新
+	@Test
+	public void insertThesisForEnglish(){
+		thesisForEnglishService.insertSujectBeforeTwentieth();
+	}
+
+   //添加外文期刊发表排行
+	@Test
+	public void insertJournalTopTwentieth(){
+		thesisForEnglishService.insertJournalTopTwentieth();
+	}
 }
