@@ -1,184 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="66feca6a-0d81-4268-880b-da3f64b36b6e" name="Default" comment="health_big_data 项目和奖励数据表拆分后">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/utils/ResultUtils.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/controller/AdminController.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/excelName (8).xls" afterPath="$PROJECT_DIR$/excelName (8).xls" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/SpringbootMybatisApplication.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/SpringbootMybatisApplication.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/config/CorsConfig.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/config/CorsConfig.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/config/CustomMVCConfiguration.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/config/CustomMVCConfiguration.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/config/ShiroConfiguration.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/config/ShiroConfiguration.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/config/ShiroRealm.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/config/ShiroRealm.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/controller/AreaController.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/controller/AreaController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/controller/BooksController.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/controller/BooksController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/controller/ExcelDownloadController.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/controller/ExcelDownloadController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/controller/ExcelImportAndBuildController.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/controller/ExcelImportAndBuildController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/controller/PatentController.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/controller/PatentController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/controller/PrizeCategoryController.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/controller/PrizeCategoryController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/controller/PrizeDataController.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/controller/PrizeDataController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/controller/ProjectCategoryController.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/controller/ProjectCategoryController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/controller/ProjectDataController.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/controller/ProjectDataController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/controller/SubjectCategoryController.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/controller/SubjectCategoryController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/controller/ThesisForChineseController.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/controller/ThesisForChineseController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/controller/ThesisForEnglishController.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/controller/ThesisForEnglishController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/TAreaMapper.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/TAreaMapper.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/TBooksMapper.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/TBooksMapper.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/TPatentMapper.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/TPatentMapper.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/TPrizeCategoryMapper.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/TPrizeCategoryMapper.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/TPrizeDataMapper.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/TPrizeDataMapper.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/TProjectCategoryMapper.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/TProjectCategoryMapper.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/TProjectDataMapper.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/TProjectDataMapper.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/TSubjectCategoryMapper.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/TSubjectCategoryMapper.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/TThesisForChineseMapper.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/TThesisForChineseMapper.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/TThesisForEnglishMapper.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/TThesisForEnglishMapper.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/system/UPermissionDao.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/system/UPermissionDao.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/system/URoleDao.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/system/URoleDao.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/system/UUserDao.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/system/UUserDao.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/system/UUserRoleDao.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/mapper/system/UUserRoleDao.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TArea.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TArea.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TAreaAndCompany.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TAreaAndCompany.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TAreaAndCompanyExample$Criteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TAreaAndCompanyExample$Criteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TAreaAndCompanyExample$Criterion.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TAreaAndCompanyExample$Criterion.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TAreaAndCompanyExample$GeneratedCriteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TAreaAndCompanyExample$GeneratedCriteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TAreaAndCompanyExample.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TAreaAndCompanyExample.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TAreaExample$Criteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TAreaExample$Criteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TAreaExample$Criterion.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TAreaExample$Criterion.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TAreaExample$GeneratedCriteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TAreaExample$GeneratedCriteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TAreaExample.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TAreaExample.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TBooks.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TBooks.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TBooksExample$Criteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TBooksExample$Criteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TBooksExample$Criterion.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TBooksExample$Criterion.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TBooksExample$GeneratedCriteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TBooksExample$GeneratedCriteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TBooksExample.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TBooksExample.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPatent.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPatent.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPatentExample$Criteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPatentExample$Criteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPatentExample$Criterion.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPatentExample$Criterion.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPatentExample$GeneratedCriteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPatentExample$GeneratedCriteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPatentExample.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPatentExample.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPrizeCategory.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPrizeCategory.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPrizeCategoryExample$Criteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPrizeCategoryExample$Criteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPrizeCategoryExample$Criterion.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPrizeCategoryExample$Criterion.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPrizeCategoryExample$GeneratedCriteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPrizeCategoryExample$GeneratedCriteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPrizeCategoryExample.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPrizeCategoryExample.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPrizeData.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPrizeData.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPrizeDataExample$Criteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPrizeDataExample$Criteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPrizeDataExample$Criterion.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPrizeDataExample$Criterion.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPrizeDataExample$GeneratedCriteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPrizeDataExample$GeneratedCriteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPrizeDataExample.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TPrizeDataExample.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TProjectCategory.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TProjectCategory.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TProjectCategoryExample$Criteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TProjectCategoryExample$Criteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TProjectCategoryExample$Criterion.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TProjectCategoryExample$Criterion.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TProjectCategoryExample$GeneratedCriteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TProjectCategoryExample$GeneratedCriteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TProjectCategoryExample.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TProjectCategoryExample.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TProjectData.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TProjectData.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TProjectDataExample$Criteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TProjectDataExample$Criteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TProjectDataExample$Criterion.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TProjectDataExample$Criterion.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TProjectDataExample$GeneratedCriteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TProjectDataExample$GeneratedCriteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TProjectDataExample.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TProjectDataExample.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TSubjectCategory.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TSubjectCategory.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TSubjectCategoryExample$Criteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TSubjectCategoryExample$Criteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TSubjectCategoryExample$Criterion.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TSubjectCategoryExample$Criterion.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TSubjectCategoryExample$GeneratedCriteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TSubjectCategoryExample$GeneratedCriteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TSubjectCategoryExample.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TSubjectCategoryExample.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TThesisForChinese.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TThesisForChinese.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TThesisForChineseExample$Criteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TThesisForChineseExample$Criteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TThesisForChineseExample$Criterion.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TThesisForChineseExample$Criterion.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TThesisForChineseExample$GeneratedCriteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TThesisForChineseExample$GeneratedCriteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TThesisForChineseExample.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TThesisForChineseExample.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TThesisForEnglish.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TThesisForEnglish.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TThesisForEnglishExample$Criteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TThesisForEnglishExample$Criteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TThesisForEnglishExample$Criterion.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TThesisForEnglishExample$Criterion.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TThesisForEnglishExample$GeneratedCriteria.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TThesisForEnglishExample$GeneratedCriteria.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TThesisForEnglishExample.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/TThesisForEnglishExample.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/system/UPermission.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/system/UPermission.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/system/URole.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/system/URole.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/system/URolePermission.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/system/URolePermission.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/system/UUser.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/system/UUser.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/system/UUserRole.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/pojo/system/UUserRole.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/AreaService.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/AreaService.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/BooksService.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/BooksService.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/ExcelImportAndBuildService.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/ExcelImportAndBuildService.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/PatentService.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/PatentService.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/PrizeCategoryService.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/PrizeCategoryService.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/PrizeDataService.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/PrizeDataService.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/ProjectCategoryService.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/ProjectCategoryService.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/ProjectDataService.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/ProjectDataService.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/SubjectCategoryService.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/SubjectCategoryService.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/ThesisForChineseService.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/ThesisForChineseService.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/ThesisForEnglishService.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/ThesisForEnglishService.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/AreaServiceImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/AreaServiceImpl.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/BooksServiceImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/BooksServiceImpl.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/ExcelImportAndBuildServiceImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/ExcelImportAndBuildServiceImpl.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/PatentServiceImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/PatentServiceImpl.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/PrizeCategoryServiceImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/PrizeCategoryServiceImpl.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/PrizeDataServiceImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/PrizeDataServiceImpl.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/ProjectCategoryServiceImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/ProjectCategoryServiceImpl.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/ProjectDataServiceImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/ProjectDataServiceImpl.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/SubjectCategoryServiceImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/SubjectCategoryServiceImpl.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/TThesisForChineseServiceImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/TThesisForChineseServiceImpl.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/ThesisForEnglishServiceImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/impl/ThesisForEnglishServiceImpl.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/system/PermissionService.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/system/PermissionService.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/system/RoleService.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/system/RoleService.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/system/UserService.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/system/UserService.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/system/impl/PermissionServiceImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/system/impl/PermissionServiceImpl.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/system/impl/RoleServiceImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/system/impl/RoleServiceImpl.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/service/system/impl/UserServiceImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/service/system/impl/UserServiceImpl.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/utils/Count.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/utils/Count.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/utils/CurrentUser.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/utils/CurrentUser.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/utils/DownloadCommonExcelUtils.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/utils/DownloadCommonExcelUtils.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/utils/DownloadExcelUtils.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/utils/DownloadExcelUtils.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/utils/InterceptionCompany.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/utils/InterceptionCompany.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/utils/PageResult.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/utils/PageResult.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/utils/ParseExcelUtils.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/utils/ParseExcelUtils.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/boku/www/utils/Result.class" afterPath="$PROJECT_DIR$/target/classes/com/boku/www/utils/Result.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/test-classes/com/boku/www/MybatisTest.class" afterPath="$PROJECT_DIR$/target/test-classes/com/boku/www/MybatisTest.class" />
+    <list default="true" id="66feca6a-0d81-4268-880b-da3f64b36b6e" name="Default" comment="添加englishFromSolrMapper接口">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/mapper/TThesisForEnglishFromSolrMapper.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/springboot_mybatis.iml" afterPath="$PROJECT_DIR$/springboot_mybatis.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/config/ShiroConfiguration.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/config/ShiroConfiguration.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/config/ShiroRealm.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/config/ShiroRealm.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/controller/AdminController.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/controller/AdminController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/controller/AreaController.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/controller/AreaController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/controller/PrizeDataController.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/controller/PrizeDataController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/controller/ProjectDataController.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/controller/ProjectDataController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/controller/ThesisForChineseController.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/controller/ThesisForChineseController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/controller/ThesisForEnglishController.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/controller/ThesisForEnglishController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/mapper/TPrizeDataMapper.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/mapper/TPrizeDataMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/mapper/TProjectDataMapper.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/mapper/TProjectDataMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/mapper/TThesisForChineseMapper.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/mapper/TThesisForChineseMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/mapper/TThesisForEnglishMapper.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/mapper/TThesisForEnglishMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/mapper/TUserForPersonageMapper.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/mapper/TUserForPersonageMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/mapper/system/UUserDao.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/mapper/system/UUserDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/pojo/TProjectData.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/pojo/TProjectData.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/pojo/TProjectDataExample.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/pojo/TProjectDataExample.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/service/AreaService.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/service/AreaService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/service/PrizeDataService.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/service/PrizeDataService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/service/ProjectDataService.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/service/ProjectDataService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/service/ThesisForChineseService.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/service/ThesisForChineseService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/service/ThesisForEnglishService.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/service/ThesisForEnglishService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/service/impl/AreaServiceImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/service/impl/AreaServiceImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/service/impl/ExcelImportAndBuildServiceImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/service/impl/ExcelImportAndBuildServiceImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/service/impl/PatentServiceImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/service/impl/PatentServiceImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/service/impl/PrizeDataServiceImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/service/impl/PrizeDataServiceImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/service/impl/ProjectDataServiceImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/service/impl/ProjectDataServiceImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/service/impl/TThesisForChineseServiceImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/service/impl/TThesisForChineseServiceImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/service/impl/ThesisForEnglishServiceImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/service/impl/ThesisForEnglishServiceImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/service/system/UserService.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/service/system/UserService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/boku/www/service/system/impl/UserServiceImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/boku/www/service/system/impl/UserServiceImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/application.properties" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/mapper/TPrizeDataMapper.xml" afterPath="$PROJECT_DIR$/src/main/resources/mapper/TPrizeDataMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/mapper/TProjectDataMapper.xml" afterPath="$PROJECT_DIR$/src/main/resources/mapper/TProjectDataMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/mapper/TThesisForChineseMapper.xml" afterPath="$PROJECT_DIR$/src/main/resources/mapper/TThesisForChineseMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/mapper/TThesisForEnglishMapper.xml" afterPath="$PROJECT_DIR$/src/main/resources/mapper/TThesisForEnglishMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/mapper/TUserForPersonageMapper.xml" afterPath="$PROJECT_DIR$/src/main/resources/mapper/TUserForPersonageMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/mapper/UUserMapper.xml" afterPath="$PROJECT_DIR$/src/main/resources/mapper/UUserMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/com/boku/www/MybatisTest.java" afterPath="$PROJECT_DIR$/src/test/java/com/boku/www/MybatisTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/application.properties" afterPath="$PROJECT_DIR$/target/classes/application.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/mapper/TAreaAndCompanyMapper.xml" afterPath="$PROJECT_DIR$/target/classes/mapper/TAreaAndCompanyMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/mapper/TProjectDataMapper.xml" afterPath="$PROJECT_DIR$/target/classes/mapper/TProjectDataMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/mapper/TThesisForChineseMapper.xml" afterPath="$PROJECT_DIR$/target/classes/mapper/TThesisForChineseMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/mapper/TThesisForEnglishMapper.xml" afterPath="$PROJECT_DIR$/target/classes/mapper/TThesisForEnglishMapper.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/mapper/UUserMapper.xml" afterPath="$PROJECT_DIR$/target/classes/mapper/UUserMapper.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -1773,7 +1598,7 @@
       <workItem from="1571650058216" duration="23229000" />
       <workItem from="1572230032047" duration="15892000" />
       <workItem from="1572516509571" duration="9623000" />
-      <workItem from="1572935468004" duration="53091000" />
+      <workItem from="1572935468004" duration="53266000" />
     </task>
     <task id="LOCAL-00001" summary="health_big_data 项目和奖励数据表拆分后">
       <created>1546393432451</created>
@@ -1853,7 +1678,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1365224000" />
+    <option name="totallyTimeSpent" value="1365399000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1865,7 +1690,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1890,7 +1715,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32960895" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22234637" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26545843" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26545843" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1716418" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3677911" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1912,7 +1737,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="health_big_data 项目和奖励数据表拆分后" />
-    <option name="LAST_COMMIT_MESSAGE" value="health_big_data 项目和奖励数据表拆分后" />
+    <MESSAGE value="添加englishFromSolrMapper接口" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加englishFromSolrMapper接口" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
