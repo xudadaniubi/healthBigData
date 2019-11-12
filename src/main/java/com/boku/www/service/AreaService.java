@@ -2,6 +2,7 @@ package com.boku.www.service;
 import java.util.List;
 
 import com.boku.www.pojo.TArea;
+import com.boku.www.pojo.TAreaAndCompany;
 import com.boku.www.utils.PageResult;
 
 /**
@@ -16,7 +17,9 @@ public interface AreaService {
 	 * @return
 	 */
 	public List<TArea> findAll();
-	
+
+
+	public List<TAreaAndCompany> findCompanyAll();
 	
 	/**
 	 * 返回分页列表

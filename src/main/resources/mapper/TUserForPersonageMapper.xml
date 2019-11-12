@@ -208,4 +208,21 @@
       id_card = #{idCard,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <select id="select" resultMap="BaseResultMap">
+        select * from t_user_for_personage_copy
+    </select>
+
+    <update id="update" parameterType="com.boku.www.pojo.TUserForPersonage">
+        update t_user_for_personage_copy
+        set username = #{username,jdbcType=VARCHAR},
+        company = #{company,jdbcType=VARCHAR},
+        major_name = #{majorName,jdbcType=VARCHAR},
+        id_card = #{idCard,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="selectByName" parameterType="string" resultMap="BaseResultMap">
+        select * from t_user_for_personage_copy where username = #{username,jdbcType=VARCHAR}
+    </select>
 </mapper>

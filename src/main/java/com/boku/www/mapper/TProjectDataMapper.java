@@ -37,4 +37,7 @@ public interface TProjectDataMapper {
 	List<Count> countTheNumberOfProjectDataInEachArea();
 
 	List<String> selectDistinctOrganizer();
+
+	List<String> likeProjectName(@Param("projectName") String projectName);
+
 }

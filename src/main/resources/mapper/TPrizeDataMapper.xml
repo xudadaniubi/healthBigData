@@ -417,4 +417,8 @@
     <select id="selectDistinctOtherOrganizerCompany" resultType="string">
         SELECT DISTINCT other_organizer_company FROM t_prize_data ;
     </select>
+    <!--项目名称下拉匹配-->
+    <select id="likeProjectName" parameterType="string" resultType="string">
+        select  project_name from t_prize_data where project_name like #{projectName} limit 0,10
+    </select>
 </mapper>

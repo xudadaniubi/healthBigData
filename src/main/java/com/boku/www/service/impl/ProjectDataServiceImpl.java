@@ -87,15 +87,12 @@ public class ProjectDataServiceImpl implements ProjectDataService {
 	 */
 	@Override
 	public PageResult findPage(int pageNum, int pageSize) {
-
 		TProjectDataExample example=new TProjectDataExample();
 		TProjectDataExample.Criteria criteria = example.createCriteria();
-
 		//根据角色添加查询条件(将角色级别返回)
 		String roleGrade = addCriteriaByRoles(criteria);
 		//只查询状态为1的数据
 		criteria.andStatusEqualTo("1");
-
 		//将查询结果进行分页
 		PageHelper.startPage(pageNum, pageSize);
 		List<TProjectData> list = projectDataMapper.selectByExample(example);
@@ -103,7 +100,6 @@ public class ProjectDataServiceImpl implements ProjectDataService {
 		//将查询到的角色和已确认/未确认的信息保存到PageResult里面，然后返回给前端
 		PageResult pageResult = new PageResult(page.getTotal(), page.getResult());
 		pageResult.setRoleGrade(roleGrade);
-
 		return pageResult;
 	}
 
@@ -267,7 +263,7 @@ public class ProjectDataServiceImpl implements ProjectDataService {
 		}
 		//项目名称
 		if (projectData.getProjectName() != null && projectData.getProjectName().length() > 0) {
-			criteria.andProjectNameEqualTo(projectData.getProjectName());
+			criteria.andProjectNameLike("%"+projectData.getProjectName()+"%");
 		}
 		//项目子类
 		if (projectData.getProjectKidcat() != null && projectData.getProjectKidcat().length() > 0) {
@@ -612,4 +608,13 @@ public class ProjectDataServiceImpl implements ProjectDataService {
 		}
 	}
 
+	@Override
+	public List<String> likeProjectName(String projectName) throws Exception {
+		if(StringUtils.isNotBlank(projectName)){
+			projectName = "%"+projectName+"%";
+			List<String> list = projectDataMapper.likeProjectName(projectName);
+			return list;
+		}
+		return null;
+	}
 }

@@ -142,6 +142,9 @@ public class UserServiceImpl implements UserService {
 	public PageResult search(UUser user ,int pageNum, int pageSize){
 		UUser currentUser = CurrentUser.returnCurrentUser();
 		//查询当前用户的角色是否为单位管理员
+		if(currentUser == null){
+			return null;
+		}
 		List<URole> roleList = roleDao.findRoleByUid(currentUser.getId());
 		UUserExample example = new UUserExample();
 		UUserExample.Criteria criteria = example.createCriteria();
@@ -274,6 +277,11 @@ public class UserServiceImpl implements UserService {
 			}
 			user.setCreateTime(new Date());
 			user.setStatus("1");
+			// 将用户名作为盐值
+			ByteSource salt = ByteSource.Util.bytes(user.getUsername());
+			//如果修改密码，将密码根据加密方式存储
+			String newPs = new SimpleHash("MD5", user.getPswd(), salt, 1024).toHex();
+			user.setPswd(newPs);
 			userDao.insert(user);
 			//再次查询获取用户的id
 			List<UUser> users = userDao.selectByUsername(user.getUsername());
@@ -350,23 +358,26 @@ public class UserServiceImpl implements UserService {
 	}*/
 
 	public String update(UUser user) {
-		UUserExample example = new UUserExample();
-		List<UUser> userList = userDao.selectByExample(example);
-		for (UUser uUser:userList) {
+		UUser us = userDao.selectByPrimaryKey(user.getId());
+		if(us != null){
 			//判断当前传过来的密码是否改变，如果改变，则需要通过md5加密，如果没改变，就不加密修改
-			if(!CurrentUser.returnCurrentUser().getPswd().equals(user.getPswd())){
-				if(StringUtils.isNotBlank(uUser.getPswd()) && StringUtils.isNotBlank(uUser.getUsername())){
-					// 将用户名作为盐值
-					ByteSource salt = ByteSource.Util.bytes(uUser.getUsername());
-					//如果修改密码，将密码根据加密方式存储
-					String newPs = new SimpleHash("MD5", uUser.getPswd(), salt, 1024).toHex();
-					uUser.setPswd(newPs);
-				}
+			if(StringUtils.isNotBlank(user.getPswd()) && StringUtils.isNotBlank(user.getUsername())){
+				// 将用户名作为盐值
+				ByteSource salt = ByteSource.Util.bytes(user.getUsername());
+				//如果修改密码，将密码根据加密方式存储
+				String newPs = new SimpleHash("MD5", user.getPswd(), salt, 1024).toHex();
+				us.setPswd(newPs);
+				us.setUsername(user.getUsername());
+			}else {
+				ByteSource salt = ByteSource.Util.bytes(us.getUsername());
+				//如果修改密码，将密码根据加密方式存储
+				String newPs = new SimpleHash("MD5", user.getPswd(), salt, 1024).toHex();
+				us.setPswd(newPs);
 			}
-			userDao.updateByPrimaryKey(uUser);
+			userDao.updateByPrimaryKeySelective(us);
+			return "修改用户成功";
 		}
-
-		return "修改用户成功";
+		return "修改用户失败";
 	}
 
 	/**
@@ -390,5 +401,15 @@ public class UserServiceImpl implements UserService {
 		UUser user = CurrentUser.returnCurrentUser();
 		//map.put(role.getName(),user);
 		return user;
+	}
+
+	@Override
+	public List<String> likeName(String name) throws Exception {
+		if(StringUtils.isNotBlank(name)){
+			name = "%"+name+"%";
+			List<String> list = userDao.likeName(name);
+			return list;
+		}
+		return null;
 	}
 }

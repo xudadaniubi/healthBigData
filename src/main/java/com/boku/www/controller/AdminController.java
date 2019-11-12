@@ -1,26 +1,24 @@
 package com.boku.www.controller;
 
 import com.boku.www.mapper.system.URoleDao;
-import com.boku.www.pojo.system.URole;
 import com.boku.www.pojo.system.UUser;
 import com.boku.www.service.system.RoleService;
 import com.boku.www.service.system.UserService;
 import com.boku.www.utils.PageResult;
 import com.boku.www.utils.Result;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import com.boku.www.utils.ResultUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.session.HttpServletSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpSession;
+import javax.xml.bind.SchemaOutputResolver;
+import java.util.*;
 
 
 /**   
@@ -70,13 +68,21 @@ public class AdminController {
                 currentUser.login( token );
                 //验证是否登录成功
                 if (currentUser.isAuthenticated()) {
-                    logger.info("用户[" + user.getUsername() + "]登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");
-					resultMap.put("status", 200);
-					resultMap.put("username", user.getUsername());
-					resultMap.put("message", "登录成功");
-					UUser uUser = (UUser)currentUser.getPrincipal();
-					uUser.setLastLoginTime(new Date());
-					userService.updateLastLoginTime(uUser);
+                	if("123456".equals(user.getPswd())){
+						resultMap.put("status", 402);
+						resultMap.put("message", "请修改密码");
+						resultMap.put("user",currentUser.getPrincipal());
+						System.out.println((UUser)currentUser.getPrincipal());
+					}else {
+						logger.info("用户[" + user.getUsername() + "]登录认证通过(这里可以进行一些认证通过后的一些系统参数初始化操作)");
+						resultMap.put("status", 200);
+						resultMap.put("username", user.getUsername());
+						resultMap.put("message", "登录成功");
+						UUser uUser = (UUser)currentUser.getPrincipal();
+						uUser.setLastLoginTime(new Date());
+						userService.updateLastLoginTime(uUser);
+						resultMap.put("user",uUser);
+					}
                 } else {
 					logger.info("用户[" + user.getUsername() + "]登录认证失败,重新登陆");
 					token.clear();
@@ -84,8 +90,10 @@ public class AdminController {
             } catch (Exception e) {
 				resultMap.put("status", 500);
 				resultMap.put("message", "用户名或密码错误");
+				System.out.println(e.getMessage());
 			}
         }
+
         return resultMap;
     }
 
@@ -164,13 +172,19 @@ public class AdminController {
 	 * 单位管理员修改用户
 	 *
 	 */
-	@RequestMapping("/user/update")
-	public String update(@RequestBody UUser user){
+	@RequestMapping(value = "/user/update",method = RequestMethod.POST)
+	public Map<String,Object> update(@RequestBody UUser user){
+		Map<String, Object> hashMap = new HashMap<>();
 		try {
-			return userService.update(user);
+			System.out.println(user.getUsername());
+			hashMap.put("status", 200);
+			hashMap.put("message",userService.update(user));
+			return hashMap;
 		}catch (Exception e){
 			e.printStackTrace();
-			return "修改用户失败";
+			hashMap.put("status", 500);
+			hashMap.put("message","密码修改失败");
+			return hashMap;
 		}
 	}
 	/**
@@ -196,6 +210,17 @@ public class AdminController {
 		}catch (Exception e){
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	//登录时做账户名提示
+	@RequestMapping("/likeName")
+	public ResultUtils likeName(String name){
+		try{
+			return ResultUtils.ok(userService.likeName(name));
+		}catch (Exception e){
+			e.printStackTrace();
+			return ResultUtils.build(400,"出现错误");
 		}
 	}
 }

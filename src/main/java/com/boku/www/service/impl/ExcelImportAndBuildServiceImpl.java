@@ -18,7 +18,6 @@ import com.boku.www.service.ExcelImportAndBuildService;
 import com.boku.www.utils.ParseExcelUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -333,28 +332,25 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 				}
 
 				//项目类别
-				if(titleRow.getCell(2).getStringCellValue().indexOf("project_category")>=0){
-					if(row.getCell(2)!=null && row.getCell(2).getCellType()==row.getCell(2).CELL_TYPE_NUMERIC){
+					//if(row.getCell(2)!=null && row.getCell(2).getCellType()==row.getCell(2).CELL_TYPE_NUMERIC){
+				if(row.getCell(2)!=null && row.getCell(2).getCellType()==row.getCell(2).CELL_TYPE_NUMERIC){
 						row.getCell(2).setCellType(Cell.CELL_TYPE_STRING);
 						projectData.setProjectCategory(row.getCell(2).getStringCellValue().trim());
 					}else if(row.getCell(2)!=null && row.getCell(2).getCellType()==row.getCell(2).CELL_TYPE_STRING){
 						projectData.setProjectCategory(row.getCell(2).getStringCellValue().trim());
 					}
 
-				}
 				//一级学科分类
-				if(titleRow.getCell(3).getStringCellValue().indexOf("subject_name1")>=0){
-					if(row.getCell(3)!=null && row.getCell(3).getCellType()==row.getCell(3).CELL_TYPE_STRING){
+					//if(row.getCell(3)!=null && row.getCell(3).getCellType()==row.getCell(3).CELL_TYPE_STRING){
+						if(row.getCell(3)!=null ){
 						projectData.setSubjectName1(row.getCell(3).getStringCellValue().trim());
 					}
-				}
 				//projectData.setSubjectName1(row.getCell(3).getStringCellValue());
 				//二级学科分类
-				if(titleRow.getCell(4).getStringCellValue().indexOf("subject_name2")>=0){
-					if(row.getCell(4)!=null && row.getCell(4).getCellType()==row.getCell(4).CELL_TYPE_STRING){
+					//if(row.getCell(4)!=null && row.getCell(4).getCellType()==row.getCell(4).CELL_TYPE_STRING){
+						if(row.getCell(4)!=null){
 						projectData.setSubjectName2(row.getCell(4).getStringCellValue().trim());
 					}
-				}
 				//projectData.setSubjectName2(row.getCell(4).getStringCellValue());
 				//项目名称
 				if(row.getCell(5)!=null) {
@@ -363,37 +359,33 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 				}
 
 				//项目子类
-				//projectData.setProjectKidcat(row.getCell(6).getStringCellValue());
-				if(titleRow.getCell(6).getStringCellValue().indexOf("project_kidcat")>=0){
-					if(row.getCell(6)!=null && row.getCell(6).getCellType()==row.getCell(6).CELL_TYPE_STRING){
+				//if(titleRow.getCell(6).getStringCellValue().indexOf("project_kidcat")>=0){
+					//if(row.getCell(6)!=null && row.getCell(6).getCellType()==row.getCell(6).CELL_TYPE_STRING){
+						if(row.getCell(6)!=null ){
 						projectData.setProjectKidcat(row.getCell(6).getStringCellValue().trim());
 					}
-				}
 				//类目
-				if(titleRow.getCell(7).getStringCellValue().indexOf("category")>=0){
-					if(row.getCell(7)!=null && row.getCell(7).getCellType()==row.getCell(7).CELL_TYPE_STRING){
+					if(row.getCell(7)!=null ){
 						projectData.setCategory(row.getCell(7).getStringCellValue().trim());
 					}
-				}
 				//projectData.setCategory(row.getCell(7).getStringCellValue());
 				//立项时间
-				if(titleRow.getCell(8).getStringCellValue().indexOf("project_start_time")>=0){
-					if(row.getCell(8)!=null && row.getCell(8).getCellType()==row.getCell(8).CELL_TYPE_NUMERIC){
+					//if(row.getCell(8)!=null && row.getCell(8).getCellType()==row.getCell(8).CELL_TYPE_NUMERIC){
+				if(row.getCell(8)!=null){
 						row.getCell(8).setCellType(Cell.CELL_TYPE_STRING);
 						projectData.setProjectStartTime(row.getCell(8).getStringCellValue().trim());
 					}else if(row.getCell(8)!=null && row.getCell(8).getCellType()==row.getCell(8).CELL_TYPE_STRING){
 						projectData.setProjectStartTime(row.getCell(8).getStringCellValue().trim());
 					}
-				}
 				//结题时间
-				if(titleRow.getCell(9).getStringCellValue().indexOf("project_end_time")>=0){
-					if(row.getCell(9)!=null && row.getCell(9).getCellType()==row.getCell(9).CELL_TYPE_NUMERIC){
+				//if(titleRow.getCell(9).getStringCellValue().indexOf("project_end_time")>=0){
+					if(row.getCell(9)!=null){
 						row.getCell(9).setCellType(Cell.CELL_TYPE_STRING);
 						projectData.setProjectEndTime(row.getCell(9).getStringCellValue().trim());
 					}else if(row.getCell(9)!=null && row.getCell(9).getCellType()==row.getCell(9).CELL_TYPE_STRING){
 						projectData.setProjectEndTime(row.getCell(9).getStringCellValue().trim());
 					}
-				}
+				//}
 				//所在地区
 				if(row.getCell(10)!=null) {
 					row.getCell(10).setCellType(Cell.CELL_TYPE_STRING);
@@ -406,6 +398,8 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 					String allOrganizerCompany = row.getCell(11).getStringCellValue();
 					//所有承办单位
 					projectData.setOrganizer(allOrganizerCompany);
+					projectData.setFirstOrganizerCompany(allOrganizerCompany);
+
 				}
 
 				/*String[] organizerCompanys = allOrganizerCompany.split(",");
@@ -424,44 +418,52 @@ public class ExcelImportAndBuildServiceImpl implements ExcelImportAndBuildServic
 					}
 					projectData.setOtherOrganizerCompany(otherOrganizerCompanys);
 				}*/
-
+				//项目负责人
 				if(row.getCell(12)!=null) {
 					row.getCell(12).setCellType(Cell.CELL_TYPE_STRING);
-					projectData.setOtherOrganizerCompany(row.getCell(12).getStringCellValue());
+					projectData.setProjectLeader(row.getCell(12).getStringCellValue());
 				}
+				//团队成员
 				if(row.getCell(13)!=null) {
 					row.getCell(13).setCellType(Cell.CELL_TYPE_STRING);
-					projectData.setFirstOrganizerCompany(row.getCell(13).getStringCellValue());
+					projectData.setTeamMembers(row.getCell(13).getStringCellValue());
 				}
+				//单位id
 				if(row.getCell(14)!=null) {
 					row.getCell(14).setCellType(Cell.CELL_TYPE_STRING);
 					projectData.setOrganizerCompanyId(row.getCell(14).getStringCellValue());
 				}
 
-				//项目负责人
-				if(row.getCell(15)!=null) {
-					row.getCell(15).setCellType(Cell.CELL_TYPE_STRING);
-					projectData.setProjectLeader(row.getCell(15).getStringCellValue());
-				}
 
-				//团队成员
-				if(titleRow.getCell(16).getStringCellValue().indexOf("team_members")>=0){
-					if(row.getCell(16)!=null && row.getCell(16).getCellType()==row.getCell(16).CELL_TYPE_STRING){
-						projectData.setTeamMembers(row.getCell(16).getStringCellValue().trim());
-					}
-				}
-				//projectData.setTeamMembers(row.getCell(13).getStringCellValue());
+
+
 				projectData.setStatus("1");
 				//默认为未确认
 				projectData.setConfirmStatus("2");
-				TProjectDataExample example = new TProjectDataExample();
-				if(org.apache.commons.lang3.StringUtils.isNotBlank(projectData.getProjectName())){
-					example.createCriteria().andProjectNameEqualTo(projectData.getProjectName());
+				String projectName = projectData.getProjectName();
+				if(org.apache.commons.lang3.StringUtils.isNotBlank(projectName)){
+					//插入项目负责人单位
+					List<TUserForPersonage> tUserForPersonages = userForPersonageMapper.selectByName(projectData.getProjectLeader());
+					if(tUserForPersonages.size() == 1){
+						String company = tUserForPersonages.get(0).getCompany();
+						if(org.apache.commons.lang3.StringUtils.isNotBlank(company)){
+							projectData.setLeaderOmpany(company);
+						}
+					}else if(tUserForPersonages.size() > 1){
+						projectData.setLeaderOmpany("1");
+					}else if(tUserForPersonages.isEmpty() || tUserForPersonages == null){
+						projectData.setLeaderOmpany("0");
+					}
+
+					TProjectDataExample example = new TProjectDataExample();
+					example.createCriteria().andProjectNameEqualTo(projectName);
 					List<TProjectData> tProjectData = projectDataMapper.selectByExample(example);
 					if(tProjectData.isEmpty()){
 						projectDataMapper.insert(projectData);
 						//list.add(projectData);
 					}else{
+						projectData.setId(tProjectData.get(0).getId());
+						projectDataMapper.updateByPrimaryKeySelective(projectData);
 						System.out.println(projectData.getProjectName());
 					}
 				}

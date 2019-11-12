@@ -99,4 +99,5 @@ public interface TThesisForChineseMapper {
 	List<String> selectCompanyByExample(String company);
 
 
+    List<String> selecTthesisForChineseTitle(String title);
 }

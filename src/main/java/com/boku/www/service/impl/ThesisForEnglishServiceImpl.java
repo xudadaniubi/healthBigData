@@ -349,6 +349,7 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 	public void cleanThesisForEnglish() throws Exception{
 		Set<String> set = new HashSet();
 		Set<String> setNew = new HashSet();
+		//查询不同的单位
 		List<String> organizerList = thesisForEnglishMapper.selectDistinctOrganizer();
 		for (String organizer:organizerList) {
 			if(StringUtils.isNotBlank(organizer)){
@@ -374,6 +375,33 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 	}
 
 
+
+
+	/*//根据省卫计委多有单位id去统计外文发表数量
+	@Override
+	public  void getThesisForEnglish(){
+		HashMap<String ,Integer> map = new HashMap<>();
+		List<String> allCompanyId = areaAndCompanyMapper.selectAllCompanyId();
+		for(String companyId:allCompanyId){
+			TThesisForEnglishExample example = new TThesisForEnglishExample();
+			example.createCriteria().andAuthorCompanyIdEqualTo(companyId);
+			List<TThesisForEnglish> thesisForEnglishList = thesisForEnglishMapper.selectByExample(example);
+
+			for (TThesisForEnglish thesisForEnglish:thesisForEnglishList) {
+				String company = thesisForEnglish.getAuthorCompany();
+
+					if(StringUtils.isNotBlank(company)){
+						if(map.get(company)==null){
+							map.put(company,1);
+						}else{
+							map.put(company,map.get(company)+1);
+						}
+					}
+			}
+		}
+
+		RW2FileUtil.writeHashMap2File(map,"E:\\healthybigdata\\recordHashMap2File2.txt");
+	}*/
 
 	/**
 	 * 获取外文solr中的数据
@@ -697,6 +725,8 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 		}
 
 		Map<String, Integer> stringIntegerMap = sortDescend(map,20);
+		//导入热词
+		//Map<String, Integer> stringIntegerMap = sortDescend(map,200);
 		int i = 1;
 		for(Map.Entry<String, Integer> entry : stringIntegerMap.entrySet()){
 			TCountTopKeywords countTopKeywords = new TCountTopKeywords();
@@ -857,8 +887,8 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 	}
 	@Override
 	public List selectKeywordsBeforeTwentiethInEachArea(){
-		HashMap map = new HashMap();
-		List list = new ArrayList();
+	     //按地区查
+		/*List list = new ArrayList();
 		for (Area area:Area.values()) {
 			Count count = new Count();
 			List<TCountTopKeywords> keywordsList = thesisForEnglishMapper.selectKeywordsBeforeTwentieth("外文", area.getMsg());
@@ -866,8 +896,12 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 			count.setArea(area.getMsg());
 			count.setCountList(keywordsList);
 			list.add(count);
-		}
-		return list;
+		}*/
+
+
+		//查200个热词
+		List<TCountTopKeywords> keywordsList = thesisForEnglishMapper.selectKeywordsBeforeTwentiethHot("外文");
+		return keywordsList;
 	}
 	/**
 	 *sci论文
@@ -1331,4 +1365,12 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 		return countAuthorNetworkMapper.selectEnglishAuthorPostNumTopTen();
 	}
 
+	@Override
+	public List<String> thesisForEnglishTitle(String title) {
+		if(StringUtils.isNotBlank(title)){
+			title = "%"+title+"%";
+			return thesisForEnglishMapper.selectThesisForEnglishTitle(title);
+		}
+		return null;
+	}
 }

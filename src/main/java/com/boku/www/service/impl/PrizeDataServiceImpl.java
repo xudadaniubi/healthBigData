@@ -241,7 +241,7 @@ public class PrizeDataServiceImpl implements PrizeDataService {
 	private String addProjectDatCriteria(TPrizeData prizeData, TPrizeDataExample.Criteria criteria){
 		//项目名称
 		if (prizeData.getProjectName() != null && prizeData.getProjectName().length() > 0) {
-			criteria.andProjectNameEqualTo(prizeData.getProjectName());
+			criteria.andProjectNameLike("%"+prizeData.getProjectName()+"%");
 		}
 		//项目类别
 		if (prizeData.getProjectCategory() != null && prizeData.getProjectCategory().length() > 0) {
@@ -550,4 +550,15 @@ public class PrizeDataServiceImpl implements PrizeDataService {
 			System.out.println("地区："+prizeData.getArea()+"---单位："+organizer+"---单位id："+companyId);
 		}
 	}
+
+	@Override
+	public List<String> likeProjectName(String projectName) {
+		if(StringUtils.isNotBlank(projectName)){
+			projectName = "%"+projectName+"%";
+			List<String> list = prizeDataMapper.likeProjectName(projectName);
+			return list;
+		}
+		return null;
+	}
+
 }

@@ -209,4 +209,8 @@ public interface ThesisForEnglishService {
 	public List<TCountIf> selectAvgIfTopTwentieth();
 
 	public List selectAuthorPostNumTopTen();
+
+    List<String> thesisForEnglishTitle(String title);
+
+    //void getThesisForEnglish();
 }

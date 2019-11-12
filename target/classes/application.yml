@@ -1,4 +1,0 @@
-#response:
-    #setHeader('Access-Control-Allow-Credentials',true);: ''
-    #setHeader('Access-Control-Allow-Origin','http: //localhost:8081');
-    #setHeader('Set-Cookie','token: cowshield');

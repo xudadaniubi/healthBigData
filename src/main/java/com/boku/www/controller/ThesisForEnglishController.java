@@ -356,6 +356,7 @@ public class ThesisForEnglishController {
 			e.printStackTrace();
 		}
 	}
+
 	@RequestMapping("/selectKeywordsBeforeTwentiethInEachArea")
 	public List selectKeywordsBeforeTwentiethInEachArea(){
 		try {
@@ -612,6 +613,17 @@ public class ThesisForEnglishController {
 			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询top10作者发文量数据失败,Exception:"+e);
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	//按标题查询提示
+	@RequestMapping("/thesisForEnglishTitle")
+	public ResultUtils thesisForEnglishTitle(String title){
+		try{
+			return ResultUtils.ok(thesisForEnglishService.thesisForEnglishTitle(title));
+		} catch (Exception e){
+			e.printStackTrace();
+			return ResultUtils.build(400,"出现错误");
 		}
 	}
 }

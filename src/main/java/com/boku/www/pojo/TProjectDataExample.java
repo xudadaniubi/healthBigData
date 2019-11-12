@@ -1438,6 +1438,10 @@ public class TProjectDataExample {
 			addCriterion("confirm_status =", value, "confirmStatus");
 			return (Criteria) this;
 		}
+		public Criteria andLeaderOmpanyEqualTo(String value) {
+			addCriterion("leader_ompany =", value, "leader_ompany");
+			return (Criteria) this;
+		}
 
 		public Criteria andConfirmStatusNotEqualTo(String value) {
 			addCriterion("confirm_status <>", value, "confirmStatus");

@@ -35,7 +35,7 @@ public class TProjectData {
     private String firstOrganizerCompany;
 
     private String organizerCompanyId;
-	//所有的承担单位
+	//项目负责人
     private String projectLeader;
 	//团队成员
     private String teamMembers;
@@ -47,5 +47,7 @@ public class TProjectData {
 	private String searchStartTime;
 	//前端传递的查询结束时间
 	private String searchEndTime;
+	//负责人单位
+	private String leaderOmpany;
 
 }

@@ -633,7 +633,11 @@
     </insert>
     <!--查询英文论文中关键字top20-->
     <select id="selectKeywordsBeforeTwentieth" resultMap="BaseResultMapTopKeywords">
-        SELECT id, keywords, top_num,count, type,area FROM t_count_top_keywords WHERE type = #{type} AND  area = #{area}ORDER BY count DESC  LIMIT 0,20
+        SELECT id, keywords, top_num,count, type,area FROM t_count_top_keywords WHERE type = #{type} AND  area = #{area} ORDER BY count DESC  LIMIT 0,20
+    </select>
+    <!--查询英文论文中热词-->
+    <select id="selectKeywordsBeforeTwentiethHot" resultMap="BaseResultMapTopKeywords">
+     SELECT id, keywords, top_num,count, type,area FROM t_count_top_keywords_hot WHERE type = #{type}  ORDER BY count DESC  LIMIT 0,200
     </select>
     <!--根据单位id查询影响因子总和-->
     <select id="selectIfByCompanyId" resultType="object">
@@ -766,6 +770,10 @@
 
     <select id="selectSumIf" resultType="object">
         SELECT sum(impact_factor) FROM t_thesis_for_english WHERE author_company_id LIKE #{companyId};
+    </select>
+
+    <select id="selectThesisForEnglishTitle" parameterType="string" resultType="string">
+        select title from t_thesis_for_english where title like #{title} limit 0,10
     </select>
 
 </mapper>

@@ -637,4 +637,8 @@
         SELECT author_company FROM t_thesis_for_chinese WHERE author_company LIKE #{company}
     </select>
 
+    <select id="selecTthesisForChineseTitle" parameterType="string" resultType="string">
+        select title from t_thesis_for_chinese where title like #{title} limit 0,10
+    </select>
+
 </mapper>

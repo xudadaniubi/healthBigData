@@ -1,12 +1,19 @@
 package com.boku.www;
 
+import com.boku.www.controller.ThesisForChineseController;
 import com.boku.www.mapper.TAreaAndCompanyMapper;
+import com.boku.www.mapper.TAreaMapper;
+import com.boku.www.mapper.TProjectDataMapper;
+import com.boku.www.mapper.TUserForPersonageMapper;
 import com.boku.www.mapper.system.UUserDao;
 import com.boku.www.mapper.system.UUserRoleDao;
-import com.boku.www.pojo.TThesisForEnglish;
+import com.boku.www.pojo.*;
 import com.boku.www.pojo.system.UUserRole;
 import com.boku.www.service.*;
 import com.boku.www.service.system.UserService;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.util.ByteSource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +24,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SpringbootMybatisApplication.class)
@@ -450,21 +458,159 @@ public class MybatisTest {
 
 	}
 
-	//添加外文关键词更新
+	//添加中外文关键词更新
 	@Test
 	public void insert(){
 
-		thesisForEnglishService.insertKeywordsBeforeTwentieth();
+		//thesisForEnglishService.insertKeywordsBeforeTwentieth();
+		thesisForChineseService.insertKeywordsBeforeTwentieth();
 	}
     //添加外文学科论文数量展示更新
 	@Test
 	public void insertThesisForEnglish(){
+
 		thesisForEnglishService.insertSujectBeforeTwentieth();
+	}
+
+    @Autowired
+	ThesisForChineseController thesisForChineseController;
+	//查询
+	@Test
+	public void testSelect(){
+		List<TCountTopKeywords> list = thesisForEnglishService.selectKeywordsBeforeTwentiethInEachArea();
+        for(TCountTopKeywords tCountTopKeyword:list){
+			System.out.println(tCountTopKeyword);
+		}
+
+		System.out.println(thesisForChineseService.selectKeywordsBeforeTwentiethInEachArea().size());
+		System.out.println(thesisForChineseController.selectKeywordsBeforeTwentiethInEachArea());
 	}
 
    //添加外文期刊发表排行
 	@Test
-	public void insertJournalTopTwentieth(){
-		thesisForEnglishService.insertJournalTopTwentieth();
+	public void insertJournalTopTwentieth()throws Exception{
+		//thesisForEnglishService.insertJournalTopTwentieth();
+		thesisForChineseService.insertKeywordsBeforeTwentiethInEachArea();
+		//期刊前二十
+		//thesisForChineseService.insertJournalTopTwentieth();
 	}
+	@Autowired
+	private TUserForPersonageMapper tUserForPersonageMapper;
+	@Test
+	public void updateUserPersonage()throws Exception{
+		List<TUserForPersonage> select = tUserForPersonageMapper.select();
+		for (TUserForPersonage tUserForPersonage:select){
+			//String username = tUserForPersonage.getUsername().replaceAll("[(a-zA-Z0-9)]", "");
+			String username = tUserForPersonage.getUsername().replaceAll(" ", "");
+			tUserForPersonage.setUsername(username);
+			tUserForPersonageMapper.update(tUserForPersonage);
+		}
+	}
+	@Autowired
+	private TProjectDataMapper tProjectDataMapper;
+
+
+	@Test
+	public void insertUserPersonage()throws Exception{
+		List<TProjectData> tProjectData = tProjectDataMapper.selectByExample(null);
+
+		for (TProjectData projectData:tProjectData){
+			List<TUserForPersonage> tUserForPersonages = tUserForPersonageMapper.selectByName(projectData.getProjectLeader());
+			if(tUserForPersonages.size() == 1){
+				projectData.setLeaderOmpany(tUserForPersonages.get(0).getCompany());
+				tProjectDataMapper.updateByPrimaryKeySelective(projectData);
+			}else if(tUserForPersonages.size() > 1){
+				projectData.setLeaderOmpany("1");
+				tProjectDataMapper.updateByPrimaryKeySelective(projectData);
+			}else if(tUserForPersonages.isEmpty() || tUserForPersonages == null){
+				projectData.setLeaderOmpany("0");
+				tProjectDataMapper.updateByPrimaryKeySelective(projectData);
+			}
+		}
+	}
+
+	@Test
+	public void updateEaraPersonge()throws Exception{
+		TProjectDataExample tProjectDataExample = new TProjectDataExample();
+		TProjectDataExample.Criteria criteria = tProjectDataExample.createCriteria();
+		criteria.andProjectCategoryGradeNotEqualTo("国家级").andProjectCategoryGradeNotEqualTo("省级");
+		List<TProjectData> tProjectData = tProjectDataMapper.selectByExample(tProjectDataExample);
+		tProjectData.stream().map(tProjectData1 -> {
+			String projectCategory = tProjectData1.getProjectCategory();
+			if(StringUtils.isBlank(tProjectData1.getProjectStartTime()) && StringUtils.isNotBlank(projectCategory)){
+				String year = projectCategory.replaceAll("[^Z0-9]", "");
+				tProjectData1.setProjectStartTime(year);
+			}
+			return tProjectData1;
+		}).collect(Collectors.toList());
+		tProjectData.stream().forEach(
+				tb -> tProjectDataMapper.updateByPrimaryKeySelective(tb)
+
+		);
+	}
+	@Test
+	public void updateEaraPersonge01()throws Exception{
+		TProjectDataExample tProjectDataExample = new TProjectDataExample();
+		TProjectDataExample.Criteria criteria = tProjectDataExample.createCriteria();
+		criteria.andProjectCategoryGradeNotEqualTo("国家级").andProjectCategoryGradeNotEqualTo("省级");
+		List<TProjectData> tProjectData = tProjectDataMapper.selectByExample(tProjectDataExample);
+		tProjectData.stream().map(tProjectData1 -> {
+			String projectCategory = tProjectData1.getProjectStartTime();
+			if(StringUtils.isNotBlank(tProjectData1.getProjectStartTime())){
+				String year = projectCategory.replaceAll("[^Z0-9]", "");
+				tProjectData1.setProjectStartTime(year);
+			}
+			return tProjectData1;
+		}).collect(Collectors.toList());
+		tProjectData.stream().forEach(
+				tb -> tProjectDataMapper.updateByPrimaryKeySelective(tb)
+
+		);
+	}
+	@Test
+	public void test01()throws Exception{
+		ByteSource salt = ByteSource.Util.bytes("未登录");
+		//如果修改密码，将密码根据加密方式存储
+		String newPs = new SimpleHash("MD5", "123456", salt, 1024).toHex();
+		System.out.println(newPs);
+	}
+	@Autowired
+	private TAreaAndCompanyMapper tAreaAndCompanyMapper;
+	@Test
+	public void test02()throws Exception{
+		TProjectDataExample tProjectDataExample = new TProjectDataExample();
+		tProjectDataExample.createCriteria().andAreaIsNull();
+		List<TProjectData> tProjectData = tProjectDataMapper.selectByExample(tProjectDataExample);
+		tProjectData.stream().forEach(
+				tb ->
+				{
+					TAreaAndCompanyExample tAreaAndCompanyExample = new TAreaAndCompanyExample();
+					tAreaAndCompanyExample.createCriteria().andCompanyEqualTo(tb.getOrganizer());
+					List<TAreaAndCompany> tAreaAndCompanies = tAreaAndCompanyMapper.selectByExample(tAreaAndCompanyExample);
+					if(tAreaAndCompanies != null && !tAreaAndCompanies.isEmpty()){
+						tb.setArea(tAreaAndCompanies.get(0).getCity());
+						tProjectDataMapper.updateByPrimaryKeySelective(tb);
+					}
+				}
+		);
+	}
+	@Test
+	public void test03()throws Exception{
+		TProjectDataExample tProjectDataExample = new TProjectDataExample();
+		tProjectDataExample.createCriteria().andLeaderOmpanyEqualTo("1");
+		List<TProjectData> tProjectData = tProjectDataMapper.selectByExample(tProjectDataExample);
+
+		for (TProjectData projectData:tProjectData){
+			List<TUserForPersonage> tUserForPersonages = tUserForPersonageMapper.selectByName(projectData.getProjectLeader());
+			if(!tUserForPersonages.isEmpty()){
+				StringBuilder stringBuilder = new StringBuilder();
+				for (TUserForPersonage tUserForPersonage:tUserForPersonages){
+					stringBuilder.append(tUserForPersonage.getCompany()+" ");
+				}
+				projectData.setLeaderOmpany(String.valueOf(stringBuilder));
+			}
+			tProjectDataMapper.updateByPrimaryKeySelective(projectData);
+		}
+	}
+
 }

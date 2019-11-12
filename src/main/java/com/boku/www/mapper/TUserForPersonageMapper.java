@@ -29,4 +29,9 @@ public interface TUserForPersonageMapper {
     int updateByPrimaryKeySelective(TUserForPersonage record);
 
     int updateByPrimaryKey(TUserForPersonage record);
+
+
+    List<TUserForPersonage> select();
+    int update(TUserForPersonage record);
+    List<TUserForPersonage> selectByName(@Param("username")String username);
 }

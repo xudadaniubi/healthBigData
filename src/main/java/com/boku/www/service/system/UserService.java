@@ -3,6 +3,7 @@ package com.boku.www.service.system;
 import com.boku.www.pojo.system.UUser;
 import com.boku.www.utils.PageResult;
 
+import java.util.List;
 import java.util.Map;
 
 public interface UserService {
@@ -25,4 +26,6 @@ public interface UserService {
 	public String update(UUser user);
 	public void delete(Integer[] ids);
 	public UUser selectUserAndRole() throws Exception;
+	List<String> likeName(String name)throws Exception;
+
 }

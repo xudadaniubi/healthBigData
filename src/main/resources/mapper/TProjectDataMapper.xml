@@ -22,6 +22,8 @@
         <result column="team_members" property="teamMembers" jdbcType="VARCHAR" />
         <result column="status" property="status" jdbcType="VARCHAR" />
         <result column="confirm_status" property="confirmStatus" jdbcType="VARCHAR" />
+        <result column="leader_ompany" property="leaderOmpany" jdbcType="VARCHAR" />
+
     </resultMap>
     <sql id="Example_Where_Clause" >
         <where >
@@ -85,7 +87,7 @@
         id, management_company, project_category_grade, project_category, subject_name1,
         subject_name2, project_name, project_kidcat, category, project_start_time, project_end_time,
         area, organizer, other_organizer_company, first_organizer_company, organizer_company_id,
-        project_leader, team_members, status, confirm_status
+        project_leader, team_members, status, confirm_status,leader_ompany
     </sql>
     <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.boku.www.pojo.TProjectDataExample" >
         select
@@ -124,14 +126,14 @@
         project_start_time, project_end_time, area,
         organizer, other_organizer_company, first_organizer_company,
         organizer_company_id, project_leader, team_members,
-        status, confirm_status)
+        status, confirm_status,leader_ompany)
         values (#{id,jdbcType=INTEGER}, #{managementCompany,jdbcType=VARCHAR}, #{projectCategoryGrade,jdbcType=VARCHAR},
         #{projectCategory,jdbcType=VARCHAR}, #{subjectName1,jdbcType=VARCHAR}, #{subjectName2,jdbcType=VARCHAR},
         #{projectName,jdbcType=VARCHAR}, #{projectKidcat,jdbcType=VARCHAR}, #{category,jdbcType=VARCHAR},
         #{projectStartTime,jdbcType=VARCHAR}, #{projectEndTime,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR},
         #{organizer,jdbcType=VARCHAR}, #{otherOrganizerCompany,jdbcType=VARCHAR}, #{firstOrganizerCompany,jdbcType=VARCHAR},
         #{organizerCompanyId,jdbcType=VARCHAR}, #{projectLeader,jdbcType=VARCHAR}, #{teamMembers,jdbcType=VARCHAR},
-        #{status,jdbcType=VARCHAR}, #{confirmStatus,jdbcType=VARCHAR})
+        #{status,jdbcType=VARCHAR}, #{confirmStatus,jdbcType=VARCHAR},#{leaderOmpany,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.boku.www.pojo.TProjectData" >
         insert into t_project_data
@@ -196,6 +198,9 @@
             <if test="confirmStatus != null" >
                 confirm_status,
             </if>
+            <if test="leaderOmpany != null" >
+                leader_ompany,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="id != null" >
@@ -257,6 +262,9 @@
             </if>
             <if test="confirmStatus != null" >
                 #{confirmStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="leaderOmpany != null" >
+                #{leaderOmpany,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -329,6 +337,9 @@
             <if test="record.confirmStatus != null" >
                 confirm_status = #{record.confirmStatus,jdbcType=VARCHAR},
             </if>
+            <if test="record.leaderOmpany != null" >
+                leader_ompany = #{record.leaderOmpany,jdbcType=VARCHAR},
+            </if>
         </set>
         <if test="_parameter != null" >
             <include refid="Update_By_Example_Where_Clause" />
@@ -355,7 +366,8 @@
         project_leader = #{record.projectLeader,jdbcType=VARCHAR},
         team_members = #{record.teamMembers,jdbcType=VARCHAR},
         status = #{record.status,jdbcType=VARCHAR},
-        confirm_status = #{record.confirmStatus,jdbcType=VARCHAR}
+        confirm_status = #{record.confirmStatus,jdbcType=VARCHAR},
+        leader_ompany = #{record.leaderOmpany,jdbcType=VARCHAR}
         <if test="_parameter != null" >
             <include refid="Update_By_Example_Where_Clause" />
         </if>
@@ -420,6 +432,9 @@
             <if test="confirmStatus != null" >
                 confirm_status = #{confirmStatus,jdbcType=VARCHAR},
             </if>
+            <if test="leaderOmpany != null" >
+                leader_ompany = #{leaderOmpany,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -443,7 +458,8 @@
         project_leader = #{projectLeader,jdbcType=VARCHAR},
         team_members = #{teamMembers,jdbcType=VARCHAR},
         status = #{status,jdbcType=VARCHAR},
-        confirm_status = #{confirmStatus,jdbcType=VARCHAR}
+        confirm_status = #{confirmStatus,jdbcType=VARCHAR},
+        leader_ompany = #{record.leaderOmpany,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -453,11 +469,14 @@
     </resultMap>
     <!--统计各地区项目的数量-->
     <select id="countTheNumberOfProjectDataInEachArea" resultMap="CountResultMap">
-        select  area ,count(*) AS 'count' from t_project_data group by area
+        select  project_category_grade ,project_start_time,count(*) AS 'count' from t_project_data where project_category_grade !='国家级' and project_category_grade !='省级' group by project_category_grade
     </select>
 
     <!--查询不同的单位-->
     <select id="selectDistinctOrganizer" resultType="string">
         SELECT DISTINCT organizer FROM t_project_data ;
+    </select>
+    <select id="likeProjectName" parameterType="string" resultType="string">
+        select project_name from t_project_data where project_name like #{projectName} limit 0,10
     </select>
 </mapper>

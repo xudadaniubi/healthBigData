@@ -12,10 +12,7 @@ package com.boku.www.controller;
 
 import com.boku.www.pojo.TPrizeData;
 import com.boku.www.service.PrizeDataService;
-import com.boku.www.utils.Count;
-import com.boku.www.utils.CurrentUser;
-import com.boku.www.utils.PageResult;
-import com.boku.www.utils.Result;
+import com.boku.www.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -181,6 +178,17 @@ public class PrizeDataController {
 			logger.info("用户"+CurrentUser.returnCurrentUser()+"统计各地区奖励的数量失败,Exception:"+e);
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	//根据输入的项目名称进行模糊匹配
+	@RequestMapping("/likePrizeName")
+	public ResultUtils likePrizeName(String projectName){
+		try{
+			return ResultUtils.ok(prizeDataService.likeProjectName(projectName));
+		}catch (Exception e){
+			e.printStackTrace();
+			return ResultUtils.build(400,"出现错误");
 		}
 	}
 }

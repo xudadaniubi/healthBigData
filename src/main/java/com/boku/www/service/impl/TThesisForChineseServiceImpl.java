@@ -542,15 +542,18 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 	}
 	@Override
 	public List selectKeywordsBeforeTwentiethInEachArea(){
-		List list = new ArrayList();
+		/*List list = new ArrayList();
 		for (Area area:Area.values()) {
 			List<TCountTopKeywords> keywordsList = thesisForChineseMapper.selectKeywordsBeforeTwentieth("中文", area.getMsg());
 			Count count = new Count();
 			count.setArea(area.getMsg());
 			count.setCountList(keywordsList);
 			list.add(count);
-		}
-		return list;
+		}*/
+
+		//查询200个热词
+		List<TCountTopKeywords> keywordsList = thesisForEnglishMapper.selectKeywordsBeforeTwentiethHot("中文");
+		return keywordsList;
 	}
 
 
@@ -997,4 +1000,12 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 		return countAuthorNetworkMapper.selectAuthorPostNumTopTen();
 	}
 
+	@Override
+	public List<String> thesisForChineseTitle(String title) {
+		if(StringUtils.isNotBlank(title)){
+			title = "%"+title+"%";
+			return thesisForChineseMapper.selecTthesisForChineseTitle(title);
+		}
+		return null;
+	}
 }

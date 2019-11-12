@@ -11,6 +11,7 @@ import com.boku.www.utils.Count;
 import com.boku.www.utils.CurrentUser;
 import com.boku.www.utils.PageResult;
 import com.github.pagehelper.Page;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -190,11 +191,15 @@ public class PatentServiceImpl implements PatentService {
 			criteria.andAreaEqualTo(patent.getArea());
 		}
 		//根据时间段查询(授权公告日)
-		if(patent.getSearchStartTime() != null && patent.getSearchEndTime()!= null){
+		/*if(patent.getSearchStartTime() != null && patent.getSearchEndTime()!= null){
 			if (patent.getSearchStartTime().toString() != null && patent.getSearchStartTime().toString().length()>0
 					&& patent.getSearchEndTime().toString() != null && patent.getSearchEndTime().toString().length()>0) {
 				criteria.andAuthorizedAnnouncementDateBetween(patent.getSearchStartTime(),patent.getSearchEndTime());
 			}
+		}*/
+		//专利类别
+		if(StringUtils.isNotBlank(patent.getPatentCategory())){
+			criteria.andPatentCategoryEqualTo(patent.getPatentCategory());
 		}
 		//确认状态
 		if(patent.getConfirmStatus()!= null && patent.getConfirmStatus().length()>0){

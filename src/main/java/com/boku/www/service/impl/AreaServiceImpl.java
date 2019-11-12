@@ -1,8 +1,10 @@
 package com.boku.www.service.impl;
 import java.util.List;
 
+import com.boku.www.mapper.TAreaAndCompanyMapper;
 import com.boku.www.mapper.TAreaMapper;
 import com.boku.www.pojo.TArea;
+import com.boku.www.pojo.TAreaAndCompany;
 import com.boku.www.pojo.TAreaExample;
 import com.boku.www.utils.PageResult;
 import com.github.pagehelper.Page;
@@ -25,7 +27,9 @@ public class AreaServiceImpl implements AreaService {
 	String roleGrade = null;
 	@Autowired
 	private TAreaMapper areaMapper;
-	
+
+	@Autowired
+	private TAreaAndCompanyMapper tAreaAndCompanyMapper;
 	/**
 	 * 查询全部
 	 */
@@ -34,6 +38,11 @@ public class AreaServiceImpl implements AreaService {
 		return areaMapper.selectByExample(null);
 	}
 
+	@Override
+	public List<TAreaAndCompany> findCompanyAll() {
+
+		return tAreaAndCompanyMapper.selectByExample(null);
+	}
 	/**
 	 * 按分页查询
 	 */
@@ -43,6 +52,8 @@ public class AreaServiceImpl implements AreaService {
 		Page<TArea> page=   (Page<TArea>) areaMapper.selectByExample(null);
 		return new PageResult(page.getTotal(), page.getResult());
 	}
+
+
 
 	/**
 	 * 增加

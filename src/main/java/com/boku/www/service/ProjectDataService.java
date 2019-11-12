@@ -89,4 +89,6 @@ public interface ProjectDataService {
 	public void repeatCompany(File file, String fileName) throws Exception;
 
 	public void insertCompanyAndArea()throws Exception;
+
+	List<String> likeProjectName(String projectName)throws Exception;
 }

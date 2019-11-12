@@ -155,4 +155,7 @@
         from u_user
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="likeName" parameterType="string" resultType="string">
+        select username from u_user where username like #{name} limit 0,10
+    </select>
 </mapper>

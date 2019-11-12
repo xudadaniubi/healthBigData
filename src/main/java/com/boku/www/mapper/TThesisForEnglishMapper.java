@@ -209,4 +209,12 @@ public interface TThesisForEnglishMapper {
 	 */
 	Object selectSumIf(String companyId);
 
+
+	/*
+	查热词
+	 */
+
+	List<TCountTopKeywords> selectKeywordsBeforeTwentiethHot(String type);
+
+    List<String> selectThesisForEnglishTitle(String title);
 }

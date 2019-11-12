@@ -38,4 +38,6 @@ public interface TPrizeDataMapper {
 	List<String> selectDistinctFirstOrganizerCompany();
 
 	List<String> selectDistinctOtherOrganizerCompany();
+
+    List<String> likeProjectName(String projectName);
 }

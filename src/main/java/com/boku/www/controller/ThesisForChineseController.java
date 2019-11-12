@@ -259,7 +259,7 @@ public class ThesisForChineseController {
 		}
 	}
 	/**
-	 * 查询各地级市关键词出现前20的
+	 * 插入中文热词出现前200的
 	 */
 	@RequestMapping("/insertKeywordsBeforeTwentiethInEachArea")
 	public void insertKeywordsBeforeTwentiethInEachArea() {
@@ -271,12 +271,13 @@ public class ThesisForChineseController {
 		}
 	}
 	/**
-	 * 查询各地级市关键词出现前20的
+	 * 查询中文热词出现前200的
 	 */
 	@RequestMapping("/selectKeywordsBeforeTwentiethInEachArea")
 	public List selectKeywordsBeforeTwentiethInEachArea() {
 		try {
 			return thesisForChineseService.selectKeywordsBeforeTwentiethInEachArea();
+
 		} catch (Exception e) {
 			logger.info("查询失败");
 			e.printStackTrace();
@@ -296,6 +297,7 @@ public class ThesisForChineseController {
 			return null;
 		}
 	}
+	//查询区域第一作者论文数量
 	@RequestMapping("/selectFirstAuthorBeforeTwentiethInEachArea")
 	public List selectFirstAuthorBeforeTwentiethInEachArea() {
 		try {
@@ -463,6 +465,16 @@ public class ThesisForChineseController {
 			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询top10作者发文量数据失败,Exception:"+e);
 			e.printStackTrace();
 			return null;
+		}
+	}
+	//按标题查询提示
+	@RequestMapping("/thesisForChineseTitle")
+	public ResultUtils thesisForChineseTitle(String title){
+		try{
+			return ResultUtils.ok(thesisForChineseService.thesisForChineseTitle(title));
+		} catch (Exception e){
+			e.printStackTrace();
+			return ResultUtils.build(400,"出现错误");
 		}
 	}
 

@@ -1,10 +1,7 @@
 package com.boku.www.config;
 
 
-import com.boku.www.mapper.system.UPermissionDao;
-import com.boku.www.mapper.system.URoleDao;
-import com.boku.www.mapper.system.UUserDao;
-import com.boku.www.pojo.system.UPermission;
+
 import com.boku.www.pojo.system.URole;
 import com.boku.www.pojo.system.UUser;
 import com.boku.www.service.system.PermissionService;
@@ -13,7 +10,6 @@ import com.boku.www.service.system.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
@@ -71,7 +67,7 @@ public class ShiroRealm extends AuthorizingRealm {
             /*for (UPermission uPermission : plist) {
             	perminsStrlist.add(uPermission.getName());
 			}*/
-            hasUser.setRoleStrlist(roleStrlist);
+             hasUser.setRoleStrlist(roleStrlist);
             //hasUser.setPerminsStrlist(perminsStrlist);
 //            Session session = SecurityUtils.getSubject().getSession();
 //            session.setAttribute("user", hasUser);//成功则放入session
@@ -111,7 +107,7 @@ public class ShiroRealm extends AuthorizingRealm {
             //权限信息对象info,用来存放查出的用户的所有的角色（role）及权限（permission）
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
             //用户的角色集合
-            info.addRoles(user.getRoleStrlist()); 
+            info.addRoles(user.getRoleStrlist());
             //用户的权限集合
             //info.addStringPermissions(user.getPerminsStrlist());
 

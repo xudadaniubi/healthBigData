@@ -45,7 +45,7 @@ public interface UUserDao{
 
 	UUser selectByPrimaryKey(Integer id);
 
-
+    List<String> likeName(@Param("name") String name);
 
 
 }

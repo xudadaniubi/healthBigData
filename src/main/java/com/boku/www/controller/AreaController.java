@@ -1,7 +1,11 @@
 package com.boku.www.controller;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.boku.www.pojo.TArea;
+import com.boku.www.pojo.TAreaAndCompany;
 import com.boku.www.utils.CurrentUser;
 import com.boku.www.utils.PageResult;
 import com.boku.www.utils.Result;
@@ -41,7 +45,26 @@ public class AreaController {
 			return null;
 		}
 	}
-	
+
+	@RequestMapping("/findCompanyAll")
+	public HashMap<String, Object> findCompanyAll(){
+		try {
+			HashMap<String, Object> hashMap = new HashMap<>();
+			List<TAreaAndCompany> companyAll = areaService.findCompanyAll();
+			Set<String> set = new HashSet<>();
+			for (TAreaAndCompany tAreaAndCompany:companyAll){
+				set.add(tAreaAndCompany.getDistrict());
+			}
+			hashMap.put("company",companyAll);
+			hashMap.put("area",set);
+			return hashMap;
+
+		} catch (Exception e) {
+			logger.info("用户"+CurrentUser.returnCurrentUser()+"查询所有的地区数据失败,Exception:"+e);
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 	/**
 	 * 返回全部列表
@@ -126,7 +149,6 @@ public class AreaController {
 	}
 		/**
 	 * 查询+分页
-	 * @param brand
 	 * @param page
 	 * @param rows
 	 * @return

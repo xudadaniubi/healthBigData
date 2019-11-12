@@ -159,4 +159,6 @@ public interface ThesisForChineseService {
 	public void updateThiesis(File file, String fileName) throws Exception;
 
 	public void  cleanRepateArea();
+
+    List<String> thesisForChineseTitle(String title);
 }

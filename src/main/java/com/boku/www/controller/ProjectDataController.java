@@ -2,10 +2,7 @@ package com.boku.www.controller;
 import java.util.List;
 
 import com.boku.www.pojo.TProjectData;
-import com.boku.www.utils.Count;
-import com.boku.www.utils.CurrentUser;
-import com.boku.www.utils.PageResult;
-import com.boku.www.utils.Result;
+import com.boku.www.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -167,6 +164,16 @@ public class ProjectDataController {
 			logger.info("用户"+CurrentUser.returnCurrentUser()+"统计各地区项目的数量失败,Exception:"+e);
 			e.printStackTrace();
 			return null;
+		}
+	}
+	//根据输入的项目名称进行模糊匹配
+	@RequestMapping("/likeProjectName")
+	public ResultUtils likeProjectName(String projectName){
+		try{
+			return ResultUtils.ok(projectDataService.likeProjectName(projectName));
+		}catch (Exception e){
+			e.printStackTrace();
+			return ResultUtils.build(400,"出现错误");
 		}
 	}
 }
