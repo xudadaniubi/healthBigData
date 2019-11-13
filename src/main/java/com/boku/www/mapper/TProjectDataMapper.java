@@ -40,4 +40,7 @@ public interface TProjectDataMapper {
 
 	List<String> likeProjectName(@Param("projectName") String projectName);
 
+    List<Count> companyCountNumberWJW();
+
+	List<Count> companyCountCollegeNumber();
 }

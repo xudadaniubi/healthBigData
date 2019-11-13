@@ -167,8 +167,11 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 	 * @return
 	 */
 	@Override
-	public PageResult findPage(TThesisForChinese thesisForChinese, int pageNum, int pageSize) {
-
+	public ResultUtils findPage(TThesisForChinese thesisForChinese, int pageNum, int pageSize) {
+		UUser currentUser = CurrentUser.returnCurrentUser();
+		if (currentUser == null){
+			return ResultUtils.build(400,"登录失效,请重新登录");
+		}
 		TThesisForChineseExample example=new TThesisForChineseExample();
 		example.setOrderByClause("`confirm_status` DESC,id ASC");
 		TThesisForChineseExample.Criteria criteria = example.createCriteria();
@@ -182,9 +185,8 @@ public class TThesisForChineseServiceImpl implements ThesisForChineseService {
 		//查询已确认和未确认的数量
 		//将查询到的角色和已确认/未确认的信息保存到PageResult里面，然后返回给前端
 		PageResult pageResult = getPageResult(page);
-
 		pageResult.setRoleGrade(roleGrade);
-		return pageResult;
+		return ResultUtils.ok(pageResult);
 	}
 
 	/**

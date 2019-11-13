@@ -3,6 +3,7 @@ import com.boku.www.pojo.TPatent;
 import com.boku.www.pojo.TThesisForEnglish;
 import com.boku.www.utils.Count;
 import com.boku.www.utils.PageResult;
+import com.boku.www.utils.ResultUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -60,7 +61,7 @@ public interface PatentService {
 	 * @param pageSize 每页记录数
 	 * @return
 	 */
-	public PageResult findPage(TPatent patent, int pageNum, int pageSize);
+	public ResultUtils findPage(TPatent patent, int pageNum, int pageSize);
 
 	/**
 	 * 根据条件查询出条件范围内的所有数据（不分页，与分页条件查询的区别），然后控制层将集合所有的数据转存储为excel的方式进行下载

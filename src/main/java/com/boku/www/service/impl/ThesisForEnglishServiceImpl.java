@@ -143,8 +143,11 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 	 * @return
 	 */
 	@Override
-	public PageResult findPage(TThesisForEnglish thesisForEnglish, int pageNum, int pageSize) {
-
+	public ResultUtils findPage(TThesisForEnglish thesisForEnglish, int pageNum, int pageSize) {
+		UUser currentUser = CurrentUser.returnCurrentUser();
+		if (currentUser == null){
+			return ResultUtils.build(400,"登录失效,请重新登录");
+		}
 		TThesisForEnglishExample example=new TThesisForEnglishExample();
 		example.setOrderByClause("`confirm_status` DESC,id ASC");
 		TThesisForEnglishExample.Criteria criteria = example.createCriteria();
@@ -159,7 +162,7 @@ public class ThesisForEnglishServiceImpl implements ThesisForEnglishService {
 		PageResult pageResult = getPageResult(page);
 
 		pageResult.setRoleGrade(roleGrade);
-		return pageResult;
+		return ResultUtils.ok(pageResult);
 	}
 
 	/**

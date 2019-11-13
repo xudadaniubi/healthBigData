@@ -27,4 +27,5 @@ public class Count {
 	private String area;
 	private Integer count;
 	private List countList;
+	private String organizer;
 }

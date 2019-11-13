@@ -10,6 +10,7 @@ import com.boku.www.service.system.RoleService;
 import com.boku.www.utils.Count;
 import com.boku.www.utils.CurrentUser;
 import com.boku.www.utils.PageResult;
+import com.boku.www.utils.ResultUtils;
 import com.github.pagehelper.Page;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -115,7 +116,11 @@ public class PatentServiceImpl implements PatentService {
 	 * @return
 	 */
 	@Override
-	public PageResult findPage(TPatent patent, int pageNum, int pageSize) {
+	public ResultUtils findPage(TPatent patent, int pageNum, int pageSize) {
+		UUser currentUser = CurrentUser.returnCurrentUser();
+		if (currentUser == null){
+			return ResultUtils.build(400,"登录失效,请重新登录");
+		}
 		TPatentExample example=new TPatentExample();
 		example.setOrderByClause("`confirm_status` DESC,id ASC");
 		TPatentExample.Criteria criteria = example.createCriteria();
@@ -129,7 +134,7 @@ public class PatentServiceImpl implements PatentService {
 		//将查询到的角色和已确认/未确认的信息保存到PageResult里面，然后返回给前端
 		PageResult pageResult = getPageResult(page);
 		pageResult.setRoleGrade(roleGrade);
-		return pageResult;
+		return ResultUtils.ok(pageResult);
 	}
 
 

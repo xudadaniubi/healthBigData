@@ -11,11 +11,8 @@ import com.boku.www.pojo.*;
 import com.boku.www.pojo.system.URole;
 import com.boku.www.pojo.system.UUser;
 import com.boku.www.service.system.RoleService;
-import com.boku.www.utils.Count;
-import com.boku.www.utils.CurrentUser;
-import com.boku.www.utils.PageResult;
+import com.boku.www.utils.*;
 
-import com.boku.www.utils.ParseExcelUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -155,8 +152,11 @@ public class ProjectDataServiceImpl implements ProjectDataService {
 	 * @return
 	 */
 		@Override
-	public PageResult findPage(TProjectData projectData, int pageNum, int pageSize) {
-
+	public ResultUtils findPage(TProjectData projectData, int pageNum, int pageSize) {
+			UUser currentUser = CurrentUser.returnCurrentUser();
+			if(currentUser == null){
+				return ResultUtils.build(400,"登录失效,请重新登录");
+			}
 			TProjectDataExample example = new TProjectDataExample();
 			//添加升序降序排列条件，DESC为降序
 			example.setOrderByClause("`confirm_status` DESC,id ASC");
@@ -177,7 +177,7 @@ public class ProjectDataServiceImpl implements ProjectDataService {
 			//将查询到的角色和已确认/未确认的信息保存到PageResult里面，然后返回给前端
 			PageResult pageResult = getPageResult(roleGrade, page ,projectData.getConfirmStatus());
 
-			return pageResult;
+			return ResultUtils.ok(pageResult);
 		}
 	/**
 	 * 根据角色添加查询条件
@@ -234,13 +234,16 @@ public class ProjectDataServiceImpl implements ProjectDataService {
 			}
 			return roleGrade;
 		}
-		return "该用户角色非法";
+		return "登录失效";
 	}
 	/**添加查询条件
 	 * @param projectData
 	 * @param criteria
 	 */
 	private String addProjectDatCriteria(TProjectData projectData, TProjectDataExample.Criteria criteria){
+		//根据角色添加条件
+		//疑问？这里添加的条件会不会直接覆盖上面的条件，如区域/单位/负责人这三个条件是否会被覆盖掉？
+		String roleGrade = addCriteriaByRoles(criteria);
 		//项目管理单位
 		if (projectData.getManagementCompany() != null && projectData.getManagementCompany().length() > 0) {
 			criteria.andManagementCompanyEqualTo(projectData.getManagementCompany());
@@ -309,9 +312,6 @@ public class ProjectDataServiceImpl implements ProjectDataService {
 		if (projectData.getTeamMembers() != null && projectData.getTeamMembers().length() > 0) {
 			criteria.andTeamMembersLike("%" + projectData.getTeamMembers() + "%");
 		}
-		//根据角色添加条件
-		//疑问？这里添加的条件会不会直接覆盖上面的条件，如区域/单位/负责人这三个条件是否会被覆盖掉？
-		String roleGrade = addCriteriaByRoles(criteria);
 
 		//添加确认状态的查询条件，主要用于信息确认页面，在默认状态下确认状态为null，在点击待确认的按钮时，查询出所有待确认的信息，将待确认的状态"2"作为条件，
 		// 同理点击已确认按钮时，查询出所有已确认的信息，将已确认的状态"1"作为条件
@@ -616,5 +616,15 @@ public class ProjectDataServiceImpl implements ProjectDataService {
 			return list;
 		}
 		return null;
+	}
+
+	@Override
+	public List<Count> companyCountNumber() {
+		return projectDataMapper.companyCountNumberWJW();
+	}
+
+	@Override
+	public List<Count> companyCountCollegeNumber() {
+		return projectDataMapper.companyCountCollegeNumber();
 	}
 }

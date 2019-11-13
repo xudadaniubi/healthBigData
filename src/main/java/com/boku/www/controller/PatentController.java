@@ -3,10 +3,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.boku.www.pojo.TPatent;
-import com.boku.www.utils.Count;
-import com.boku.www.utils.CurrentUser;
-import com.boku.www.utils.PageResult;
-import com.boku.www.utils.Result;
+import com.boku.www.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,7 +130,7 @@ public class PatentController {
 	 * @return
 	 */
 	@RequestMapping("/search")
-	public PageResult search(@RequestBody TPatent patent, int page, int rows  ){
+	public ResultUtils search(@RequestBody TPatent patent, int page, int rows  ){
 		try {
 			return patentService.findPage(patent, page, rows);
 		} catch (Exception e) {

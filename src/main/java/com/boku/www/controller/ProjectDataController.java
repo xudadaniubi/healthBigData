@@ -126,7 +126,7 @@ public class ProjectDataController {
 	 * @return
 	 */
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	public PageResult search(@RequestBody TProjectData projectData, int page, int rows  ){
+	public ResultUtils search(@RequestBody TProjectData projectData, int page, int rows  ){
 		try {
 			return projectDataService.findPage(projectData, page, rows);
 		} catch (Exception e) {
@@ -171,6 +171,28 @@ public class ProjectDataController {
 	public ResultUtils likeProjectName(String projectName){
 		try{
 			return ResultUtils.ok(projectDataService.likeProjectName(projectName));
+		}catch (Exception e){
+			e.printStackTrace();
+			return ResultUtils.build(400,"出现错误");
+		}
+	}
+
+		//委直属单位的项目统计图
+	@RequestMapping("/companyCountNumber")
+	public ResultUtils companyCountNumber(){
+		try{
+			return ResultUtils.ok(projectDataService.companyCountNumber());
+		}catch (Exception e){
+			e.printStackTrace();
+			return ResultUtils.build(400,"出现错误");
+		}
+	}
+
+	//高校及其附属项目统计图
+	@RequestMapping("/companyCountCollegeNumber")
+	public ResultUtils companyCountCollegeNumber(){
+		try{
+			return ResultUtils.ok(projectDataService.companyCountCollegeNumber());
 		}catch (Exception e){
 			e.printStackTrace();
 			return ResultUtils.build(400,"出现错误");

@@ -3,6 +3,7 @@ package com.boku.www.service;
 import com.boku.www.pojo.TPrizeData;
 import com.boku.www.utils.Count;
 import com.boku.www.utils.PageResult;
+import com.boku.www.utils.ResultUtils;
 
 import java.io.File;
 import java.util.List;
@@ -59,7 +60,7 @@ public interface PrizeDataService {
 	 * @param pageSize 每页记录数
 	 * @return
 	 */
-	public PageResult findPage(TPrizeData prizeData, int pageNum, int pageSize);
+	public ResultUtils findPage(TPrizeData prizeData, int pageNum, int pageSize);
 
 	/**
 	 * 根据条件查询项目数据及统计信息，将数据返回controller，controller将集合转换为excel文件，

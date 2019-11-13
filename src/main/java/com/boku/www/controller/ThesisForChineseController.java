@@ -138,7 +138,7 @@ public class ThesisForChineseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	public PageResult search(@RequestBody TThesisForChinese thesisForChinese, int page, int rows  ){
+	public ResultUtils search(@RequestBody TThesisForChinese thesisForChinese, int page, int rows  ){
 		try {
 			return thesisForChineseService.findPage(thesisForChinese, page, rows);
 		} catch (Exception e) {

@@ -16,10 +16,7 @@ import com.boku.www.pojo.system.URole;
 import com.boku.www.pojo.system.UUser;
 import com.boku.www.service.PrizeDataService;
 import com.boku.www.service.system.RoleService;
-import com.boku.www.utils.Count;
-import com.boku.www.utils.CurrentUser;
-import com.boku.www.utils.PageResult;
-import com.boku.www.utils.ParseExcelUtils;
+import com.boku.www.utils.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -154,8 +151,11 @@ public class PrizeDataServiceImpl implements PrizeDataService {
 	 * @return
 	 */
 	@Override
-	public PageResult findPage(TPrizeData prizeData, int pageNum, int pageSize) {
-
+	public ResultUtils findPage(TPrizeData prizeData, int pageNum, int pageSize) {
+		UUser currentUser = CurrentUser.returnCurrentUser();
+		if (currentUser == null){
+			return ResultUtils.build(400,"登录失效,请重新登录");
+		}
 		TPrizeDataExample example = new TPrizeDataExample();
 		//添加升序降序排列条件，DESC为降序
 		example.setOrderByClause("`confirm_status` DESC,id ASC");
@@ -175,7 +175,7 @@ public class PrizeDataServiceImpl implements PrizeDataService {
 		//将查询到的角色和已确认/未确认的信息保存到PageResult里面，然后返回给前端
 		PageResult pageResult = getPageResult(roleGrade, page ,prizeData.getConfirmStatus());
 
-		return pageResult;
+		return ResultUtils.ok(pageResult);
 	}
 	/**
 	 * 根据角色添加查询条件

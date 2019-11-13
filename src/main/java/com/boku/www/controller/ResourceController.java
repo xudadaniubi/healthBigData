@@ -35,7 +35,7 @@ import java.util.List;
  */
 @RestController
 @CrossOrigin
-@RequestMapping("resource")
+@RequestMapping("/resource")
 public class ResourceController {
 	private Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
@@ -53,11 +53,10 @@ public class ResourceController {
 			return new Result(false, "增加失败");
 		}
 	}
-
-	@RequestMapping(value = "/search",method = RequestMethod.POST )
-	public PageResult search(@RequestBody TResource resource , int page, int rows  ){
+    //服务资源
+	@RequestMapping(value = "/search" )
+	public PageResult search(TResource resource,int page, int rows){
 		try {
-
 			return resourceService.search(resource,page,rows);
 		} catch (Exception e) {
 			logger.info("用户"+ CurrentUser.returnCurrentUser()+"查询数据失败,Exception:"+e);
