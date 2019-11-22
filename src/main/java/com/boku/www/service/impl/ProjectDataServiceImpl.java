@@ -159,7 +159,7 @@ public class ProjectDataServiceImpl implements ProjectDataService {
 			}
 			TProjectDataExample example = new TProjectDataExample();
 			//添加升序降序排列条件，DESC为降序
-			example.setOrderByClause("`confirm_status` DESC,id ASC");
+			example.setOrderByClause("`first_organizer_company` ASC,id ASC");
 
 			TProjectDataExample.Criteria criteria = example.createCriteria();
 			String roleGrade = null;
@@ -242,7 +242,6 @@ public class ProjectDataServiceImpl implements ProjectDataService {
 	 */
 	private String addProjectDatCriteria(TProjectData projectData, TProjectDataExample.Criteria criteria){
 		//根据角色添加条件
-		//疑问？这里添加的条件会不会直接覆盖上面的条件，如区域/单位/负责人这三个条件是否会被覆盖掉？
 		String roleGrade = addCriteriaByRoles(criteria);
 		//项目管理单位
 		if (projectData.getManagementCompany() != null && projectData.getManagementCompany().length() > 0) {
@@ -388,6 +387,7 @@ public class ProjectDataServiceImpl implements ProjectDataService {
 			TProjectData projectData = projectDataMapper.selectByPrimaryKey(id);
 			//已确认 确认状态修改为“1”
 			projectData.setConfirmStatus("1");
+			System.out.println(projectData);
 			projectDataMapper.updateByPrimaryKey(projectData);
 		}
 	}

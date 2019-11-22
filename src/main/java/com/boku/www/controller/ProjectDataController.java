@@ -157,13 +157,13 @@ public class ProjectDataController {
 	 * 统计各地区项目的数量
 	 */
 	@RequestMapping("/countTheNumberOfProjectDataInEachArea")
-	public List<Count> countTheNumberOfProjectDataInEachArea(){
+	public ResultUtils countTheNumberOfProjectDataInEachArea(){
 		try {
-			return projectDataService.countTheNumberOfProjectDataInEachArea();
+			return ResultUtils.ok(projectDataService.countTheNumberOfProjectDataInEachArea());
 		} catch (Exception e) {
 			logger.info("用户"+CurrentUser.returnCurrentUser()+"统计各地区项目的数量失败,Exception:"+e);
 			e.printStackTrace();
-			return null;
+			return ResultUtils.build(500,"请与管理员联系");
 		}
 	}
 	//根据输入的项目名称进行模糊匹配

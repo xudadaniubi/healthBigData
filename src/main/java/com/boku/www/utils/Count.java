@@ -28,4 +28,5 @@ public class Count {
 	private Integer count;
 	private List countList;
 	private String organizer;
+	private String year;
 }

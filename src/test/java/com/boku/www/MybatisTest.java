@@ -1,10 +1,7 @@
 package com.boku.www;
 
 import com.boku.www.controller.ThesisForChineseController;
-import com.boku.www.mapper.TAreaAndCompanyMapper;
-import com.boku.www.mapper.TAreaMapper;
-import com.boku.www.mapper.TProjectDataMapper;
-import com.boku.www.mapper.TUserForPersonageMapper;
+import com.boku.www.mapper.*;
 import com.boku.www.mapper.system.UUserDao;
 import com.boku.www.mapper.system.UUserRoleDao;
 import com.boku.www.pojo.*;
@@ -578,39 +575,65 @@ public class MybatisTest {
 	private TAreaAndCompanyMapper tAreaAndCompanyMapper;
 	@Test
 	public void test02()throws Exception{
-		TProjectDataExample tProjectDataExample = new TProjectDataExample();
-		tProjectDataExample.createCriteria().andAreaIsNull();
-		List<TProjectData> tProjectData = tProjectDataMapper.selectByExample(tProjectDataExample);
+		List<TProjectData> tProjectData = tProjectDataMapper.selectByExample(null);
 		tProjectData.stream().forEach(
 				tb ->
 				{
-					TAreaAndCompanyExample tAreaAndCompanyExample = new TAreaAndCompanyExample();
-					tAreaAndCompanyExample.createCriteria().andCompanyEqualTo(tb.getOrganizer());
-					List<TAreaAndCompany> tAreaAndCompanies = tAreaAndCompanyMapper.selectByExample(tAreaAndCompanyExample);
-					if(tAreaAndCompanies != null && !tAreaAndCompanies.isEmpty()){
-						tb.setArea(tAreaAndCompanies.get(0).getCity());
-						tProjectDataMapper.updateByPrimaryKeySelective(tb);
+					if(StringUtils.isNotBlank(tb.getFirstOrganizerCompany())){
+						TAreaAndCompanyExample tAreaAndCompanyExample = new TAreaAndCompanyExample();
+						tAreaAndCompanyExample.createCriteria().andCompanyEqualTo(tb.getFirstOrganizerCompany());
+						List<TAreaAndCompany> tAreaAndCompanies = tAreaAndCompanyMapper.selectByExample(tAreaAndCompanyExample);
+						if(tAreaAndCompanies != null && !tAreaAndCompanies.isEmpty()){
+							tb.setArea(tAreaAndCompanies.get(0).getCity());
+							tProjectDataMapper.updateByPrimaryKeySelective(tb);
+						}
 					}
 				}
 		);
 	}
 	@Test
 	public void test03()throws Exception{
-		TProjectDataExample tProjectDataExample = new TProjectDataExample();
-		tProjectDataExample.createCriteria().andLeaderOmpanyEqualTo("1");
-		List<TProjectData> tProjectData = tProjectDataMapper.selectByExample(tProjectDataExample);
+
+		List<TProjectData> tProjectData = tProjectDataMapper.selectByExample(null);
 
 		for (TProjectData projectData:tProjectData){
-			List<TUserForPersonage> tUserForPersonages = tUserForPersonageMapper.selectByName(projectData.getProjectLeader());
-			if(!tUserForPersonages.isEmpty()){
-				StringBuilder stringBuilder = new StringBuilder();
-				for (TUserForPersonage tUserForPersonage:tUserForPersonages){
-					stringBuilder.append(tUserForPersonage.getCompany()+" ");
-				}
-				projectData.setLeaderOmpany(String.valueOf(stringBuilder));
-			}
-			tProjectDataMapper.updateByPrimaryKeySelective(projectData);
+			projectData.setArea(null);
+			tProjectDataMapper.updateByPrimaryKey(projectData);
 		}
+	}
+	@Autowired
+    private TPrizeDataMapper tPrizeDataMapper;
+	@Test
+	public void test04()throws Exception{
+		List<TPrizeData> tProjectData = tPrizeDataMapper.selectByExample(null);
+		tProjectData.stream().forEach(
+				tb ->
+				{
+					if(StringUtils.isNotBlank(tb.getFirstOrganizerCompany())){
+						TAreaAndCompanyExample tAreaAndCompanyExample = new TAreaAndCompanyExample();
+						tAreaAndCompanyExample.createCriteria().andCompanyEqualTo(tb.getFirstOrganizerCompany());
+						List<TAreaAndCompany> tAreaAndCompanies = tAreaAndCompanyMapper.selectByExample(tAreaAndCompanyExample);
+						if(tAreaAndCompanies != null && !tAreaAndCompanies.isEmpty()){
+							tb.setArea(tAreaAndCompanies.get(0).getCity());
+							tPrizeDataMapper.updateByPrimaryKeySelective(tb);
+						}
+					}
+				}
+		);
+	}
+	@Test
+	public void test05(){
+		List<TPrizeData> list = tPrizeDataMapper.selectByExample(null);
+		list.stream().map(li -> {
+			String organizerCompany = li.getOtherOrganizerCompany();
+			if(StringUtils.isNotBlank(organizerCompany)){
+				li.setFirstOrganizerCompany(li.getFirstOrganizerCompany()+","+organizerCompany);
+			}
+			return li;
+		}).collect(Collectors.toList());
+
+		list.stream().forEach(li-> System.out.println(li.getFirstOrganizerCompany())
+		);
 	}
 
 }

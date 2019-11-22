@@ -31,6 +31,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static javax.xml.bind.JAXBIntrospector.getValue;
 
@@ -158,7 +159,7 @@ public class PrizeDataServiceImpl implements PrizeDataService {
 		}
 		TPrizeDataExample example = new TPrizeDataExample();
 		//添加升序降序排列条件，DESC为降序
-		example.setOrderByClause("`confirm_status` DESC,id ASC");
+		example.setOrderByClause("`first_organizer_company` DESC,id ASC");
 		TPrizeDataExample.Criteria criteria = example.createCriteria();
 		String roleGrade = null;
 		if (prizeData != null) {
@@ -169,6 +170,13 @@ public class PrizeDataServiceImpl implements PrizeDataService {
 		PageHelper.startPage(pageNum, pageSize);
 		//分页查询,得到符合条件的项目数据表的集合
 		List<TPrizeData> list = prizeDataMapper.selectByExample(example);
+		list.stream().map(li -> {
+			String organizerCompany = li.getOtherOrganizerCompany();
+			if(StringUtils.isNotBlank(organizerCompany)){
+				li.setFirstOrganizerCompany(li.getFirstOrganizerCompany()+","+organizerCompany);
+			}
+			return li;
+		}).collect(Collectors.toList());
 		//将成果数量存到PageResult对应的属性里面
 		//PageInfo<TProjectData> pageInfo = new PageInfo<TProjectData>(list);
 		Page<TPrizeData> page = (Page<TPrizeData>) list;

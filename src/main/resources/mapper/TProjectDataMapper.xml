@@ -459,7 +459,7 @@
         team_members = #{teamMembers,jdbcType=VARCHAR},
         status = #{status,jdbcType=VARCHAR},
         confirm_status = #{confirmStatus,jdbcType=VARCHAR},
-        leader_ompany = #{record.leaderOmpany,jdbcType=VARCHAR}
+        leader_ompany = #{leaderOmpany,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -467,10 +467,11 @@
         <result column="area" property="area" jdbcType="VARCHAR" />
         <result column="count" property="count" jdbcType="INTEGER" />
         <result column="first_organizer_company" property="organizer" jdbcType="VARCHAR"/>
+        <result column="project_start_time" property="year" jdbcType="VARCHAR"/>
     </resultMap>
     <!--统计各地区项目的数量-->
     <select id="countTheNumberOfProjectDataInEachArea" resultMap="CountResultMap">
-        select  project_category_grade ,project_start_time,count(*) AS 'count' from t_project_data where project_category_grade !='国家级' and project_category_grade !='省级' group by project_category_grade
+      select area,project_start_time,count(*) AS 'count' from t_project_data where area  not in('浙大及其附属','温医大及其附属','浙中大及其附属','杭师大','其他高校','委直属','') and project_start_time !='' group by area,project_start_time
     </select>
 
     <!--查询不同的单位-->
@@ -487,6 +488,6 @@
     </select>
 
     <select id="companyCountCollegeNumber" resultMap="CountResultMap">
-       select first_organizer_company,area,count(*) AS 'count' from t_project_data where area in ('浙大及其附属','温医大及其附属','浙中大及其附属','杭师大','其他高校') and first_organizer_company is not null group by first_organizer_company
+       select first_organizer_company,area,count(*) AS 'count' from t_project_data where area in ('浙大及其附属','温医大及其附属','浙中大及其附属','杭师大') and first_organizer_company is not null group by first_organizer_company
     </select>
 </mapper>
